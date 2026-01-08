@@ -13,15 +13,15 @@ export default function Navbar(){
 
         <nav className="hidden lg:flex items-center gap-8 text-m text-#040D21">
           <Link href="/service" className="hover:underline">Services</Link>
-          <a href="#database" className="hover:underline">B2B Database</a>
-          <a href="#reports" className="hover:underline">Location Reports</a>
+          <Link href="/b2b" className="hover:underline">B2B Database</Link>
+          <Link href="/location-report" className="hover:underline">Location Reports</Link>
           <a href="#blog" className="hover:underline">Blog</a>
           <Link href="/contact" className="hover:underline">Contact-Us</Link>
           
         </nav>
 
         <div className="flex items-center gap-4">
-          <a className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm" href="/start">Start Free</a>
+          <a className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm" href="/contact">Lets Talk !</a>
 
           {/* mobile menu */}
           <button className="lg:hidden p-2" onClick={()=>setOpen(!open)} aria-label="menu">
@@ -36,8 +36,8 @@ export default function Navbar(){
         <div className="lg:hidden border-t">
           <div className="px-6 py-4 flex flex-col gap-3">
             <Link href="/service">Services</Link>
-            <a href="#database">B2B Database</a>
-            <a href="#reports">Location Reports</a>
+            <Link href="/b2b">B2B Database</Link>
+            <Link href="/location-report">Location Reports</Link>
             <Link href="/contact">Contact-Us</Link>
           </div>
         </div>

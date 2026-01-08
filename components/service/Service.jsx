@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 export default function ServicesPage() {
   const services = [
@@ -7,76 +8,88 @@ export default function ServicesPage() {
     desc: "Stay ahead in the real estate market with our comprehensive Real Estate Data Scraping Services. Scrape valuable real estate data, including agents, listings, brokers, estate agents, houses, mortgages, and building permits. Gather detailed housing data, including current and historical owners, deeds, tax assessments, and precise valuations to power your system or receive timely email alerts.",
     wide: true,
     image: "images/service-page/1.png",
-    className: "flex-row"
+    className: "flex-row",
+    href: "/service/real-estate-data-scraping"
   },
   {
     title: "Sales Lead Generation Data Scraping",
     desc: "Services Achieve laser-focused targeting by extracting relevant Sales Lead Data from the web. Reach your ideal audience to effectively market your products or services and execute successful sales campaigns. Enrich your CRM with emails, contact numbers, addresses, revenue figures, and social media profiles through our Sales Lead Generation Data Scraping Services.",
     image: "images/service-page/2.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "/service/sales-leads-data"
   },
   {
     title: "Financial Data Scraping Services",
     desc: "Stay ahead of the curve in the finance industry with our Financial Data Scraping Services. Scrape essential finance market data, including news articles, company information, equity research, turnover, retained earnings, business and political news, and real-time stock rates. Unlock limitless financial data to drive informed decision-making.",
     image: "images/service-page/3.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "#"
   },
   {
     title: "E-commerce Data Scraping Services",
     desc: "Extract valuable E-commerce data from any website with our specialized E-commerce Data Scraping Services. Scrape product details, pricing, deals, customer reviews, ratings, and seller information. Gain insights into consumer preferences and market trends to optimize your e-commerce strategies.",
     wide: true,
     image: "images/service-page/4.png",
-    className: "flex-row"
+    className: "flex-row",
+    href: "/service/ecom-scraping"
   },
   {
     title: "Recruitment Data Scraping Services",
     desc: "Streamline your hiring process with our customized Recruitment Data Scraping Services. Scrape job data from various sources, including the latest job listings, open vacancies, candidate profiles, company information, in-demand skills, and hiring locations. Leverage this data to find the perfect candidates and make informed hiring decisions.",
     image: "images/service-page/5.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "/service/recruitment-scraping"
   },
   {
     title: "Travel and Leisure Data Scraping",
     desc: "Unlock valuable insights in the travel industry with our Travel and Leisure Data Scraping Services. Scrape travel data, such as hotel reviews, pricing, room availability, airline ticket prices, and more from diverse web sources. Analyze traveler patterns, preferences, and sentiments to optimize your offerings in the travel and hospitality sector.",
     image: "images/service-page/6.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "#"
   },
   {
     title: "Research and Journalism Data Scraping",
     desc: "Empower your research and journalism projects with our comprehensive data scraping services. Access a wealth of data on weather, third world development, crime, local and global trends to support your research or news stories. Ensure accuracy and credibility with our reliable Research and Journalism Data Scraping solutions.",
     wide: true,
     image: "images/service-page/7.png",
-    className: "flex-row"
+    className: "flex-row",
+    href: "/service/research-data-scraping"
   },
   {
     title: "Retail Store Data Scraping",
     desc: "Gain a competitive edge in the retail industry with our Retail Store Data Scraping Services. Scrape vital information such as store openings, closures, parking convenience, in-store pickup options, services, subsidiaries, and nearest competitors. Leverage this data to optimize your retail strategies and drive growth.",
     image: "images/service-page/8.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "/service/retail-data-scraping"
   },
   {
     title: "Brand Monitoring Data",
     desc: "Scrape travel data such as hotel reviews, pricing, room availability, airline ticket prices, and more from vast sources available across the web. Analyze travelers’ patterns, likes, dislikes of customers, and many other details, which can be utilized for successful dealings in the travel & hospitality industry.",
     image: "images/service-page/9.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "#"
   },
   {
     title: "Manufacturing Industry Data Scraping",
     desc: "Revolutionize your manufacturing processes with data-driven insights from our Manufacturing Industry Data Scraping Services. Identify consumer preferences, optimize resource usage, reduce waste, improve machine productivity, and increase efficiency. Unlock the power of data to streamline your manufacturing operations and stay ahead of the competition.",
     wide: true,
     image: "images/service-page/10.png",
-    className: "flex-row"
+    className: "flex-row",
+    href: "#"
   },
   {
     title: "Social Media Data Extraction Services",
     desc: "Harness the power of social media with our Social Media Data Extraction Services. Monitor social media platforms for posts, analyze sentiments, and create winning social media strategies. Scrape valuable social media data, including posts, likes, comments, and more to gain insights into your customers, retailers, and competitors.",
     image: "images/service-page/11.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "#"
   },
   {
     title: "News Monitoring Data Scraping",
     desc: "Stay informed about the latest events and trends with our News Monitoring Data Scraping Services. Extract news data about companies, products, industries, and more using our advanced web scraping technologies. Access global data, visualizations, infographics, and local news to evaluate recent events and gain valuable insights.",
     image: "images/service-page/12.png",
-    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500"
+    className: "flex-col-reverse items-center border border-indigo-200 border-t-8 border-t-indigo-500",
+    href: "/service/news-monitoring-data-scraping"
   },
 ];
 
@@ -137,10 +150,9 @@ export default function ServicesPage() {
                     <p className="text-sm text-gray-600 leading-relaxed mb-5">
                       {item.desc}
                     </p>
-
-                    <button className="text-blue-600 text-sm font-medium hover:underline cursor-pointer">
-                      Learn More →
-                    </button>
+                    <Link href={item.href} className="text-blue-600 text-sm font-medium hover:underline cursor-pointer">
+                      Learn More &rarr;
+                    </Link>
                   
                   </div>
                   
