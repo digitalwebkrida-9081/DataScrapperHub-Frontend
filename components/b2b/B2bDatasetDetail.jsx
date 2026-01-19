@@ -9,6 +9,7 @@ const B2bDatasetDetail = ({ id }) => {
     const [dataset, setDataset] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [purchaseLoading, setPurchaseLoading] = useState(false);
     const [form, setForm] = useState({
         fullName: '',
         email: '',
@@ -20,10 +21,44 @@ const B2bDatasetDetail = ({ id }) => {
         setForm(prev => ({ ...prev, [name]: value }));
     };
 
-    const handlePurchase = (e) => {
+    const handlePurchase = async (e) => {
         e.preventDefault();
-        alert(`Purchase initiated for ${form.fullName}. This is a simulation.`);
-        setIsModalOpen(false);
+        setPurchaseLoading(true);
+        try {
+            const response = await fetch('http://localhost:5000/api/scraper/dataset/purchase', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: id,
+                    ...form
+                })
+            });
+            
+            if (response.ok) {
+                // Success: Download file
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${dataset.category}-${dataset.location}.xlsx`; 
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+
+                alert(`Purchase Successful! Downloading file...`);
+                setIsModalOpen(false);
+            } else {
+                // Failure: Parse JSON error
+                const result = await response.json();
+                alert(`Purchase Failed: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Purchase error:", error);
+            alert("An error occurred during purchase.");
+        } finally {
+            setPurchaseLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -42,16 +77,17 @@ const B2bDatasetDetail = ({ id }) => {
                 }
 
                 // 2. Fallback to API for real database records
-                const response = await fetch(`http://localhost:5000/api/b2b-leads/${id}`);
+                // Use the new scraper dataset endpoint
+                const response = await fetch(`http://localhost:5000/api/scraper/dataset/${id}`);
                 
                 if (!response.ok) throw new Error('Failed to fetch');
                 const result = await response.json();
                 
-                // Handle successResponse wrapper { data: ..., message: ... }
-                const datasetData = result.data || result;
-                
-                if (datasetData) {
-                     setDataset(datasetData);
+                if (result.success && result.data) {
+                     setDataset(result.data);
+                } else {
+                    // Fallback or error handling
+                    console.error("Dataset not found details:", result);
                 }
                 setLoading(false);
             } catch (error) {
@@ -170,9 +206,10 @@ const B2bDatasetDetail = ({ id }) => {
                                      <th className="p-3 whitespace-nowrap">City</th>
                                      <th className="p-3 whitespace-nowrap">State/Province</th>
                                      <th className="p-3 whitespace-nowrap">Country</th>
+                                     <th className="p-3 whitespace-nowrap">Website</th>
                                      <th className="p-3 whitespace-nowrap">Email</th>
                                      <th className="p-3 whitespace-nowrap">Phone</th>
-                                     <th className="p-3 whitespace-nowrap">Rating (0-5)</th>
+                                     <th className="p-3 whitespace-nowrap">Rating</th>
                                      <th className="p-3 whitespace-nowrap">Reviews</th>
                                      <th className="p-3 whitespace-nowrap text-center">Action</th>
                                  </tr>
@@ -181,12 +218,19 @@ const B2bDatasetDetail = ({ id }) => {
                                  {dataset.sampleList.map((row, idx) => (
                                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition">
                                          <td className="p-3 font-medium text-slate-700">{row.name}</td>
-                                         <td className="p-3 text-slate-500 truncate max-w-[150px]">{row.address}</td>
+                                         <td className="p-3 text-slate-500 flex items-center gap-1 overflow-hidden text-ellipsis max-w-[200px]"><MdLocationOn className='text-blue-500 shrink-0'/>{'Avaliable'}</td>
                                          <td className="p-3 text-slate-500">{row.city}</td>
                                          <td className="p-3 text-slate-500">{row.state}</td>
                                          <td className="p-3 text-slate-500">{row.country}</td>
-                                         <td className="p-3 text-slate-500 flex items-center gap-1"><MdEmail className="text-blue-400"/> {row.email ? 'Available' : '--'}</td>
-                                         <td className="p-3 text-slate-500 flex items-center gap-1"><MdPhone className="text-green-500"/> {row.phone ? 'Available' : '--'}</td>
+                                         <td className="p-3 text-slate-500 max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap">
+                                            {row.website ? (
+                                                <a href="#" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }} className="text-blue-600 hover:underline flex items-center gap-1">
+                                                    <FaGlobe className="shrink-0 text-xs"/> {'Available'}
+                                                </a>
+                                            ) : '--'}
+                                         </td>
+                                         <td className="p-3 text-slate-500 flex items-center gap-1 overflow-hidden text-ellipsis max-w-[200px]"><MdEmail className="text-blue-300 shrink-0"/> {'Available'}</td>
+                                         <td className="p-3 text-slate-500"><span className="flex items-center gap-1"><MdPhone className="text-green-500 shrink-0"/> {'Available'}</span></td>
                                          <td className="p-3 text-slate-500">{row.rating}</td>
                                          <td className="p-3 text-slate-500">{row.reviews}</td>
                                          <td className="p-3 text-center">
@@ -431,12 +475,19 @@ const B2bDatasetDetail = ({ id }) => {
 
                             <button 
                                 type="submit"
-                                className="w-full mt-6 bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition shadow-xl shadow-slate-900/20 group cursor-pointer"
+                                disabled={purchaseLoading}
+                                className="w-full mt-6 bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition shadow-xl shadow-slate-900/20 group cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                             >
-                                <div className="w-8 h-8 bg-slate-700/50 rounded flex items-center justify-center group-hover:bg-slate-700 transition">
-                                    <FaShoppingCart className="text-sm" />
-                                </div>
-                                BUY NOW
+                                {purchaseLoading ? (
+                                    <span>Processing...</span>
+                                ) : (
+                                    <>
+                                    <div className="w-8 h-8 bg-slate-700/50 rounded flex items-center justify-center group-hover:bg-slate-700 transition">
+                                        <FaShoppingCart className="text-sm" />
+                                    </div>
+                                    BUY NOW
+                                    </>
+                                )}
                             </button>
                         </form>
                     </div>

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding, FaStar } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown } from 'react-icons/md';
+import SearchableDropdown from '../ui/SearchableDropdown';
 
 const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // State for data and loading
@@ -19,10 +20,10 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     // Filter states
     const [filters, setFilters] = useState({
-        category: initialFilters.category || '',
+        category: initialFilters.category || 'Restaurants',
         country: initialFilters.country || 'United States',
-        state: initialFilters.state || '',
-        city: initialFilters.city || ''
+        state: initialFilters.state || 'New York',
+        city: initialFilters.city || 'New York'
     });
 
     // Helper functions for fetching dropdown data
@@ -53,7 +54,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         }
         try {
             // Backend is currently hardcoded for US states/cities
-            const response = await fetch('http://localhost:5000/api/location/states');
+            const response = await fetch(`http://localhost:5000/api/location/states?country=${encodeURIComponent(filters.country)}`);
             const result = await response.json();
             setStates(result.data || []);
         } catch (error) {
@@ -97,7 +98,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 const stateObj = states.find(s => s.name === filters.state);
                 if (!stateObj) return;
 
-                const response = await fetch(`http://localhost:5000/api/location/cities/${stateObj.isoCode}`);
+                const response = await fetch(`http://localhost:5000/api/location/cities/${stateObj.isoCode}?country=${encodeURIComponent(filters.country)}`);
                 const result = await response.json();
                 setCities(result.data || []);
             } catch (error) {
@@ -118,69 +119,61 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         }));
     };
 
-    const handleSearch = () => {
-        // Generate simulated data based on selected filters
+    const handleSearch = async () => {
         const { category, country, state, city } = filters;
         
-        if (!category && !country) {
-             alert("Please select at least a category or country");
+        if (!category) {
+             alert("Please select at least a category.");
              return;
         }
 
         setLoading(true);
-        
-        // Simulate a delay
-        setTimeout(() => {
-            const count = 23; // Generate 23 items as requested
-            const simulatedDatasets = Array.from({ length: count }, (_, i) => {
-                const cat = category || 'Businesses';
-                const loc = city || state || country || 'Global';
-                const simulatedName = `List Of ${cat} in ${loc} ${i + 1}`;
-                const tempId = (Date.now() + i).toString();
-                
-                const item = {
-                    id: tempId,
-                    _id: tempId,
-                    name: simulatedName,
-                    category: cat,
-                    location: loc,
-                    records: (Math.floor(Math.random() * 100) + 10) + ",000",
-                    totalRecords: (Math.floor(Math.random() * 100) + 10) + ",000",
-                    emails: (Math.floor(Math.random() * 80) + 5) + ",000",
-                    emailCount: (Math.floor(Math.random() * 80) + 5) + ",000",
-                    phones: (Math.floor(Math.random() * 90) + 10) + ",000",
-                    phoneCount: (Math.floor(Math.random() * 90) + 10) + ",000",
-                    price: "$299",
-                    lastUpdate: new Date().toLocaleDateString(),
-                    isSimulated: true,
-                    sampleList: Array.from({ length: 10 }, (_, j) => ({
-                        name: `${category || 'Business'} Store ${j + 1}`,
-                        address: `${Math.floor(Math.random() * 999) + 1} Main St`,
-                        city: city || 'Springfield',
-                        state: state || 'IL',
-                        country: country || 'USA',
-                        email: 'available',
-                        phone: 'available',
-                        rating: (Math.random() * 2 + 3).toFixed(1),
-                        reviews: Math.floor(Math.random() * 100).toString()
-                    }))
-                };
-                return item;
+
+        try {
+            // New logic: Fetch "Dataset Summary" instead of raw business list
+            const queryParams = new URLSearchParams({
+                country: country || '',
+                state: state || '',
+                city: city || '',
+                category: category
             });
 
-            // Store in sessionStorage for the detail page
-            sessionStorage.setItem('simulatedDatasets', JSON.stringify(simulatedDatasets));
+            const response = await fetch(`http://localhost:5000/api/scraper/dataset/search?${queryParams}`);
+            const result = await response.json();
             
-            setDatasets(simulatedDatasets);
+            if (result.success && result.dataset) {
+                // If dataset found, show it as a single row in the table
+                // We adapt the dataset object to match the table rendering usage temporarily
+                // Or we update the table columns. 
+                // Let's map it to match existing table columns to minimize UI rewrite, but change semantics.
+                const ds = result.dataset;
+                const mappedData = [{
+                    id: ds.id,
+                    name: `List Of ${ds.category} in ${ds.location}`,
+                    records: ds.totalRecords.toLocaleString(), // Showing counts
+                    emails: ds.emailCount.toLocaleString(), 
+                    phones: ds.phones.toLocaleString(),
+                    full_address: `Last Updated: ${ds.lastUpdate}`, // Using address slot for sub-info
+                    price: ds.price,
+                    isDataset: true
+                }];
+                setDatasets(mappedData);
+            } else {
+                setDatasets([]);
+            }
+
+        } catch (error) {
+            console.error("Error searching data:", error);
+            setDatasets([]);
+        } finally {
             setLoading(false);
-        }, 800);
+        }
     };
 
     return (
         <div className="bg-white min-h-screen font-sans text-slate-800">
-            {/* --- HERO SECTION --- */}
+            {/* ... (Hero Section remains same) ... */}
             <div className="relative bg-[#0a1f44] text-white pt-20 pb-24 overflow-hidden">
-                {/* Abstract Data Background (CSS illustration) */}
                 <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
                      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#4F46E5" d="M42.7,-62.9C50.9,-52.8,50.1,-34.4,51.7,-19.2C53.4,-4,57.4,8,54,18.7C50.6,29.4,39.8,38.8,28.5,45.6C17.2,52.4,5.4,56.6,-7.1,58.8C-19.6,61,-32.8,61.2,-43.3,54.7C-53.8,48.2,-61.6,35,-65.4,20.9C-69.2,6.8,-69,-8.2,-63.3,-21.3C-57.6,-34.4,-46.4,-45.6,-34.8,-53.9C-23.2,-62.2,-11.6,-67.6,2.2,-71C16,-74.4,32,-75.8,42.7,-62.9Z" transform="translate(100 100)" />
@@ -198,7 +191,6 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                         </p>
                     </div>
                     
-                    {/* Hero Illustration / Dashboard Preview */}
                     <div className="lg:w-1/2 flex justify-center">
                         <div className="p-2 rounded-xl ">
                              <img 
@@ -221,7 +213,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     )}
 
                     <div className="flex flex-col lg:flex-row gap-8">
-                        {/* SIDEBAR FILTERS */}
+                        {/* SIDEBAR FILTERS (unchanged logic, just rendering) */}
                         <div className="lg:w-1/4">
                             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                                 <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
@@ -231,81 +223,52 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 <div className="space-y-4">
                                     {/* Category Select */}
                                     <div className="relative">
-                                        <label className="text-xs font-bold uppercase text-slate-500 mb-1 block">Category</label>
-                                        <div className="relative">
-                                            <select 
-                                                name="category"
-                                                value={filters.category}
-                                                onChange={handleFilterChange}
-                                                className="w-full pl-4 pr-10 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
-                                            >
-                                                <option value="">Select Category</option>
-                                                {categories.map((cat, idx) => (
-                                                    <option key={idx} value={cat.name}>{cat.name}</option>
-                                                ))}
-                                            </select>
-                                            <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg pointer-events-none" />
-                                        </div>
+                                        <SearchableDropdown
+                                            label="Category"
+                                            name="category"
+                                            value={filters.category}
+                                            onChange={handleFilterChange}
+                                            options={categories.map(c => c.name)}
+                                            placeholder="Select Category"
+                                        />
                                     </div>
 
                                     {/* Country Select */}
                                     <div className="relative">
-                                        <label className="text-xs font-bold uppercase text-slate-500 mb-1 block">Country</label>
-                                        <div className="relative">
-                                            <select 
-                                                name="country"
-                                                value={filters.country}
-                                                onChange={handleFilterChange}
-                                                className="w-full pl-4 pr-10 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
-                                            >
-                                                <option value="">Select Country</option>
-                                                {countries.map((country, idx) => {
-                                                    const name = country.country_name || country.name;
-                                                    return <option key={idx} value={name}>{name}</option>;
-                                                })}
-                                            </select>
-                                            <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg pointer-events-none" />
-                                        </div>
+                                        <SearchableDropdown
+                                            label="Country"
+                                            name="country"
+                                            value={filters.country}
+                                            onChange={handleFilterChange}
+                                            options={countries.map(c => c.country_name || c.name)}
+                                            placeholder="Select Country"
+                                        />
                                     </div>
 
                                     {/* State Select */}
                                     <div className="relative">
-                                        <label className="text-xs font-bold uppercase text-slate-500 mb-1 block">State</label>
-                                        <div className="relative">
-                                            <select 
-                                                name="state"
-                                                value={filters.state}
-                                                onChange={handleFilterChange}
-                                                disabled={!filters.country}
-                                                className="w-full pl-4 pr-10 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white disabled:bg-slate-50 disabled:text-slate-400"
-                                            >
-                                                <option value="">Select State</option>
-                                                {states.map((state, idx) => (
-                                                    <option key={idx} value={state.name}>{state.name}</option>
-                                                ))}
-                                            </select>
-                                            <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg pointer-events-none" />
-                                        </div>
+                                        <SearchableDropdown
+                                            label="State"
+                                            name="state"
+                                            value={filters.state}
+                                            onChange={handleFilterChange}
+                                            options={states.map(s => s.name)}
+                                            placeholder="Select State"
+                                            disabled={!filters.country}
+                                        />
                                     </div>
 
                                     {/* City Select */}
                                     <div className="relative">
-                                        <label className="text-xs font-bold uppercase text-slate-500 mb-1 block">City</label>
-                                        <div className="relative">
-                                            <select 
-                                                name="city"
-                                                value={filters.city}
-                                                onChange={handleFilterChange}
-                                                disabled={!filters.state}
-                                                className="w-full pl-4 pr-10 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white disabled:bg-slate-50 disabled:text-slate-400"
-                                            >
-                                                <option value="">Select City</option>
-                                                {cities.map((city, idx) => (
-                                                    <option key={idx} value={city.name}>{city.name}</option>
-                                                ))}
-                                            </select>
-                                            <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg pointer-events-none" />
-                                        </div>
+                                        <SearchableDropdown
+                                            label="City"
+                                            name="city"
+                                            value={filters.city}
+                                            onChange={handleFilterChange}
+                                            options={cities.map(c => c.name)}
+                                            placeholder="Select City"
+                                            disabled={!filters.state}
+                                        />
                                     </div>
                                     
                                     <button 
@@ -322,31 +285,44 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                         <div className="lg:w-3/4">
                             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                                 {loading ? (
-                                    <div className="p-12 text-center text-slate-500">Loading datasets...</div>
+                                    <div className="p-12 text-center text-slate-500">
+                                         <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-200 border-t-blue-600 mb-2"></div>
+                                         <p>Finding the comprehensive dataset...</p>
+                                    </div>
+                                ) : datasets.length === 0 ? (
+                                    <div className="p-12 text-center text-slate-500">
+                                        <p>No complete datasets found for this criteria.</p>
+                                        <Link href="/maps-scraper" className="text-blue-600 hover:underline mt-2 inline-block">
+                                            Need this data? Use our Scraper to compile it first.
+                                        </Link>
+                                    </div>
                                 ) : (
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-left border-collapse">
                                             <thead>
                                                 <tr className="bg-blue-50 text-blue-900 text-xs uppercase font-bold tracking-wider">
                                                     <th className="p-4 border-b border-blue-100">Name</th>
-                                                    <th className="p-4 border-b border-blue-100">Records</th>
-                                                    <th className="p-4 border-b border-blue-100 flex items-center gap-1"><MdEmail/> Email</th>
-                                                    <th className="p-4 border-b border-blue-100"><span className="flex items-center gap-1"><MdPhone/> Phone</span></th>
+                                                    <th className="p-4 border-b border-blue-100">Number of Records</th>
+                                                    <th className="p-4 border-b border-blue-100 flex items-center gap-1"><MdEmail/> Emails</th>
+                                                    <th className="p-4 border-b border-blue-100"><span className="flex items-center gap-1"><MdPhone/> Phones</span></th>
                                                     <th className="p-4 border-b border-blue-100 text-right">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-slate-100">
                                                 {datasets.map((item) => (
                                                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                                                        <td className="p-4 font-medium text-slate-700">{item.name}</td>
-                                                        <td className="p-4 text-slate-600">{item.records}</td>
+                                                        <td className="p-4 font-medium text-slate-700">
+                                                            <div className="font-bold text-lg text-slate-700">{item.name}</div>
+                                                            <div className="text-xs text-slate-400 mt-1">{item.full_address}</div>
+                                                        </td>
+                                                        <td className="p-4 text-slate-600 font-bold">{item.records}</td>
                                                         <td className="p-4 text-slate-600">{item.emails}</td>
                                                         <td className="p-4 text-slate-600">{item.phones}</td>
                                                         <td className="p-4">
                                                             <div className="flex gap-2 justify-end">
-                                                                <Link href={`/b2b/${item.id}`} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded hover:bg-blue-700 transition">View Dataset</Link>
-                                                                <button className="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 text-xs font-semibold rounded hover:bg-slate-50 transition">Sample Data</button>
-                                                                <button className="px-3 py-1.5 bg-blue-50 text-blue-600 text-xs font-semibold rounded hover:bg-blue-100 transition">To renew</button>
+                                                                <Link href={`/b2b/${item.id}`} className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm shadow hover:bg-blue-700 transition">
+                                                                    View & Purchase Report
+                                                                </Link>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -357,9 +333,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 )}
                                 
                                 <div className="p-4 border-t border-slate-100 flex justify-center">
-                                    <button className="text-blue-600 font-medium text-sm flex items-center gap-1 hover:underline">
-                                        Load more datasets <MdKeyboardArrowDown />
-                                    </button>
+                                    {/* Pagination or load more if mostly needed for many datasets */}
                                 </div>
                             </div>
                         </div>
