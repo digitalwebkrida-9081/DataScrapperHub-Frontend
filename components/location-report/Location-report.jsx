@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding } from 'react-icons/fa';
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import WhyChoose from '../WhyChoose';
 
-const Locationreport = () => {
+const Locationreport = ({ initialCountrySlug }) => {
+    const router = useRouter();
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState('United States');
     const [datasets, setDatasets] = useState([]);
@@ -26,15 +28,31 @@ const Locationreport = () => {
                 const countryResult = await countryRes.json();
                 const categoryResult = await categoryRes.json();
 
-                if (countryResult.success) setCountries(countryResult.data || []);
+                const fetchedCountries = countryResult.success ? (countryResult.data || []) : [];
+                setCountries(fetchedCountries);
                 if (categoryResult.success) setCategories(categoryResult.data || []);
+
+                // Handle initial slug logic
+                if (initialCountrySlug && fetchedCountries.length > 0) {
+                    // Try to find exact match or fuzzy match
+                    const decodedSlug = decodeURIComponent(initialCountrySlug).replace(/-/g, ' ');
+                    const foundCountry = fetchedCountries.find(c => 
+                        (c.country_name || c.name).toLowerCase() === decodedSlug.toLowerCase()
+                    );
+                    
+                    if (foundCountry) {
+                        const countryName = foundCountry.country_name || foundCountry.name;
+                        setSelectedCountry(countryName);
+                        setCountrySearchQuery(countryName); 
+                    }
+                }
 
             } catch (error) {
                 console.error("Error fetching initial data:", error);
             }
         };
         fetchData();
-    }, []);
+    }, [initialCountrySlug]); // valid dependency
 
     // Fetch Datasets when country changes
     React.useEffect(() => {
@@ -62,6 +80,17 @@ const Locationreport = () => {
             fetchDatasets();
         }
     }, [selectedCountry]);
+    
+    // Update URL when country changes (user interaction)
+    const handleCountryChange = (countryName) => {
+        setSelectedCountry(countryName);
+        setCountrySearchQuery(countryName);
+        setIsCountryDropdownOpen(false);
+        
+        // Update URL
+        const slug = countryName.toLowerCase().replace(/\s+/g, '-');
+        router.push(`/smartscraper/business-reports/${slug}`);
+    };
 
     const [searchQuery, setSearchQuery] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -210,9 +239,7 @@ const Locationreport = () => {
                                                             key={idx}
                                                             className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer text-slate-700"
                                                             onClick={() => {
-                                                                setSelectedCountry(countryName);
-                                                                setCountrySearchQuery(countryName);
-                                                                setIsCountryDropdownOpen(false);
+                                                                handleCountryChange(countryName);
                                                             }}
                                                         >
                                                             {countryName}
