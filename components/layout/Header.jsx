@@ -40,7 +40,7 @@ export default function Navbar(){
         <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between">
           {/* LOGO */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative overflow-hidden w-10 h-10 rounded-lg shadow-sm">
+            <div className="relative overflow-hidden w-10 h-10 rounded-lg">
                 <img src="/images/logo.jpg" alt="DataSellerHub" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             </div>
             <span className="font-bold text-xl md:text-2xl tracking-tight text-slate-900">
