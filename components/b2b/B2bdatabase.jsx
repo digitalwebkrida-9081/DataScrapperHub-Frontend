@@ -432,7 +432,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     {/* Domains */}
                      <div>
                         <h3 className="text-[32px] font-bold text-center mb-8">
-                            Find <span className="text-blue-600">B2B Leads</span> Across {filters.country ? `${filters.country} Different Domains` : 'Different Domains'}
+                            Find <span className="text-blue-600">B2B Leads</span> Across Different Domains
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-8 text-[14px] text-slate-500 max-w-6xl mx-auto">
                             {/* Generating a long list of domains using all actual countries */}
@@ -443,7 +443,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                     const slug = countryName.toLowerCase().replace(/\s+/g, '-');
                                     const label = `Business Leads in ${countryName} (${randomNum})`;
                                     return (
-                                        <Link key={i} href={`/b2b/c/${slug}`} className="flex items-start gap-2 text-slate-500 text-[14px] font-semibold hover:text-blue-600 transition">
+                                        <Link key={i} href={`/b2b/business-report/${slug}`} className="flex items-start gap-2 text-slate-500 text-[14px] font-semibold hover:text-blue-600 transition">
                                             <span className="mt-1.5 w-1 h-1 bg-slate-400 rounded-full shrink-0"></span>
                                             <span>{label}</span>
                                         </Link>
