@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaGlobe, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import WhyChoose from '../WhyChoose';
 
 const B2bCountryDetail = ({ countrySlug }) => {
     const router = useRouter();
@@ -115,9 +116,9 @@ const B2bCountryDetail = ({ countrySlug }) => {
                             <div className="absolute bottom-0 left-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl -z-10"></div>
                             
                             <img 
-                                src="/images/vector/data-delivery-image-1.png" 
+                                src="/images/b2b-loc.png" 
                                 alt={`${displayName} Business Data`} 
-                                className="max-w-full h-auto drop-shadow-2xl animate-in slide-in-from-right duration-700"
+                                className="max-w-full h-80 drop-shadow-lg animate-in slide-in-from-right duration-700 opacity-90 transition-opacity mix-blend-screen pointer-events-none select-none"
                             />
                         </div>
                     </div>
@@ -197,6 +198,9 @@ const B2bCountryDetail = ({ countrySlug }) => {
                         })}
                     </div>
                 </div>
+            </div>
+            <div>
+                <WhyChoose />
             </div>
         </div>
     );

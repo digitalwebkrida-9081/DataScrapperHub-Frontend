@@ -115,7 +115,7 @@ const [open, setOpen] = useState(false);
 
               <p className="text-sm text-gray-500 mb-10 max-w-2xl">
                 By submitting this form, I confirm that I have read and
-                understood Smart Scraper’s{" "}
+                understood Data Seller Hub’s{" "}
                 <span className="text-blue-600 cursor-pointer">
                   Privacy Statement
                 </span>
