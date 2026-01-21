@@ -244,22 +244,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     </div>
                 </div>
 
-                {/* Marquee Section */}
-                <div className="absolute bottom-0 left-0 w-full py-6">
-                    <div className="overflow-hidden marquee-fade relative">
-                         <div className="flex items-center gap-12 animate-marquee whitespace-nowrap px-4">
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((num) => (
-                                <img key={num} src={`/images/logos/logo-${num}.png`} className="h-8 w-auto object-contain opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" alt="Partner Logo" />
-                            ))}
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((num) => (
-                                <img key={`dup-${num}`} src={`/images/logos/logo-${num}.png`} className="h-8 w-auto object-contain opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" alt="Partner Logo" />
-                            ))}
-                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((num) => (
-                                <img key={`dup2-${num}`} src={`/images/logos/logo-${num}.png`} className="h-8 w-auto object-contain opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" alt="Partner Logo" />
-                            ))}
-                         </div>
-                    </div>
-                </div>
+               
             </div>
 
             {/* --- MAIN SEARCH & DATA SECTION --- */}

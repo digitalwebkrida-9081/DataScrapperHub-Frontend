@@ -37,34 +37,7 @@ export default function Hero() {
       </div>
 
 
-      <div className="absolute bottom-0 left-0 w-full py-4">
-        <div className="overflow-hidden marquee-fade">
-          <div className="flex items-center gap-12 animate-marquee px-12">
-            <img src="images/logos/logo-1.png" className="h-8 opacity-80" alt="Logo 1" />
-            <img src="images/logos/logo-2.png" className="h-8 opacity-80" alt="Logo 2" />
-            <img src="images/logos/logo-3.png" className="h-8 opacity-80" alt="Logo 3" />
-            <img src="images/logos/logo-4.png" className="h-8 opacity-80" alt="Logo 4" />
-            <img src="images/logos/logo-5.png" className="h-8 opacity-80" alt="Logo 5" />
-            <img src="images/logos/logo-6.png" className="h-8 opacity-80" alt="Logo 6" />
-            <img src="images/logos/logo-7.png" className="h-8 opacity-80" alt="Logo 7" />
-            <img src="images/logos/logo-8.png" className="h-8 opacity-80" alt="Logo 8" />
-            <img src="images/logos/logo-9.png" className="h-8 opacity-80" alt="Logo 9" />
-            <img src="images/logos/logo-10.png" className="h-8 opacity-80" alt="Logo 10" />
-            <img src="images/logos/logo-11.png" className="h-8 opacity-80" alt="Logo 11" />
-
-            <img src="images/logos/logo-1.png" className="h-8 opacity-80" alt="Logo 1" />
-            <img src="images/logos/logo-2.png" className="h-8 opacity-80" alt="Logo 2" />
-            <img src="images/logos/logo-3.png" className="h-8 opacity-80" alt="Logo 3" />
-            <img src="images/logos/logo-4.png" className="h-8 opacity-80" alt="Logo 4" />
-            <img src="images/logos/logo-5.png" className="h-8 opacity-80" alt="Logo 5" />
-             <img src="images/logos/logo-6.png" className="h-8 opacity-80" alt="Logo 6" />
-            <img src="images/logos/logo-7.png" className="h-8 opacity-80" alt="Logo 7" />
-            <img src="images/logos/logo-8.png" className="h-8 opacity-80" alt="Logo 8" />
-            <img src="images/logos/logo-9.png" className="h-8 opacity-80" alt="Logo 9" />
-            <img src="images/logos/logo-10.png" className="h-8 opacity-80" alt="Logo 10" />
-          </div>
-        </div>
-      </div>
+      
     </section>
   );
 }
