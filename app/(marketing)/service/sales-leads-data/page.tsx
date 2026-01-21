@@ -1,8 +1,8 @@
 import SalesLead from "@/components/service/Saleslead";
 
 export const metadata = {
-  title: "Sales Lead Data | DataScraperHub",
-  description: "Sales Lead Data Scraping | DataScraperHub",
+  title: "Sales Lead Data | DataSellerHub",
+  description: "Sales Lead Data Scraping | DataSellerHub",
 };
 
 export default function SalesLeadPage() {

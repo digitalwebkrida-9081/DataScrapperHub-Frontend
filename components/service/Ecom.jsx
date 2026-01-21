@@ -15,10 +15,10 @@ export default function RealEstate() {
         <div className="relative max-w-7xl mx-auto px-6 w-full text-white">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-              Unlock E-commerce Success with DataScraperHub
+              Unlock E-commerce Success with DataSellerHub
             </h1>
             <p className="text-gray-200 text-lg mb-8 leading-relaxed">
-              DataScraperHub offers powerful E-commerce data scraping services to extract valuable insights from any website. Scrape E-commerce data such as product details, pricing, deals, customer reviews, ratings, and seller information. Make data-driven decisions to optimize your product offerings and understand your target audience.
+              DataSellerHub offers powerful E-commerce data scraping services to extract valuable insights from any website. Scrape E-commerce data such as product details, pricing, deals, customer reviews, ratings, and seller information. Make data-driven decisions to optimize your product offerings and understand your target audience.
             </p>
             
             <button className="bg-white text-blue-900 px-8 py-3 rounded font-semibold hover:bg-blue-50 transition">
@@ -38,10 +38,10 @@ export default function RealEstate() {
       <section className="py-20 bg-[#EBF3FF]">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">
-             Empower Your Business with DataScraperHub
+             Empower Your Business with DataSellerHub
           </h2>
           <p className="max-w-4xl mx-auto text-gray-600 mb-16 leading-relaxed">
-            DataScraperHub delivers high-quality, actionable E-commerce data to drive your online success. We provide comprehensive data, including product descriptions, bestsellers, images, demand trends, stock availability, and more from diverse sources. Gain access to structured, reliable data to expand your reach and dominate global markets.
+            DataSellerHub delivers high-quality, actionable E-commerce data to drive your online success. We provide comprehensive data, including product descriptions, bestsellers, images, demand trends, stock availability, and more from diverse sources. Gain access to structured, reliable data to expand your reach and dominate global markets.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -77,7 +77,7 @@ export default function RealEstate() {
               Harness the Power of E-commerce Data
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              DataScraperHub uses cutting-edge technologies to gather a wealth of E-commerce data, empowering you to outperform competitors. From product images and descriptions to performance metrics, variations, and stock availability, our data solutions provide the foundation for your success.
+              DataSellerHub uses cutting-edge technologies to gather a wealth of E-commerce data, empowering you to outperform competitors. From product images and descriptions to performance metrics, variations, and stock availability, our data solutions provide the foundation for your success.
             </p>
             
             <div className="grid grid-cols-2 gap-8 text-center mt-10">
@@ -100,7 +100,7 @@ export default function RealEstate() {
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
               Ensure a seamless supply chain with accurate data on pricing and stock availability.
-DataScraperHub delivers unique, real-time, and customized data solutions tailored to your specific needs. Our exclusive, up-to-date insights give you a competitive edge.
+DataSellerHub delivers unique, real-time, and customized data solutions tailored to your specific needs. Our exclusive, up-to-date insights give you a competitive edge.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">
@@ -176,7 +176,7 @@ DataScraperHub delivers unique, real-time, and customized data solutions tailore
              </div>
 
              <p className="mt-12 text-center text-gray-500 text-lg">
-               E-commerce data scraping is a game-changer for businesses looking to expand their brand. Leverage data-driven insights to make informed decisions about products, ensuring alignment with your target audience. As your business scales, reliable data becomes crucial. DataScraperHub empowers data-driven E-commerce companies to measure and refine their strategies, enabling them to thrive in the competitive marketplace.
+               E-commerce data scraping is a game-changer for businesses looking to expand their brand. Leverage data-driven insights to make informed decisions about products, ensuring alignment with your target audience. As your business scales, reliable data becomes crucial. DataSellerHub empowers data-driven E-commerce companies to measure and refine their strategies, enabling them to thrive in the competitive marketplace.
                <br/><br/>
                Tell us your project and we will scrape it for you.
              </p>

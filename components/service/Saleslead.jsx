@@ -19,7 +19,7 @@ export default function RealEstate() {
             </h1>
             <p className="text-gray-200 text-lg mb-8 leading-relaxed">
               Refine your targeting accuracy by procuring relevant leads from the wide internet world. Communicate with perfect audience for product/service promotion or sales campaign execution smoothly. Enrich CRM data with emails, contact numbers, addresses, revenue figures, social media profiles and more. <br /> <br />
-              START YOUR JOURNEY WITH DATASCRAPERHUB TODAY
+              START YOUR JOURNEY WITH DataSellerHub TODAY
             </p>
             
             <button className="bg-white text-blue-900 px-8 py-3 rounded font-semibold hover:bg-blue-50 transition">
@@ -42,7 +42,7 @@ export default function RealEstate() {
              Unleashing the Potential of Real Estate Data
           </h2>
           <p className="max-w-4xl mx-auto text-gray-600 mb-16 leading-relaxed">
-            DataScraperHub provides sales lead data that is current and of high quality, saving you time and resources. You can get detailed information like postal codes, first names and last names, LinkedIn URLs and more from us. The sales lead generation data assists you in finding prospective customers who are prepared to purchase your product or service. We empower companies to maximize resource utilization by providing rich and predictive details.
+            DataSellerHub provides sales lead data that is current and of high quality, saving you time and resources. You can get detailed information like postal codes, first names and last names, LinkedIn URLs and more from us. The sales lead generation data assists you in finding prospective customers who are prepared to purchase your product or service. We empower companies to maximize resource utilization by providing rich and predictive details.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -100,7 +100,7 @@ export default function RealEstate() {
       <section className="bg-[#2F66F6] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
-              DataScraperHub is the complete provider, presenting unique, on-demand and tailored data as per your business requirements. Only you get the scraped sales lead generation data, making you distinct from rivals who use general data providers. We bring fresh and different information for you to rely on.
+              DataSellerHub is the complete provider, presenting unique, on-demand and tailored data as per your business requirements. Only you get the scraped sales lead generation data, making you distinct from rivals who use general data providers. We bring fresh and different information for you to rely on.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">

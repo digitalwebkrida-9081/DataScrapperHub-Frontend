@@ -17,7 +17,7 @@ export default function ServicesPage() {
 
           {/* Title */}
           <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
-            DataScraperHub - Privacy Policy
+            DataSellerHub - Privacy Policy
           </h1>
 
           {/* Scroll Indicator */}
@@ -38,13 +38,13 @@ export default function ServicesPage() {
               Privacy Notice
             </h2>
             <p className="mb-4">
-              Inside this Privacy Policy document, you will find the kinds of information we gather and save in DataScraperHub, as well as how we utilize it.
+              Inside this Privacy Policy document, you will find the kinds of information we gather and save in DataSellerHub, as well as how we utilize it.
             </p>
             <p className="mb-4">
               If there are any more questions or need for extra details regarding our Privacy Policy, feel free to reach out.
             </p>
             <p className="mb-4">
-              This Privacy Policy is only for our online actions and is valid for visitors to our website about the data we collect in DataScraperHub. It doesn't include any details gathered offline or through means other than this website.
+              This Privacy Policy is only for our online actions and is valid for visitors to our website about the data we collect in DataSellerHub. It doesn't include any details gathered offline or through means other than this website.
             </p>
           </div>
 
@@ -98,7 +98,7 @@ During the Account creation process, we might request your contact details such 
               Log Files
             </h2>
             <p className="mb-4">
-              DataScraperHub employs a common practice of using log files. These files record visitors when they visit websites; this is done by all hosting companies as part of their hosting service's analytics. Log files gather information about internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time of visit/interaction, referring or exit pages as well as click counts.
+              DataSellerHub employs a common practice of using log files. These files record visitors when they visit websites; this is done by all hosting companies as part of their hosting service's analytics. Log files gather information about internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time of visit/interaction, referring or exit pages as well as click counts.
             </p>
             <p className="mb-4">
               They are not associated with any personal information, but for trend analysis, site administration, tracking movement of users on the website and gathering demographic info.
@@ -111,7 +111,7 @@ During the Account creation process, we might request your contact details such 
               Cookies and Web Beacons
             </h2>
             <p className="mb-4">
-              DataScraperHub applies cookies, these are used to collect and store information such as visitor’s preferences, and the particular pages on the website that visitor accessed or visited. The data is utilized for improving user experience by customizing our page content according to browser type of visitors and other similar information.
+              DataSellerHub applies cookies, these are used to collect and store information such as visitor’s preferences, and the particular pages on the website that visitor accessed or visited. The data is utilized for improving user experience by customizing our page content according to browser type of visitors and other similar information.
             </p>
           </div>
 
@@ -131,13 +131,13 @@ During the Account creation process, we might request your contact details such 
               Advertising Partners Privacy Policies
             </h2>
             <p className="mb-4">
-              This list provides the Privacy Policy for every advertising partner of DataScraperHub.
+              This list provides the Privacy Policy for every advertising partner of DataSellerHub.
             </p>
             <p className="mb-4">
               The Services may include advertisements from third-party ad servers or networks. These ads are sent directly to your browser and the servers automatically recognize your IP address. They use different technologies like cookies, JavaScript, Web Beacons, or others in their respective advertisements and links that appear on the Services. This is done to measure the effectiveness of their advertising campaigns and personalize the advertising content you see.
             </p>
             <p className="mb-4">
-              (Note: DataScraperHub does not have any access or control on these cookies that are employed by third-party advertisers.)
+              (Note: DataSellerHub does not have any access or control on these cookies that are employed by third-party advertisers.)
             </p>
           </div>
 
@@ -147,7 +147,7 @@ During the Account creation process, we might request your contact details such 
               Third-Party Privacy Policies
             </h2>
             <p className="mb-4">
-              The Privacy Policy of DataScraperHub is not applicable to any other advertisers or websites. As a result, we are recommending that you consult the respective Privacy Policies for these third-party ad servers for more detailed information. It might include instructions from them about opting out of certain choices.
+              The Privacy Policy of DataSellerHub is not applicable to any other advertisers or websites. As a result, we are recommending that you consult the respective Privacy Policies for these third-party ad servers for more detailed information. It might include instructions from them about opting out of certain choices.
             </p>
             <p className="mb-4">
               Anyway, you can choose to disable cookies through your browser options.
@@ -204,7 +204,7 @@ During the Account creation process, we might request your contact details such 
               The most important thing is to include safety for children while using the internet. We suggest parents/guardians look at, join in and oversee their online activity.
             </p>
             <p className="mb-4">
-              DataScraperHub doesn't purposely gather any Personal Identifiable Information from children under 13 years old. If you think that your child has given this type of personal information on our website, whether knowingly or unknowingly, we urge you to get in touch with us. We will make every effort to quickly delete such information from our records.
+              DataSellerHub doesn't purposely gather any Personal Identifiable Information from children under 13 years old. If you think that your child has given this type of personal information on our website, whether knowingly or unknowingly, we urge you to get in touch with us. We will make every effort to quickly delete such information from our records.
             </p>
           </div>
         </div>

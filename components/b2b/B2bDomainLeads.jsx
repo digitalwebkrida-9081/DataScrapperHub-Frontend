@@ -204,7 +204,7 @@ const B2bDomainLeads = ({ country = "United States" }) => {
             <div className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-2xl font-bold text-slate-900">How DataScraperHub Helps Your Business Grow</h2>
+                        <h2 className="text-2xl font-bold text-slate-900">How DataSellerHub Helps Your Business Grow</h2>
                         <p className="text-slate-500 mt-2">Strategic advantages of using our curated B2B datasets.</p>
                     </div>
 
@@ -357,7 +357,7 @@ const B2bDomainLeads = ({ country = "United States" }) => {
                     <div className="bg-slate-100 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10">
                         <div className="md:w-2/3">
                             <h2 className="text-3xl font-bold text-slate-900 mb-4">
-                                Harness the Power of <span className="text-blue-600">DataScraperHub</span>
+                                Harness the Power of <span className="text-blue-600">DataSellerHub</span>
                             </h2>
                             <p className="text-slate-600 text-lg mb-8 leading-relaxed">
                                 Our web scraping services collect data and convert it into standardized CSV, Excel, and JSON formats.

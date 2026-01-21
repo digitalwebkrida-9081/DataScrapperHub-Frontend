@@ -100,7 +100,7 @@ const [open, setOpen] = useState(false);
                       Email Address
                     </p>
                     <p className="text-sm text-gray-500">
-                      info@datascraperhub.com
+                      info@DataSellerHub.com
                     </p>
                   </div>
                 </div>

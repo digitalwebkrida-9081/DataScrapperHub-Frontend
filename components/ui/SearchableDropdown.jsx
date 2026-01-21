@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { MdKeyboardArrowDown, MdSearch } from 'react-icons/md';
+import { FaTimes } from 'react-icons/fa';
 
 const SearchableDropdown = ({ 
     options = [], 
@@ -17,11 +18,30 @@ const SearchableDropdown = ({
     const wrapperRef = useRef(null);
 
     useEffect(() => {
-        setFilteredOptions(
-            options.filter(option => 
-                (option.label || option).toLowerCase().includes(searchTerm.toLowerCase())
-            )
+        const lowerTerm = searchTerm.toLowerCase();
+        const filtered = options.filter(option => 
+            (option.label || option).toLowerCase().includes(lowerTerm)
         );
+
+        // Sort results: Exact match > Starts with > Contains
+        filtered.sort((a, b) => {
+            const labelA = (a.label || a).toLowerCase();
+            const labelB = (b.label || b).toLowerCase();
+
+            // 1. Exact match
+            if (labelA === lowerTerm && labelB !== lowerTerm) return -1;
+            if (labelB === lowerTerm && labelA !== lowerTerm) return 1;
+
+            // 2. Starts with
+            const aStarts = labelA.startsWith(lowerTerm);
+            const bStarts = labelB.startsWith(lowerTerm);
+            if (aStarts && !bStarts) return -1;
+            if (bStarts && !aStarts) return 1;
+
+            return 0; 
+        });
+
+        setFilteredOptions(filtered);
     }, [searchTerm, options]);
 
     useEffect(() => {
@@ -65,6 +85,21 @@ const SearchableDropdown = ({
                         <span className="text-slate-400">{placeholder}</span>
                     )}
                 </div>
+                
+                {/* Clear Button */}
+                {value && !disabled && (
+                    <div 
+                        className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-500 p-1 cursor-pointer z-10 transition-colors"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onChange({ target: { name, value: '' } });
+                            setSearchTerm('');
+                        }}
+                    >
+                        <FaTimes size={14} />
+                    </div>
+                )}
+
                 <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg pointer-events-none" />
             </div>
 

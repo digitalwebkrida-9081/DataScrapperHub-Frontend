@@ -8,7 +8,10 @@ const GoogleMapsScraper = () => {
         country: '',
         state: '',
         city: '',
-        category: ''
+        category: '',
+        latitude: '',
+        longitude: '',
+        radius: 5000
     });
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
@@ -124,6 +127,50 @@ const GoogleMapsScraper = () => {
                                 onChange={handleInputChange}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                             />
+                        </div>
+                    </div>
+                    
+                    {/* Lat/Long Optional Section */}
+                    <div className="mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <h3 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                            <FaMapMarkerAlt className="text-blue-500"/> 
+                            Advanced Location (Optional)
+                            <span className="text-xs font-normal text-slate-400 ml-auto">Overrides text location if provided</span>
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-2">Latitude</label>
+                                <input 
+                                    type="text" 
+                                    name="latitude"
+                                    placeholder="e.g. 40.7128" 
+                                    className="w-full px-3 py-2 border border-slate-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                    value={formData.latitude}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-2">Longitude</label>
+                                <input 
+                                    type="text" 
+                                    name="longitude"
+                                    placeholder="e.g. -74.0060" 
+                                    className="w-full px-3 py-2 border border-slate-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                    value={formData.longitude}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                             <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-2">Radius (Meters)</label>
+                                <input 
+                                    type="number" 
+                                    name="radius"
+                                    placeholder="e.g. 5000" 
+                                    className="w-full px-3 py-2 border border-slate-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                    value={formData.radius}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
                         </div>
                     </div>
 

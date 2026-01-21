@@ -17,7 +17,7 @@ export default function ServicesPage() {
 
           {/* Title */}
           <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
-            DataScraperHub - GDPR Compliance
+            DataSellerHub - GDPR Compliance
           </h1>
 
           {/* Scroll Indicator */}
@@ -34,7 +34,7 @@ export default function ServicesPage() {
         <div className="max-w-6xl mx-auto px-6 space-y-14 text-gray-700">
           {/* Intro */}
           <p className="text-lg leading-relaxed">
-            At DataScraperHub, we prioritize data privacy and security. The General Data Protection Regulation (GDPR) is a comprehensive European Union legislation designed to safeguard the rights of individuals concerning their personal data. We are fully committed to GDPR compliance and ensuring that our services meet its stringent requirements.
+            At DataSellerHub, we prioritize data privacy and security. The General Data Protection Regulation (GDPR) is a comprehensive European Union legislation designed to safeguard the rights of individuals concerning their personal data. We are fully committed to GDPR compliance and ensuring that our services meet its stringent requirements.
           </p>
 
           {/* Our Pledge */}
@@ -71,7 +71,7 @@ export default function ServicesPage() {
               How Our Services Ensure GDPR Compliance
             </h2>
             <p className="mb-4">
-              At DataScraperHub, we understand the critical importance of data protection and privacy compliance, particularly in the context of the GDPR. Our web scraping services have been meticulously designed with GDPR compliance at the core, placing your data security and privacy at the forefront of our operations.
+              At DataSellerHub, we understand the critical importance of data protection and privacy compliance, particularly in the context of the GDPR. Our web scraping services have been meticulously designed with GDPR compliance at the core, placing your data security and privacy at the forefront of our operations.
             </p>
             <ul className="list-decimal pl-6 space-y-2">
               <li>
@@ -98,7 +98,7 @@ export default function ServicesPage() {
               Collection of Data
             </h2>
             <p className="mb-4">
-              Ensuring the privacy and security of your data is our utmost priority at DataScraperHub. Here's how we handle various types of data collected through our website and services. Your trust is paramount to us, and we believe in being fully transparent about our practices. Please take a moment to review the following information regarding data collection and usage.
+              Ensuring the privacy and security of your data is our utmost priority at DataSellerHub. Here's how we handle various types of data collected through our website and services. Your trust is paramount to us, and we believe in being fully transparent about our practices. Please take a moment to review the following information regarding data collection and usage.
             </p>
             <ul className="list-decimal pl-6 space-y-2">
               <li>
@@ -111,7 +111,7 @@ export default function ServicesPage() {
                 When you download or purchase a dataset, we store minimal information required for internal data analysis purposes only. This information is stored securely in our own database and is never shared with any external services.
               </li>
               <li>
-                We utilize a self-hosted email delivery service to send transactional emails to registered users of DataScraperHub, ensuring that your data remains within our secure          infrastructure.
+                We utilize a self-hosted email delivery service to send transactional emails to registered users of DataSellerHub, ensuring that your data remains within our secure          infrastructure.
               </li>
               <li>
                 As required by law, we share only the necessary transactional data with our accountants and relevant tax authorities when paying VAT and filing our annual tax returns.

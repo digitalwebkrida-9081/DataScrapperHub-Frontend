@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
@@ -23,12 +25,12 @@ export default function Hero() {
             </p>
 
             <div className="mt-8 flex gap-4">
-              <a
-                href="#database"
+              <Link
+                href="/b2b"
                 className="inline-flex items-center px-5 py-3 bg-blue-500 hover:bg-blue-600 transition text-white rounded-md font-semibold shadow"
               >
                 Explore B2B Database
-              </a>
+              </Link>
             </div>
           </div>
         </div>

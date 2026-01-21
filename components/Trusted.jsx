@@ -13,11 +13,11 @@ export default function Trusted() {
     <section className="py-20 bg-white pb-10">
       <div className="max-w-7xl mx-auto px-6 text-center">
         
-        <h2 className="text-3xl font-semibold text-gray-900">
+        <h2 className="text-[32px] font-bold text-gray-900">
           Trusted by Industry Leaders
         </h2>
 
-        <p className="mt-4 max-w-3xl mx-auto text-gray-500 border-b border-[#F3F3F3] pb-6">
+        <p className="mt-4 max-w-4xl mx-auto text-gray-500 border-b border-[#F3F3F3] pb-6">
           Web scraping solutions empower businesses to extract online data and transform it
           into structured insights that drive value across applications, fuelling growth and innovation.
         </p>

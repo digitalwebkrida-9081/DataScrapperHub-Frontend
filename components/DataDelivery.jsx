@@ -20,7 +20,7 @@ export default function DataDelivery() {
           </h2>
 
           <p className="mt-5 text-[#425466] text-base leading-relaxed">
-            DataScraperHub scrapes and transforms data into your preferred
+            DataSellerHub scrapes and transforms data into your preferred
             structure and format, including TXT, PDF, Image, JSON, FTP, API,
             and CSV, streamlining integration with your business processes.
           </p>

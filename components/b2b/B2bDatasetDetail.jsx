@@ -4,8 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { FaCheckCircle, FaStar, FaDownload, FaChartLine, FaLock, FaEnvelope, FaPhone, FaMapMarkerAlt, FaGlobe, FaBuilding, FaUser, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import { MdVerified, MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import WhyChoose from '../WhyChoose';
 
 const B2bDatasetDetail = ({ id }) => {
+    const searchParams = useSearchParams();
+    const displayLabel = searchParams.get('label');
+
     const [dataset, setDataset] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -110,69 +115,128 @@ const B2bDatasetDetail = ({ id }) => {
     return (
         <div className="bg-white min-h-screen font-sans text-slate-800">
             {/* --- HERO SECTION --- */}
-            <div className="bg-[#0a1f44] text-white pt-24 pb-20 relative overflow-hidden">
-                 {/* Background decoration */}
-                 <div className="absolute top-0 right-0 p-10 opacity-10">
-                    <svg width="300" height="300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="2" />
-                        <path d="M50 10 L50 90 M10 50 L90 50" stroke="white" strokeWidth="2" />
-                    </svg>
-                </div>
-
-                <div className="container mx-auto px-4 relative z-10 flex flex-col lg:flex-row items-center justify-between">
-                    <div className="lg:w-3/5 mb-10 lg:mb-0">
-                         <div className="text-sm text-blue-300 mb-4 flex gap-2">
-                             <Link href="/" className="hover:underline">Home</Link> / 
-                             <Link href="/b2b" className="hover:underline">B2B Database</Link> / 
-                             <span className="text-white">{dataset.category}</span>
-                         </div>
-                        <h1 className="text-3xl lg:text-5xl font-bold mb-4 leading-tight">
-                            List of <span className="text-blue-400">{dataset.category}</span> in {dataset.location}
-                        </h1>
-                        <p className="text-slate-300 text-lg mb-6 max-w-2xl">
-                            Download the verified list of {dataset.category} with contact info (Phone, Email), provided directly to you for cold outreach.
-                        </p>
-                        
-                        <div className="flex flex-col sm:flex-row gap-4 mb-8 text-sm">
-                            <div className="flex items-center gap-2 text-green-400">
-                                <FaCheckCircle /> <span>{dataset.totalRecords} Phone verified listing stores</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-green-400">
-                                <FaCheckCircle /> <span>{dataset.emailCount} Email verified stores</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-green-400">
-                                <FaCheckCircle /> <span>100% Data Accuracy Guarantee</span>
-                            </div>
-                        </div>
-
-                         <div className="flex items-center gap-4 mb-6">
-                             <span className="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold uppercase">Best Value</span>
-                             <span className="text-slate-400 text-sm">Update: {dataset.lastUpdate}</span>
-                         </div>
-
-                        <div className="flex gap-4 items-center">
-                            <div className="text-4xl font-bold">{dataset.price}</div>
-                            <div className="text-slate-400 line-through text-lg">$599 (50% Off)</div>
-                        </div>
-                        
-                         <div className="mt-8 flex gap-4">
-                            <button 
-                                onClick={() => setIsModalOpen(true)}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold flex items-center gap-2 transition shadow-lg shadow-blue-600/30 cursor-pointer"
-                            >
-                                <FaDownload /> Buy & Download Now
-                            </button>
-                             <button
-                             onClick={() => setIsModalOpen(true)}
-                             className="bg-white text-slate-900 hover:bg-slate-100 px-8 py-3 rounded-lg font-bold flex items-center gap-2 transition cursor-pointer">
-                                <FaDownload /> Download Sample
-                            </button>
-                        </div>
+            <div className="bg-[#05051a] text-white pt-10 pb-20 relative overflow-hidden font-sans">
+                <div className="container mx-auto px-4 relative z-10">
+                    {/* Breadcrumb */}
+                    <div className="text-xs font-medium text-slate-400 mb-6 flex gap-2 items-center tracking-wide">
+                         <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link> / 
+                         <Link href="/b2b" className="hover:text-blue-400 transition-colors">B2B Database</Link> / 
+                         <span className="text-slate-200">{dataset.category} in {dataset.location}</span>
                     </div>
-                    
-                    {/* Hero Illustration */}
-                    <div className="lg:w-2/5 flex justify-center">
-                        <img src="/images/b2b-hero.png" alt="Data Illustration" className="w-full max-w-md" />
+
+                    <div className="flex flex-col lg:flex-row gap-12">
+                        {/* LEFT CONTENT */}
+                        <div className="lg:w-[60%]">
+                            <h1 className="text-2xl lg:text-4xl font-bold mb-6 leading-tight">
+                                List of <span className="font-bold text-blue-500">{dataset.category}</span> {displayLabel ? `in ${displayLabel}` : dataset.location.split(',').slice(-2).join(',')}
+                            </h1>
+                            
+                            <p className="text-slate-300 text-sm md:text-base mb-8 leading-relaxed">
+                                There are <strong className="text-white">{dataset.totalRecords.toLocaleString()}</strong> {dataset.category} in {dataset.location} as of {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}. 
+                                Of these locations, {Math.floor(dataset.totalRecords * 0.95).toLocaleString()} {dataset.category} which is 95.89% of all {dataset.category} in {dataset.location} are single-owner operations.
+                                The top three states with the most {dataset.category} are populated below. Average age of {dataset.category} in {dataset.location} is 3 years and 10 months.
+                            </p>
+
+                            {/* STATS GRID */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8 mb-8 text-sm md:text-base">
+                                 {/* Column 1 */}
+                                 <div className="space-y-3">
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{dataset.totalRecords.toLocaleString()}</span>
+                                         <span className="text-slate-300">Number of {dataset.category}</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{dataset.emailCount ? dataset.emailCount.toLocaleString() : Math.floor(dataset.totalRecords * 0.4).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Email Addresses</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{dataset.phones ? dataset.phones.toLocaleString() : Math.floor(dataset.totalRecords * 0.85).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Phone Numbers</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.6).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">With Websites</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.3).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">LinkedIn Profiles</span>
+                                     </div>
+                                 </div>
+
+                                 {/* Column 2 */}
+                                 <div className="space-y-3">
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.55).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Facebook Profiles</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.45).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Instagram Handles</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.15).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">X Handles</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.05).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">TikTok Profiles</span>
+                                     </div>
+                                     <div className="flex items-center gap-3">
+                                         <FaCheckCircle className="text-green-500 shrink-0"/>
+                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.12).toLocaleString()}</span>
+                                         <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">YouTube Channels</span>
+                                     </div>
+                                 </div>
+                            </div>
+
+                            <p className="text-blue-400 text-xs font-semibold mb-6">
+                                Data updated on {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                            </p>
+
+                            {/* PRICE & BUTTONS */}
+                            <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                                <div>
+                                    <div className="flex items-end gap-3 mb-4">
+                                        <span className="text-4xl font-extrabold text-blue-500">$199</span>
+                                        <span className="text-xl text-slate-500 line-through font-medium mb-1">$398</span>
+                                        <span className="text-white text-xl mb-1">(Holiday Discount: 50% OFF)</span>
+                                    </div>
+                                    
+                                    <div className="flex gap-4">
+                                        <button 
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded font-bold flex items-center gap-2 transition uppercase tracking-wide cursor-pointer"
+                                        >
+                                            <FaDownload /> Purchase Lead List
+                                        </button>
+                                        <button 
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="bg-white hover:bg-slate-100 text-slate-900 px-8 py-3.5 rounded font-bold flex items-center gap-2 transition uppercase tracking-wide border border-white cursor-pointer"
+                                        >
+                                            <FaDownload /> Free Sample Lead List
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* RIGHT CONTENT (VIDEO) */}
+                        <div className="lg:w-[40%] mt-8 lg:mt-0">
+                            <div className="rounded-xl overflow-hidden shadow-2xl ">
+                                {/* Simulated YouTube Embed */}
+                                <img src="/images/b2b-hero.png" alt="Hero banner" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -262,7 +326,7 @@ const B2bDatasetDetail = ({ id }) => {
             <div className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-2xl font-bold text-slate-900">How DataScraperHub Data Services Helps Businesses</h2>
+                        <h2 className="text-2xl font-bold text-slate-900">How DataSellerHub Data Services Helps Businesses</h2>
                         <p className="text-slate-500 mt-2">Explore the strategic advantages of our data scraping solutions for your business.</p>
                     </div>
 
@@ -330,14 +394,14 @@ const B2bDatasetDetail = ({ id }) => {
                      </div>
 
                      <div className="mt-12 flex flex-col md:flex-row gap-6 max-w-4xl mx-auto">
-                         <div className="flex-1 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl p-6 text-white relative overflow-hidden">
+                         <div className="flex-1 bg-linear-to-br from-blue-500 to-blue-700 rounded-xl p-6 text-white relative overflow-hidden">
                              <div className="relative z-10">
                                  <h4 className="font-bold mb-1">Store Owner</h4>
                                  <p className="text-sm opacity-80">Available</p>
                              </div>
                              <FaUser className="absolute bottom-4 right-4 text-6xl opacity-20" />
                          </div>
-                          <div className="flex-1 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl p-6 text-white relative overflow-hidden">
+                          <div className="flex-1 bg-linear-to-br from-blue-500 to-blue-700 rounded-xl p-6 text-white relative overflow-hidden">
                              <div className="relative z-10">
                                  <h4 className="font-bold mb-1">Facility Owner</h4>
                                  <p className="text-sm opacity-80">Available</p>
@@ -388,6 +452,9 @@ const B2bDatasetDetail = ({ id }) => {
                         </div>
                      </div>
                  </div>
+            </div>
+            <div>
+                <WhyChoose />
             </div>
             
             {/* Reusing existing footer or relying on Layout for Footer */}

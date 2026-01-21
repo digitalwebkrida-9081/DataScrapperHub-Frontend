@@ -15,11 +15,11 @@ export default function RealEstate() {
         <div className="relative max-w-7xl mx-auto px-6 w-full text-white">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-              Harness the Power of Real Estate and Housing Data with DataScraperHub
+              Harness the Power of Real Estate and Housing Data with DataSellerHub
             </h1>
             <p className="text-gray-200 text-lg mb-8 leading-relaxed">
               Staying ahead of the curve in real estate means access to accurate and timely data. 
-              At DataScraperHub, we specialize in providing comprehensive real estate data scraping services 
+              At DataSellerHub, we specialize in providing comprehensive real estate data scraping services 
               to help you make informed decisions. From tracking market trends to identifying investment opportunities, 
               our housing data solutions empower you to navigate the complexities of the real estate landscape with confidence.
             </p>
@@ -44,7 +44,7 @@ export default function RealEstate() {
              Unleashing the Potential of Real Estate Data
           </h2>
           <p className="max-w-4xl mx-auto text-gray-600 mb-16 leading-relaxed">
-            At DataScraperHub, we understand the critical role that structured and interactive real estate data plays in driving informed decision-making. 
+            At DataSellerHub, we understand the critical role that structured and interactive real estate data plays in driving informed decision-making. 
             Our team of experts leverages cutting-edge technologies to transform raw housing data into actionable insights. 
             Through our rigorous quality assurance process, we ensure the delivery of reliable and precise property data across the nation, 
             making us your one-stop solution for all your real estate data needs.
@@ -83,9 +83,9 @@ export default function RealEstate() {
               Comprehensive Real Estate and Housing Data Solutions
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              DataScraperHub specializes in gathering a wide range of real estate and housing data to meet your specific requirements. 
+              DataSellerHub specializes in gathering a wide range of real estate and housing data to meet your specific requirements. 
               From ownership and listing information to demographic data, property status, valuation, urban planning insights, store expansions, 
-              and beyond, we leave no stone unturned. With DataScraperHub, you can build your business faster with the most accessible 
+              and beyond, we leave no stone unturned. With DataSellerHub, you can build your business faster with the most accessible 
               and reliable real estate data available across the web.
             </p>
             
@@ -108,7 +108,7 @@ export default function RealEstate() {
       <section className="bg-[#2F66F6] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
-              DataScraperHub is an expert in real estate data scraping, giving strong abilities to businesses and experts by providing top-quality information. Our skills cover various kinds of residential, commercial and industrial lands as well as plots among others - guaranteeing a comprehensive method for gathering data. If you are a real estate investor or part of a broker company, agent who works independently then DataScraperHub will be your reliable companion to provide structured and precise real estate data globally; so that you can make knowledgeable choices and stay ahead in the competitive market.
+              DataSellerHub is an expert in real estate data scraping, giving strong abilities to businesses and experts by providing top-quality information. Our skills cover various kinds of residential, commercial and industrial lands as well as plots among others - guaranteeing a comprehensive method for gathering data. If you are a real estate investor or part of a broker company, agent who works independently then DataSellerHub will be your reliable companion to provide structured and precise real estate data globally; so that you can make knowledgeable choices and stay ahead in the competitive market.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">
@@ -181,7 +181,7 @@ export default function RealEstate() {
              </div>
 
              <p className="mt-12 text-center text-gray-500 text-lg">
-               At DataScraperHub, we take pride in being a full-service provider, delivering unique, real-time, and custom real estate data based on your specific business requirements. Unlike generic data providers, we ensure that the scraped housing data you receive is tailored to your needs, giving you a competitive edge in the market. With DataScraperHub, you can rely on receiving up-to-date and exclusive data that sets you apart from your competitors.
+               At DataSellerHub, we take pride in being a full-service provider, delivering unique, real-time, and custom real estate data based on your specific business requirements. Unlike generic data providers, we ensure that the scraped housing data you receive is tailored to your needs, giving you a competitive edge in the market. With DataSellerHub, you can rely on receiving up-to-date and exclusive data that sets you apart from your competitors.
                <br/><br/>
                Tell us your project and we will scrape it for you.
              </p>

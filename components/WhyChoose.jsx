@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { FaChartLine, FaDatabase, FaUserFriends } from "react-icons/fa";
+
 export default function BeyondJustLeads() {
   return (
     <section className="py-20 bg-white pt-10">
@@ -11,7 +14,7 @@ export default function BeyondJustLeads() {
           <h2 className="mt-3 text-3xl font-semibold text-gray-900">
             Beyond Just Leads
           </h2>
-          <p className="mt-4 text-gray-500 leading-relaxed">
+          <p className="mt-4 text-gray-500 leading-relaxed text-[18px]">
             Maximize the potential of your marketing, sales, analytics, and operations
             with exclusive, high-quality leads. Reduce time spent on lead sourcing and
             focus on high-impact initiatives.
@@ -22,34 +25,34 @@ export default function BeyondJustLeads() {
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Card 1 */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
-            <p className="text-sm font-medium">Close Faster</p>
-            <h3 className="mt-4 text-3xl font-bold">62%</h3>
-            <p className="mt-2 text-sm opacity-90">
-              Increase in overall productivity
-            </p>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.35),transparent_40%)]" />
-          </div>
+          <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group">
+               <div className="relative z-10">
+                    <h4 className="text-lg font-semibold opacity-90 mb-2">Close Faster</h4>
+                    <div className="text-5xl font-bold mb-2">62%</div>
+                    <p className="text-[13px] opacity-75">Increase in overall productivity</p>
+               </div>
+               <FaChartLine className="absolute bottom-4 right-4 text-blue-500 text-8xl opacity-30 group-hover:scale-110 transition-transform" />
+            </div>
 
           {/* Card 2 */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
-            <p className="text-sm font-medium">Gain Insights</p>
-            <h3 className="mt-4 text-3xl font-bold">3x</h3>
-            <p className="mt-2 text-sm opacity-90">
-              Increase in win rates
-            </p>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_40%)]" />
-          </div>
+          <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group">
+               <div className="relative z-10">
+                    <h4 className="text-lg font-semibold opacity-90 mb-2">Save Budgets</h4>
+                    <div className="text-5xl font-bold mb-2">3x</div>
+                    <p className="text-[13px] opacity-75">Increase in win rates</p>
+               </div>
+               <FaDatabase className="absolute bottom-4 right-4 text-blue-500 text-8xl opacity-30 group-hover:scale-110 transition-transform" />
+            </div>
 
           {/* Card 3 */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
-            <p className="text-sm font-medium">Attract Customers</p>
-            <h3 className="mt-4 text-3xl font-bold">74%</h3>
-            <p className="mt-2 text-sm opacity-90">
-              Decrease in marketing spend
-            </p>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.35),transparent_45%)]" />
-          </div>
+          <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group">
+               <div className="relative z-10">
+                    <h4 className="text-lg font-semibold opacity-90 mb-2">Attract Customers</h4>
+                    <div className="text-5xl font-bold mb-2">74%</div>
+                    <p className="text-[13px] opacity-75">Decrease in marketing spend</p>
+               </div>
+               <FaUserFriends className="absolute bottom-4 right-4 text-blue-500 text-8xl opacity-30 group-hover:scale-110 transition-transform" />
+            </div>
 
         </div>
 
@@ -60,7 +63,7 @@ export default function BeyondJustLeads() {
           <div className="flex-1 max-w-xl">
             <h3 className="text-2xl font-semibold text-gray-900">
               Harness the Power of{" "}
-              <span className="text-[#3067FF]">DataScraperHub</span>
+              <span className="text-[#3067FF]">DataSellerHub</span>
             </h3>
 
             <p className="mt-4 text-[#425466] leading-relaxed">
@@ -71,15 +74,15 @@ export default function BeyondJustLeads() {
               data for any business sector.
             </p>
 
-            <button className="mt-6 inline-flex items-center px-6 py-3 bg-[#3067FF] text-white text-sm font-medium rounded-lg hover:bg-[#254eda] transition">
-              Contact Our Experts Now
+            <button className="mt-6 inline-flex items-center px-6 py-3 bg-[#3067FF] text-white text-sm font-medium rounded-lg hover:bg-[#254eda] transition cursor-pointer">
+              <Link href="/contact">Contact Our Experts Now</Link>
             </button>
           </div>
 
           {/* Right Illustration */}
           <div className="flex-1 flex justify-center">
             <img
-              src="images/vector/team-illustration.png"
+              src="/images/vector/team-illustration.png"
               alt=" Team collaboration"
               className="w-full max-w-[360px] object-contain"
             />

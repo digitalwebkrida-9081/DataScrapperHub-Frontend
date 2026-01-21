@@ -107,12 +107,12 @@ export default function ServicesPage() {
             </h1>
             <p className="text-gray-300 max-w-xl text-sm leading-relaxed mb-8">
               Discover the most reliable web scraping services at your
-              fingertips with DataScraperHub, your trusted web scraping
+              fingertips with DataSellerHub, your trusted web scraping
               solution provider.
             </p>
 
             <button className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-md text-sm font-medium cursor-pointer">
-              Explore B2B Database
+              <Link href="/b2b">Explore B2B Database</Link>
             </button>
           </div>
 
@@ -171,7 +171,7 @@ export default function ServicesPage() {
 
   <div className="relative max-w-7xl mx-auto px-6 text-center">
     <h2 className="text-3xl md:text-4xl font-bold mb-4">
-      Scale up your business with Datascraperhub
+      Scale up your business with DataSellerHub
     </h2>
     <p className="text-sm text-blue-100 max-w-2xl mx-auto mb-8">
       Unlock powerful data extraction solutions tailored to your business

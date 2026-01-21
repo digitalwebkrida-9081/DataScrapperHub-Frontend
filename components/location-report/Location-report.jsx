@@ -3,41 +3,88 @@
 import React, { useState } from 'react';
 import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding } from 'react-icons/fa';
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import WhyChoose from '../WhyChoose';
 
 const Locationreport = () => {
-    // Mock data for the links list
-    const regionLinks = [
-        "Business Leads in Asia (5416)",
-        "Business Leads in South America (5106)",
-        "Business Leads in Asia (5416)",
-        "Business Leads in South America (5106)",
-        "Business Leads in Asia (5416)",
-        "Business Leads in South America (5106)",
-        "Business Leads in Asia (5416)",
-        "Business Leads in South America (5106)",
-        "Business Leads in Asia (5416)",
-        "Business Leads in South America (5106)",
-        "Business Leads in Europe (5300)",
-        "Business Leads in Africa (5100)",
-        "Business Leads in Europe (5300)",
-        "Business Leads in Africa (5100)",
-        "Business Leads in Europe (5300)",
-        "Business Leads in Africa (5100)",
-        "Business Leads in Europe (5300)",
-        "Business Leads in Africa (5100)",
-        "Business Leads in Europe (5300)",
-        "Business Leads in Africa (5100)",
-        "Business Leads in North America (6270)",
-        "Business Leads in Oceania (6082)",
-        "Business Leads in North America (6270)",
-        "Business Leads in Oceania (6082)",
-        "Business Leads in North America (6270)",
-        "Business Leads in Oceania (6082)",
-        "Business Leads in North America (6270)",
-        "Business Leads in Oceania (6082)",
-        "Business Leads in North America (6270)",
-        "Business Leads in Oceania (6082)",
-    ];
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState('United States');
+    const [datasets, setDatasets] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 30;
+    const [loading, setLoading] = useState(true);
+
+    // Fetch Countries & Categories
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [countryRes, categoryRes] = await Promise.all([
+                    fetch('http://localhost:5000/api/country/get-countries'),
+                    fetch('http://localhost:5000/api/category')
+                ]);
+
+                const countryResult = await countryRes.json();
+                const categoryResult = await categoryRes.json();
+
+                if (countryResult.success) setCountries(countryResult.data || []);
+                if (categoryResult.success) setCategories(categoryResult.data || []);
+
+            } catch (error) {
+                console.error("Error fetching initial data:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Fetch Datasets when country changes
+    React.useEffect(() => {
+        const fetchDatasets = async () => {
+            setLoading(true);
+            try {
+                const query = selectedCountry ? `?country=${encodeURIComponent(selectedCountry)}` : '';
+                const response = await fetch(`http://localhost:5000/api/scraper/dataset/search${query}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    setDatasets(result.datasets || result.data || []);
+                } else {
+                    setDatasets([]);
+                }
+            } catch (error) {
+                console.error("Error fetching datasets:", error);
+                setDatasets([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (selectedCountry) {
+            fetchDatasets();
+        }
+    }, [selectedCountry]);
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
+    // Country Search State
+    const [countrySearchQuery, setCountrySearchQuery] = useState('United States');
+    const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+
+    // Filter Categories
+    const filteredCategories = categories.filter(cat => 
+        cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    
+    // Filter Countries
+    const filteredCountries = countries.filter(c => 
+        (c.country_name || c.name).toLowerCase().includes(countrySearchQuery.toLowerCase())
+    );
+
+    // Pagination Calculation (based on filtered results)
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentCategories = filteredCategories.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
 
     return (
         <div className="bg-white min-h-screen font-sans text-slate-800">
@@ -67,7 +114,7 @@ const Locationreport = () => {
                         {/* Blue Blob Background */}
                         <div className="absolute inset-0 bg-blue-600/20 blur-3xl rounded-full transform scale-75"></div>
                         
-                        <div className="text-slate-800 p-4 rounded-xl shadow-2xl relative z-10 max-w-sm w-full">
+                        <div className="text-slate-800 p-4 rounded-xl relative z-10 max-w-sm w-full">
                             <img src="/images/location-hero.png" alt="Hero-img" />
                         </div>
                     </div>
@@ -92,114 +139,186 @@ const Locationreport = () => {
 
                     <div className="max-w-4xl mx-auto mb-12">
                         <div className="flex flex-col md:flex-row gap-4">
-                            <div className="flex-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Select Category</label>
+                            <div className="flex-1 relative">
+                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block text-center">Search Category</label>
                                 <div className="relative">
-                                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                                    <input type="text" placeholder="Search Category" className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm" />
-                                    <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Type to search categories..." 
+                                        value={searchQuery}
+                                        onChange={(e) => {
+                                            setSearchQuery(e.target.value);
+                                            setCurrentPage(1); 
+                                            setIsDropdownOpen(true);
+                                        }}
+                                        onFocus={() => setIsDropdownOpen(true)}
+                                        onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)}
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-blue-500"
+                                    />
+                                    <MdKeyboardArrowDown className={`absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                                    
+                                    {/* Custom Dropdown List */}
+                                    {isDropdownOpen && (
+                                        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                                            {filteredCategories.length > 0 ? (
+                                                filteredCategories.map((cat, idx) => (
+                                                    <div 
+                                                        key={idx}
+                                                        className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer text-slate-700"
+                                                        onClick={() => {
+                                                            setSearchQuery(cat.name);
+                                                            setIsDropdownOpen(false);
+                                                            setCurrentPage(1);
+                                                        }}
+                                                    >
+                                                        {cat.name}
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="px-4 py-2 text-sm text-slate-400 italic">No categories found</div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            <div className="flex-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Select Country</label>
+
+                            <div className="flex-1 relative">
+                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block text-center">Select Country</label>
                                 <div className="relative">
-                                    <input type="text" placeholder="United States" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm" />
-                                     <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Type to search countries..." 
+                                        value={countrySearchQuery}
+                                        onChange={(e) => {
+                                            setCountrySearchQuery(e.target.value);
+                                            setIsCountryDropdownOpen(true);
+                                        }}
+                                        onFocus={() => setIsCountryDropdownOpen(true)}
+                                        onBlur={() => setTimeout(() => setIsCountryDropdownOpen(false), 200)}
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-blue-500"
+                                    />
+                                    <MdKeyboardArrowDown className={`absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} />
+                                    
+                                    {/* Custom Country Dropdown List */}
+                                    {isCountryDropdownOpen && (
+                                        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                                            {filteredCountries.length > 0 ? (
+                                                filteredCountries.map((c, idx) => {
+                                                     const countryName = c.country_name || c.name;
+                                                     return (
+                                                        <div 
+                                                            key={idx}
+                                                            className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer text-slate-700"
+                                                            onClick={() => {
+                                                                setSelectedCountry(countryName);
+                                                                setCountrySearchQuery(countryName);
+                                                                setIsCountryDropdownOpen(false);
+                                                            }}
+                                                        >
+                                                            {countryName}
+                                                        </div>
+                                                     );
+                                                })
+                                            ) : (
+                                                <div className="px-4 py-2 text-sm text-slate-400 italic">No countries found</div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-y-2 gap-x-8 text-xs text-slate-600 max-w-6xl mx-auto mb-12">
-                        {regionLinks.map((link, i) => (
-                            <div key={i} className="flex items-center gap-2 py-1">
-                                <span className="w-1 h-1 bg-slate-800 rounded-full"></span>
-                                <a href="#" className="hover:text-blue-600 hover:underline">{link}</a>
-                            </div>
-                        ))}
-                    </div>
+                    {loading ? (
+                         <div className="text-center text-slate-500 py-10">Loading datasets...</div>
+                    ) : (
+                        <div className="grid md:grid-cols-3 gap-y-2 gap-x-8 text-xs text-slate-600 max-w-6xl mx-auto mb-12">
+                            {currentCategories.length > 0 ? (
+                                currentCategories.map((category) => {
+                                    // Find if there's a dataset for this category
+                                    const matchedDataset = datasets.find(d => d.category === category.name);
+                                    
+                                    // Link text format
+                                    const linkText = `Business Leads for ${category.name} in ${selectedCountry || 'Country'}`;
 
-                    {/* Pagination - Visual Only */}
-                    <div className="flex justify-center items-center gap-2">
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-slate-100 text-slate-400 text-sm"><MdKeyboardArrowLeft/></button>
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-600/20">1</button>
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-50 text-blue-600 text-sm font-medium">2</button>
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-50 text-blue-600 text-sm font-medium">3</button>
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-50 text-blue-600 text-sm font-medium">4</button>
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-50 text-blue-600 text-sm font-medium">5</button>
-                         <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 text-sm"><MdKeyboardArrowRight/></button>
-                    </div>
+                                    return (
+                                        <div key={category._id || category.id} className="flex items-center gap-2 py-1 text-[14px]">
+                                            <span className={`w-1 h-1 rounded-full shrink-0 ${matchedDataset ? 'bg-slate-800' : 'bg-slate-300'}`}></span>
+                                            {matchedDataset ? (
+                                                <a href={`/b2b/${matchedDataset.id}`} className="hover:text-blue-600 hover:underline truncate text-slate-700 font-medium">
+                                                    {linkText}
+                                                </a>
+                                            ) : (
+                                                <span className="text-slate-400 truncate cursor-not-allowed" title="Data not currently available">
+                                                    {linkText}
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <div className="col-span-3 text-center text-slate-400 italic">
+                                    No categories found matching "{searchQuery}"
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Pagination - Dynamic Sliding */}
+                    {totalPages > 1 && (
+                        <div className="flex justify-center items-center gap-2 mt-8">
+                             <button 
+                                onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="w-8 h-8 flex items-center justify-center rounded bg-slate-100 text-slate-400 text-sm disabled:opacity-50 hover:bg-slate-200 transition"
+                             >
+                                <MdKeyboardArrowLeft/>
+                             </button>
+                             
+                             {(() => {
+                                 const maxButtons = 5;
+                                 let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+                                 let endPage = startPage + maxButtons - 1;
+                                 
+                                 if (endPage > totalPages) {
+                                     endPage = totalPages;
+                                     startPage = Math.max(1, endPage - maxButtons + 1);
+                                 }
+                                 
+                                 const pages = [];
+                                 for (let i = startPage; i <= endPage; i++) {
+                                     pages.push(i);
+                                 }
+                                 
+                                 return pages.map(number => (
+                                     <button 
+                                        key={number} 
+                                        onClick={() => setCurrentPage(number)}
+                                        className={`w-8 h-8 flex items-center justify-center rounded text-sm font-medium transition ${
+                                            currentPage === number 
+                                            ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-600/20' 
+                                            : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                                        }`}
+                                     >
+                                        {number}
+                                     </button>
+                                 ));
+                             })()}
+
+                             <button 
+                                onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className="w-8 h-8 flex items-center justify-center rounded bg-slate-100 text-slate-400 text-sm disabled:opacity-50 hover:bg-slate-200 transition"
+                             >
+                                <MdKeyboardArrowRight/>
+                             </button>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* --- STATS / VALUE PROP --- */}
-            <div className="bg-white py-16">
-                 <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
-                         <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">WHY DATASCRAPERHUB?</p>
-                         <h3 className="text-3xl font-bold mb-4">Beyond Just Leads</h3>
-                         <p className="text-slate-500 max-w-3xl mx-auto text-sm">
-                             Maximize the potential of your marketing, sales, analytics, and operations with exclusive, high-quality leads.
-                             Reduce time spent on lead sourcing and focus on high-impact initiatives.
-                         </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                        <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group min-h-[200px] flex flex-col justify-center">
-                           <div className="relative z-10">
-                                <h4 className="text-lg font-medium opacity-90 mb-2">Close Faster</h4>
-                                <div className="text-5xl font-bold mb-2">62%</div>
-                                <p className="text-xs opacity-75">Increase in overall productivity</p>
-                           </div>
-                            <div className="absolute right-0 bottom-0 opacity-20 transform translate-x-1/4 translate-y-1/4">
-                                <FaArrowRight className="text-9xl rotate-45" />
-                            </div>
-                        </div>
-                         <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group min-h-[200px] flex flex-col justify-center">
-                           <div className="relative z-10">
-                                <h4 className="text-lg font-medium opacity-90 mb-2">Gain Insights</h4>
-                                <div className="text-5xl font-bold mb-2">3x</div>
-                                <p className="text-xs opacity-75">Increase in win rates</p>
-                           </div>
-                           <FaChartLine className="absolute bottom-4 right-4 text-blue-400 text-8xl opacity-30" />
-                        </div>
-                         <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group min-h-[200px] flex flex-col justify-center">
-                           <div className="relative z-10">
-                                <h4 className="text-lg font-medium opacity-90 mb-2">Attract Customers</h4>
-                                <div className="text-5xl font-bold mb-2">74%</div>
-                                <p className="text-xs opacity-75">Decrease in marketing spend</p>
-                           </div>
-                           <div className="absolute right-[-20px] bottom-[-20px] opacity-20">
-                                <div className="w-40 h-40 border-8 border-white rounded-full"></div>
-                           </div>
-                        </div>
-                    </div>
-                 </div>
-            </div>
-
-            {/* --- CTA SECTION --- */}
-            <div className="bg-white py-24">
-                <div className="container mx-auto px-4">
-                    <div className="bg-slate-50 rounded-3xl p-8 md:p-12 border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-10">
-                        <div className="md:w-3/5">
-                            <h2 className="text-3xl font-bold text-slate-900 mb-4">
-                                Harness the Power of <span className="text-blue-600">DataScraperHub</span>
-                            </h2>
-                            <p className="text-slate-600 text-sm mb-8 leading-relaxed">
-                                Our web scraping services collect data and convert it into standardized CSV, Excel, and JSON formats. We deliver accurate, fast data scraping to meet the high-volume needs of enterprises. These samples illustrate the breadth of our web scraping capabilities across industries. We can extract data for any business sector.
-                            </p>
-                            <button className="bg-blue-600 text-white px-8 py-3.5 rounded font-semibold shadow-lg shadow-blue-600/30 hover:bg-blue-700 transition flex items-center gap-2">
-                                Contact Our Experts Now
-                            </button>
-                        </div>
-                        <div className="md:w-2/5 flex justify-center">
-                            {/* Illustration placeholder */}
-                            <img src="/images/vector/team-illustration.png" alt="Data Illustration" className="w-full max-w-xs grayscale opacity-80" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+            {/* --- Why Choose Us --- */}
+            <WhyChoose/>
         </div>
     );
 };

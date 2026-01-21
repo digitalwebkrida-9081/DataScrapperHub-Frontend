@@ -77,24 +77,41 @@ const services = [
 
 export default function ServicesGrid() {
   return (
-    <section className="py-20 bg-[#EBF3FF]">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center">Discover Our B2B Database</h2>
-        <p className="text-center text-gray-600 mt-2">
+    <section className="py-24 bg-[#EBF3FF]">
+      <div className="max-w-[1400px] mx-auto px-6">
+        <h2 className="text-4xl font-bold text-center text-slate-900 mb-4">Discover Our B2B Database</h2>
+        <p className="text-center text-slate-600 max-w-4xl mx-auto mb-16 text-lg leading-relaxed">
           Empowering businesses with web and data scraping. Web scraping solutions transform unstructured online data into structured, actionable insights that drive business value across applications and departments.
         </p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {services.map((s, i) => (
-            <div key={i} className="p-6 border-red-200 rounded-lg shadow-lg bg-gray-50">
-              <img src={s.image} alt="" className=" bg-white-200 border-1 rounded-lg h-15 p-2"/>
-              <h3 className="font-semibold text-lg pt-2">{s.title}</h3>
-              <p className="mt-2 text-gray-600">{s.desc}</p>
-              <Link href={s.href} className="text-blue-600 text-sm font-medium hover:underline cursor-pointer">
-                      Learn More &rarr;
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {services.map((s, i) => {
+            return (
+              <div 
+                key={i} 
+                className="group flex flex-col p-8 rounded-2xl bg-white shadow-sm transition-all duration-300 h-full hover:shadow-xl border-t-4 border-transparent hover:border-blue-600"
+              >
+                {/* Icon Container */}
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors duration-300 bg-blue-50 group-hover:bg-blue-600">
+                  <img 
+                    src={s.image} 
+                    alt="" 
+                    className="w-7 h-7 object-contain transition-all duration-300 group-hover:brightness-0 group-hover:invert"
+                  />
+                </div>
+
+                <h3 className="font-bold text-xl text-slate-900 mb-4 group-hover:text-blue-600 transition-colors">{s.title}</h3>
+                
+                <p className="text-slate-500 text-sm leading-relaxed mb-8 grow">
+                  {s.desc}
+                </p>
+
+                <Link href={s.href} className="inline-flex font-bold text-sm tracking-wide transition-colors mt-auto text-blue-600 hover:text-blue-700">
+                  Learn More
                 </Link>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

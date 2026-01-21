@@ -5,31 +5,31 @@ import { useState } from "react";
 const faqs = [
   {
     question:
-      "What types of data can DataScraperHub scrape for my business using web scraping services?",
+      "What types of data can DataSellerHub scrape for my business using web scraping services?",
     answer:
-      "DataScraperHub offers web and data scraping services for various data types, including product details, pricing, reviews, contact information, and more.",
+      "DataSellerHub offers web and data scraping services for various data types, including product details, pricing, reviews, contact information, and more.",
   },
   {
     question:
-      "How does DataScraperHub ensure the quality and accuracy of the data obtained through website scraping services?",
+      "How does DataSellerHub ensure the quality and accuracy of the data obtained through website scraping services?",
     answer:
       "We use advanced validation checks, manual quality audits, and automated monitoring to ensure accuracy, consistency, and reliability of the scraped data.",
   },
   {
     question:
-      "Can DataScraperHub handle large-scale web scraping projects, such as Real Estate Data Scraping or E-commerce Data Scraping?",
+      "Can DataSellerHub handle large-scale web scraping projects, such as Real Estate Data Scraping or E-commerce Data Scraping?",
     answer:
       "Yes, we specialize in handling enterprise-scale scraping projects with high volumes, ensuring speed, scalability, and compliance.",
   },
   {
     question:
-      "How quickly can I expect to receive my scraped data, such as Sales Lead Data or Financial Data Scraping, from DataScraperHub?",
+      "How quickly can I expect to receive my scraped data, such as Sales Lead Data or Financial Data Scraping, from DataSellerHub?",
     answer:
       "Delivery timelines depend on project scope, but most datasets are delivered within a few days, with real-time or scheduled delivery options available.",
   },
   {
     question:
-      "Does DataScraperHub offer customized web scraping solutions, like Recruitment Data Scraping or Social Media Scraping, tailored to my specific business needs?",
+      "Does DataSellerHub offer customized web scraping solutions, like Recruitment Data Scraping or Social Media Scraping, tailored to my specific business needs?",
     answer:
       "Absolutely. We provide fully customized scraping solutions tailored to your business goals, industry requirements, and data formats.",
   },

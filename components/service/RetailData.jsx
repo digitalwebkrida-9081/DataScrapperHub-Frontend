@@ -38,10 +38,10 @@ export default function RealEstate() {
       <section className="py-20 bg-[#EBF3FF]">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">
-             Elevating Your Business with DataScraperHub
+             Elevating Your Business with DataSellerHub
           </h2>
           <p className="max-w-4xl mx-auto text-gray-600 mb-16 leading-relaxed">
-            DataScraperHub equips you with thousands of scraped retail store locations. This knowledge gives deep insights into new trends, competing prices and unlimited location data from multiple sources. With the most recent customer preferences in hand, retailers can plan their advertisements, promotions and sales campaigns effectively.
+            DataSellerHub equips you with thousands of scraped retail store locations. This knowledge gives deep insights into new trends, competing prices and unlimited location data from multiple sources. With the most recent customer preferences in hand, retailers can plan their advertisements, promotions and sales campaigns effectively.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -77,7 +77,7 @@ export default function RealEstate() {
              Comprehensive Retail Store Data at Your Fingertips
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              Media monitoring from DataScraperHub provides you with wide-ranging information access on particular subjects. We scrape social media platforms, podcasts, public newsletters, online news sites and blogs. You can specify exact news sources to monitor by location or industry and receive the data in your preferred customized format.
+              Media monitoring from DataSellerHub provides you with wide-ranging information access on particular subjects. We scrape social media platforms, podcasts, public newsletters, online news sites and blogs. You can specify exact news sources to monitor by location or industry and receive the data in your preferred customized format.
             </p>
             
             <div className="grid grid-cols-2 gap-8 text-center mt-10">
@@ -99,7 +99,7 @@ export default function RealEstate() {
       <section className="bg-[#2F66F6] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
-              DataScraperHub is a full-service provider that gives you fresh and special data, made only for your particular business needs. The retail location data we scrape will always be different than the generic kind of information which other providers sell to your competition. You can trust in us to provide unique and current details.
+              DataSellerHub is a full-service provider that gives you fresh and special data, made only for your particular business needs. The retail location data we scrape will always be different than the generic kind of information which other providers sell to your competition. You can trust in us to provide unique and current details.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">
@@ -140,7 +140,7 @@ export default function RealEstate() {
       <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6">
              <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-               DataScraperHub: Your Trusted Partner in Unique, Real-time, and Custom Data
+               DataSellerHub: Your Trusted Partner in Unique, Real-time, and Custom Data
              </h2>
              
              <div className="grid md:grid-cols-3 gap-8 text-sm text-gray-600">
@@ -174,7 +174,7 @@ export default function RealEstate() {
              </div>
 
              <p className="mt-12 text-center text-gray-500 text-lg">
-               Data has a very important part in promoting growth, progress and creativity within your company. Get the business locations that you require for allocation or selling. DataScraperHub is an expert at store location extraction projects, where we scrape store details from different sources.
+               Data has a very important part in promoting growth, progress and creativity within your company. Get the business locations that you require for allocation or selling. DataSellerHub is an expert at store location extraction projects, where we scrape store details from different sources.
                <br/><br/>
                Tell us your project and we will scrape it for you.
              </p>

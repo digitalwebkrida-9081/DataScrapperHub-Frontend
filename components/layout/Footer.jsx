@@ -17,13 +17,13 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-2 text-xl font-bold">
             <span className="text-[#2F66F6] rounded-full px-2 py-1">
-              <img src="images/logos/main-logo/small-logo.png" alt="DataScraperHub Logo" />
+              <img src="images/logos/main-logo/small-logo.png" alt="DataSellerHub Logo" />
             </span>
-            DataScraperHub
+            DataSellerHub
           </div>
 
           <p className="mt-4 text-sm text-blue-100 leading-relaxed">
-            DataScraperHub is a web scraping service company that extracts any
+            DataSellerHub is a web scraping service company that extracts any
             relevant website and helps you get data for all your business
             requirements with 100% accuracy.
           </p>
@@ -101,7 +101,7 @@ export default function Footer() {
               <IoCall className="text-white" /> <span>+91 90814 66782</span>
             </p>
             <p className="flex items-center gap-2">
-              <IoMail className="text-white" /> <span>info@datascraperhub.com</span>
+              <IoMail className="text-white" /> <span>info@DataSellerHub.com</span>
             </p>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-blue-400/40 py-4 text-center text-sm text-blue-100">
-        © DataScraperHub 2014–2024 All Rights Reserved
+        © DataSellerHub 2014–2024 All Rights Reserved
       </div>
     </footer>
   );

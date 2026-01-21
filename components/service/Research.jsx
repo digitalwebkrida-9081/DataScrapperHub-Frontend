@@ -18,7 +18,7 @@ export default function RealEstate() {
               Empowering Research and Journalism with High-Quality Data
             </h1>
             <p className="text-gray-200 text-lg mb-8 leading-relaxed">
-              DataScraperHub knows that researchers and journalists need good data to make their analysis and reports better. We aim to help you get the Research and Journalism data like weather trends, indicators for third world development, crime stats, along with local as well as worldwide tendencies. This will fuel your next research project or news story (Datascraperhub.com).
+              DataSellerHub knows that researchers and journalists need good data to make their analysis and reports better. We aim to help you get the Research and Journalism data like weather trends, indicators for third world development, crime stats, along with local as well as worldwide tendencies. This will fuel your next research project or news story (DataSellerHub.com).
             </p>
             
             <button className="bg-white text-blue-900 px-8 py-3 rounded font-semibold hover:bg-blue-50 transition">
@@ -38,10 +38,10 @@ export default function RealEstate() {
       <section className="py-20 bg-[#EBF3FF]">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">
-             Elevating Your Research with DataScraperHub
+             Elevating Your Research with DataSellerHub
           </h2>
           <p className="max-w-4xl mx-auto text-gray-600 mb-16 leading-relaxed">
-            The quality of data is what supports any research project. Our team from DataScraperHub can scrape social media sites to find out what are the most popular news topics at present, get data for backing up arguments and claims in your stories, gather information to create interesting infographics and many other things. We provide you with reliable Research and Journalism data that allows accurate analysis.
+            The quality of data is what supports any research project. Our team from DataSellerHub can scrape social media sites to find out what are the most popular news topics at present, get data for backing up arguments and claims in your stories, gather information to create interesting infographics and many other things. We provide you with reliable Research and Journalism data that allows accurate analysis.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -77,7 +77,7 @@ export default function RealEstate() {
              Get Research and Journalism Data Within Your Reach
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              DataScraperHub is a service that offers many types of data from different origins. These can be publications, crime numbers, social media details or thoughts from crowds; it could also include weather facts and history records for use in Research and Journalism. We use the newest methods to give you structured data which is correct and current according to your requirements.
+              DataSellerHub is a service that offers many types of data from different origins. These can be publications, crime numbers, social media details or thoughts from crowds; it could also include weather facts and history records for use in Research and Journalism. We use the newest methods to give you structured data which is correct and current according to your requirements.
             </p>
             
             <div className="grid grid-cols-2 gap-8 text-center mt-10">
@@ -99,7 +99,7 @@ export default function RealEstate() {
       <section className="bg-[#2F66F6] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
-              DataScraperHub is a complete provider, supplying special, instantaneous and personalized Research and Journalism data as per your demands. The data we scrape is only for you which helps to make sure that no one else has it, giving a competitive advantage over those who use generic or already present datasets.
+              DataSellerHub is a complete provider, supplying special, instantaneous and personalized Research and Journalism data as per your demands. The data we scrape is only for you which helps to make sure that no one else has it, giving a competitive advantage over those who use generic or already present datasets.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">
@@ -174,7 +174,7 @@ export default function RealEstate() {
              </div>
 
              <p className="mt-12 text-center text-gray-500 text-lg">
-               The web has a lot of data that is very important for research, and DataScraperHub can assist you in using it well. We are able to scrape big data from all different kinds of places on the internet and organize them into structures so that our customers always have the most recent news and useful information they need available in their desired format.
+               The web has a lot of data that is very important for research, and DataSellerHub can assist you in using it well. We are able to scrape big data from all different kinds of places on the internet and organize them into structures so that our customers always have the most recent news and useful information they need available in their desired format.
                <br/><br/>
                Tell us your project and we will scrape it for you.
              </p>

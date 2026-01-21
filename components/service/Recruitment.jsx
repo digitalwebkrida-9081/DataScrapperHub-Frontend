@@ -18,7 +18,7 @@ export default function RealEstate() {
               Recruitment Data Scraping Services
             </h1>
             <p className="text-gray-200 text-lg mb-8 leading-relaxed">
-              At DataScraperHub, we offer tailored data scraping solutions to extract job data from various recruitment-related sources across the web. Our services enable you to scrape job data, including the latest job listings, open vacancies, candidate profiles, company profiles, in-demand skills, and hiring locations from career pages of company websites and job portals. With our help, you can build reliable job data feeds to fuel your recruitment efforts.
+              At DataSellerHub, we offer tailored data scraping solutions to extract job data from various recruitment-related sources across the web. Our services enable you to scrape job data, including the latest job listings, open vacancies, candidate profiles, company profiles, in-demand skills, and hiring locations from career pages of company websites and job portals. With our help, you can build reliable job data feeds to fuel your recruitment efforts.
             </p>
             
             <button className="bg-white text-blue-900 px-8 py-3 rounded font-semibold hover:bg-blue-50 transition">
@@ -78,7 +78,7 @@ process"
               Comprehensive Recruitment Data
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              DataScraperHub provides job monitoring data, including job listings, candidates seeking opportunities, resumes, professionals with specific skills, company reviews, salary trends, job responsibilities, and more. Our cutting-edge technologies allow us to serve web data tailored to your exact requirements.
+              DataSellerHub provides job monitoring data, including job listings, candidates seeking opportunities, resumes, professionals with specific skills, company reviews, salary trends, job responsibilities, and more. Our cutting-edge technologies allow us to serve web data tailored to your exact requirements.
             </p>
             
             <div className="grid grid-cols-2 gap-8 text-center mt-10">
@@ -100,7 +100,7 @@ process"
       <section className="bg-[#2F66F6] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
-              DataScraperHub is a full-service provider, offering unique, real-time, and custom data based on your precise business requirements. Scraped recruitment data from DataScraperHub will never be the same as the data your competitors purchase from existing providers. We deliver unique and updated data you can trust.
+              DataSellerHub is a full-service provider, offering unique, real-time, and custom data based on your precise business requirements. Scraped recruitment data from DataSellerHub will never be the same as the data your competitors purchase from existing providers. We deliver unique and updated data you can trust.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">
@@ -175,7 +175,7 @@ process"
              </div>
 
              <p className="mt-12 text-center text-gray-500 text-lg">
-               E-commerce data scraping is a game-changer for businesses looking to expand their brand. Leverage data-driven insights to make informed decisions about products, ensuring alignment with your target audience. As your business scales, reliable data becomes crucial. DataScraperHub empowers data-driven E-commerce companies to measure and refine their strategies, enabling them to thrive in the competitive marketplace.
+               E-commerce data scraping is a game-changer for businesses looking to expand their brand. Leverage data-driven insights to make informed decisions about products, ensuring alignment with your target audience. As your business scales, reliable data becomes crucial. DataSellerHub empowers data-driven E-commerce companies to measure and refine their strategies, enabling them to thrive in the competitive marketplace.
                <br/><br/>
                Tell us your project and we will scrape it for you.
              </p>

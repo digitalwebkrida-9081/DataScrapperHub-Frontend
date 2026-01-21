@@ -41,7 +41,7 @@ export default function RealEstate() {
              What We Can Do for You
           </h2>
           <p className="max-w-4xl mx-auto text-gray-600 mb-16 leading-relaxed">
-            DataScraperHub is the place where we give you a lot of information that helps in monitoring and tracking subjects with accuracy and speed. Our services deliver trustworthy and precise data from websites, blogs, social media platforms like Facebook or Instagram, news sites such as BBC News online etc., review sites (like Yelp), and many other sources.
+            DataSellerHub is the place where we give you a lot of information that helps in monitoring and tracking subjects with accuracy and speed. Our services deliver trustworthy and precise data from websites, blogs, social media platforms like Facebook or Instagram, news sites such as BBC News online etc., review sites (like Yelp), and many other sources.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -77,7 +77,7 @@ export default function RealEstate() {
              News Monitoring Data We Provide
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              DataScraperHub gives full media monitoring services, giving you a wider range of information related to your chosen topic. We can scrape social media platforms, podcasts, publicly available newsletters and online news sites plus blogs and forums among other places. We have the ability to focus on specific news sources for monitoring either by geographical location or industry sector. The data will be provided in any format that suits your needs best.
+              DataSellerHub gives full media monitoring services, giving you a wider range of information related to your chosen topic. We can scrape social media platforms, podcasts, publicly available newsletters and online news sites plus blogs and forums among other places. We have the ability to focus on specific news sources for monitoring either by geographical location or industry sector. The data will be provided in any format that suits your needs best.
             </p>
             
             <div className="grid grid-cols-2 gap-8 text-center mt-10">
@@ -99,7 +99,7 @@ export default function RealEstate() {
       <section className="bg-[#2F66F6] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6">
             <p className="mb-10 text-left max-w-5xl leading-relaxed text-blue-100 text-[18px]">
-              DataScraperHub is a complete provider, giving you exclusive, real-time and custom data that matches exactly with what your business needs. The scraped news monitoring data we provide is specific to only one user like yourself - it's different from the stuff other providers sell to your competition. Trust in our unique and current information for all of your business requirements.
+              DataSellerHub is a complete provider, giving you exclusive, real-time and custom data that matches exactly with what your business needs. The scraped news monitoring data we provide is specific to only one user like yourself - it's different from the stuff other providers sell to your competition. Trust in our unique and current information for all of your business requirements.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm font-medium">

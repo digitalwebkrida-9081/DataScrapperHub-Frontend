@@ -7,7 +7,7 @@ export default function Newsletter(){
     <>
     <div className="bg-slate-950 py-1">
       <div className="max-w-2xl mx-auto px-4 text-center">
-        <h2 className="text-l  mb-2"><span className="text-white">Looking for other datasets ? </span> <span className="text-blue-500 font-bold"> Contact Us </span></h2>
+        <h2 className="text-l  mb-2"><span className="text-white">Looking for other datasets ? </span> <span className="text-blue-500 font-bold cursor-pointer" onClick={() => window.location.href = "/contact"}> Contact Us </span></h2>
        
         
       </div>
