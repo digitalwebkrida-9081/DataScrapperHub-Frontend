@@ -26,12 +26,13 @@ const B2bCountryDetail = ({ countrySlug }) => {
                 const formattedCountryName = decodeURIComponent(countrySlug).replace(/-/g, ' ');
 
                 // 2. Fetch Categories
-                const catRes = await fetch('http://localhost:5000/api/category');
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const catRes = await fetch(`${API_URL}/api/category`);
                 const catResult = await catRes.json();
                 if (catResult.success) setCategories(catResult.data || []);
 
                 // 3. Fetch States for this Country
-                const statesRes = await fetch(`http://localhost:5000/api/location/states?country=${encodeURIComponent(formattedCountryName)}`);
+                const statesRes = await fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(formattedCountryName)}`);
                 const statesResult = await statesRes.json();
                 if (statesResult.success) setStates(statesResult.data || []);
 
@@ -52,7 +53,8 @@ const B2bCountryDetail = ({ countrySlug }) => {
         setCheckingState(stateName);
         try {
             // Check if there is data for this state
-            const response = await fetch(`http://localhost:5000/api/scraper/dataset/search?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const response = await fetch(`${API_URL}/api/scraper/dataset/search?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
             const result = await response.json();
 
             if (result.success && result.datasets && result.datasets.length > 0) {

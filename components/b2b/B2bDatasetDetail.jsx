@@ -30,7 +30,8 @@ const B2bDatasetDetail = ({ id }) => {
         e.preventDefault();
         setPurchaseLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/api/scraper/dataset/purchase', {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -83,7 +84,8 @@ const B2bDatasetDetail = ({ id }) => {
 
                 // 2. Fallback to API for real database records
                 // Use the new scraper dataset endpoint
-                const response = await fetch(`http://localhost:5000/api/scraper/dataset/${id}`);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const response = await fetch(`${API_URL}/api/scraper/dataset/${id}`);
                 
                 if (!response.ok) throw new Error('Failed to fetch');
                 const result = await response.json();

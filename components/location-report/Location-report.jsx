@@ -20,9 +20,10 @@ const Locationreport = ({ initialCountrySlug = null }) => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
                 const [countryRes, categoryRes] = await Promise.all([
-                    fetch('http://localhost:5000/api/country/get-countries'),
-                    fetch('http://localhost:5000/api/category')
+                    fetch(`${API_URL}/api/country/get-countries`),
+                    fetch(`${API_URL}/api/category`)
                 ]);
 
                 const countryResult = await countryRes.json();
@@ -60,7 +61,8 @@ const Locationreport = ({ initialCountrySlug = null }) => {
             setLoading(true);
             try {
                 const query = selectedCountry ? `?country=${encodeURIComponent(selectedCountry)}` : '';
-                const response = await fetch(`http://localhost:5000/api/scraper/dataset/search${query}`);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const response = await fetch(`${API_URL}/api/scraper/dataset/search${query}`);
                 const result = await response.json();
                 
                 if (result.success) {

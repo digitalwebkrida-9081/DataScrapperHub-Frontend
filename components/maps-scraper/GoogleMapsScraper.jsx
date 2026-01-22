@@ -41,7 +41,8 @@ const GoogleMapsScraper = () => {
         setFiles(null);
 
         try {
-            const response = await fetch('http://localhost:5000/api/scraper/search-rapid', {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const response = await fetch(`${API_URL}/api/scraper/search-rapid`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

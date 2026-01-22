@@ -42,7 +42,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // Helper functions for fetching dropdown data
     const fetchCategories = async () => {
         try {
-            const catRes = await fetch('http://localhost:5000/api/category');
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const catRes = await fetch(`${API_URL}/api/category`);
             const catData = await catRes.json();
             setCategories(catData.data || []);
         } catch (error) {
@@ -52,7 +53,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     const fetchCountries = async () => {
         try {
-            const countryRes = await fetch('http://localhost:5000/api/country/get-countries');
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const countryRes = await fetch(`${API_URL}/api/country/get-countries`);
             const countryData = await countryRes.json();
             setCountries(countryData.data || []);
         } catch (error) {
@@ -67,7 +69,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         }
         try {
             // Backend is currently hardcoded for US states/cities
-            const response = await fetch(`http://localhost:5000/api/location/states?country=${encodeURIComponent(filters.country)}`);
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const response = await fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(filters.country)}`);
             const result = await response.json();
             setStates(result.data || []);
         } catch (error) {
@@ -115,7 +118,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 const stateObj = states.find(s => s.name === filters.state);
                 if (!stateObj) return;
 
-                const response = await fetch(`http://localhost:5000/api/location/cities/${stateObj.isoCode}?country=${encodeURIComponent(filters.country)}`);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const response = await fetch(`${API_URL}/api/location/cities/${stateObj.isoCode}?country=${encodeURIComponent(filters.country)}`);
                 const result = await response.json();
                 setCities(result.data || []);
             } catch (error) {
@@ -150,7 +154,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 category: category || ''
             });
 
-            const response = await fetch(`http://localhost:5000/api/scraper/dataset/search?${queryParams}`);
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const response = await fetch(`${API_URL}/api/scraper/dataset/search?${queryParams}`);
             const result = await response.json();
             
             if (result.success && result.datasets) {
