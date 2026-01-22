@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { IoCall, IoMail } from "react-icons/io5";
 
@@ -117,7 +118,7 @@ const [open, setOpen] = useState(false);
                 By submitting this form, I confirm that I have read and
                 understood Data Seller Hub’s{" "}
                 <span className="text-blue-600 cursor-pointer">
-                  Privacy Statement
+                  <Link href='/privacy-policy'>Privacy Statement</Link>
                 </span>
                 .
               </p>

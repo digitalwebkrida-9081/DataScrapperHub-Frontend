@@ -6,7 +6,7 @@ import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaP
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import WhyChoose from '../WhyChoose';
 
-const Locationreport = ({ initialCountrySlug }) => {
+const Locationreport = ({ initialCountrySlug = null }) => {
     const router = useRouter();
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState('United States');
