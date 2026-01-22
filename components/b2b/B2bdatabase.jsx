@@ -369,10 +369,10 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                         <td className="p-4 text-slate-600 text-center align-middle whitespace-nowrap">{item.phones}</td>
                                                         <td className="p-4 align-middle whitespace-nowrap">
                                                             <div className="flex gap-2 items-center justify-center">
-                                                                <Link 
-                                                                    href={`/b2b/${item.id}?label=${encodeURIComponent(item.displayLoc || "")}`} 
-                                                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
-                                                                >
+                                                                    <Link 
+                                                                        href={`/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
+                                                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
+                                                                    >
                                                                     View & Purchase Report
                                                                 </Link>
                                                             </div>
@@ -433,7 +433,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                     const slug = countryName.toLowerCase().replace(/\s+/g, '-');
                                     const label = `Business Leads in ${countryName} (${randomNum})`;
                                     return (
-                                        <Link key={i} href={`/b2b/business-report/${slug}`} className="flex items-start gap-2 text-slate-500 text-[14px] font-semibold hover:text-blue-600 transition">
+                                        <Link key={i} href={`/business-report-view?country=${slug}`} className="flex items-start gap-2 text-slate-500 text-[14px] font-semibold hover:text-blue-600 transition">
                                             <span className="mt-1.5 w-1 h-1 bg-slate-400 rounded-full shrink-0"></span>
                                             <span>{label}</span>
                                         </Link>

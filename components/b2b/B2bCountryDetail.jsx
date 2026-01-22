@@ -61,7 +61,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                 // Found specific data, go to the first dataset (most relevant)
                 const datasetId = result.datasets[0].id;
                 const label = result.datasets[0].location || `${stateName}, ${countryName}`;
-                router.push(`/b2b/${datasetId}?label=${encodeURIComponent(label)}`);
+                router.push(`/dataset-detail?id=${datasetId}&label=${encodeURIComponent(label)}`);
             } else {
                 // No specific dataset found, fall back to general search
                 router.push(`/b2b?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
