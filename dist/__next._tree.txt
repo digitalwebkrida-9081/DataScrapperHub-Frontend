@@ -1,4 +1,4 @@
-:HL["/_next/static/chunks/a206a6e76875e86d.css","style"]
+:HL["/_next/static/chunks/286c0560ae542ddf.css","style"]
 :HL["/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["images/logos/main-logo/small-logo.png","image"]
@@ -26,8 +26,4 @@
 :HL["images/svg/w6.svg","image"]
 :HL["images/svg/w7.svg","image"]
 :HL["/images/vector/team-illustration.png","image"]
-<<<<<<< HEAD
-0:{"buildId":"-0Qt4NhbeEjgvcjlBDwMb","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
-=======
-0:{"buildId":"hXYgefTB35uH9EgyW-F6L","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
->>>>>>> a19cb323bbdb17cb927307c25fe4af480406388a
+0:{"buildId":"mV1AVRXeiHXZHBV7n2k2y","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
