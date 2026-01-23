@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(marketing)/layout,_N_T_/(marketing)/service/layout,_N_T_/(marketing)/service/news-monitoring-data-scraping/layout,_N_T_/(marketing)/service/news-monitoring-data-scraping/page,_N_T_/service/news-monitoring-data-scraping"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KG1hcmtldGluZyk/service/news-monitoring-data-scraping/__PAGE__",
+    "/!KG1hcmtldGluZyk/service/news-monitoring-data-scraping",
+    "/!KG1hcmtldGluZyk/service",
+    "/!KG1hcmtldGluZyk",
+    "/_index",
+    "/_head"
+  ]
+}
