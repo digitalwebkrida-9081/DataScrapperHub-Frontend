@@ -42,7 +42,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // Helper functions for fetching dropdown data
     const fetchCategories = async () => {
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const API_URL = "https://stagservice.datasellerhub.com" ;
             const catRes = await fetch(`${API_URL}/api/category`);
             const catData = await catRes.json();
             setCategories(catData.data || []);
@@ -53,7 +53,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     const fetchCountries = async () => {
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const API_URL = "https://stagservice.datasellerhub.com" ;
             const countryRes = await fetch(`${API_URL}/api/country/get-countries`);
             const countryData = await countryRes.json();
             setCountries(countryData.data || []);
@@ -69,7 +69,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         }
         try {
             // Backend is currently hardcoded for US states/cities
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const API_URL = "https://stagservice.datasellerhub.com" ;
             const response = await fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(filters.country)}`);
             const result = await response.json();
             setStates(result.data || []);
@@ -118,7 +118,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 const stateObj = states.find(s => s.name === filters.state);
                 if (!stateObj) return;
 
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const API_URL = "https://stagservice.datasellerhub.com" ;
                 const response = await fetch(`${API_URL}/api/location/cities/${stateObj.isoCode}?country=${encodeURIComponent(filters.country)}`);
                 const result = await response.json();
                 setCities(result.data || []);
@@ -154,7 +154,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 category: category || ''
             });
 
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const API_URL = "https://stagservice.datasellerhub.com" ;
             const response = await fetch(`${API_URL}/api/scraper/dataset/search?${queryParams}`);
             const result = await response.json();
             

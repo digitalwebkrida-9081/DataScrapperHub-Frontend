@@ -26,7 +26,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                 const formattedCountryName = decodeURIComponent(countrySlug).replace(/-/g, ' ');
 
                 // 2. Fetch Categories
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const API_URL = "https://stagservice.datasellerhub.com" ;
                 const catRes = await fetch(`${API_URL}/api/category`);
                 const catResult = await catRes.json();
                 if (catResult.success) setCategories(catResult.data || []);
@@ -53,7 +53,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
         setCheckingState(stateName);
         try {
             // Check if there is data for this state
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const API_URL = "https://stagservice.datasellerhub.com" ;
             const response = await fetch(`${API_URL}/api/scraper/dataset/search?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
             const result = await response.json();
 
