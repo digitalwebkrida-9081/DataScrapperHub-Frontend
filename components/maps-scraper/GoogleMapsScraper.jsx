@@ -41,7 +41,7 @@ const GoogleMapsScraper = () => {
         setFiles(null);
 
         try {
-            const API_URL = "https://stagservice.datasellerhub.com" ;
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
             const response = await fetch(`${API_URL}/api/scraper/search-rapid`, {
                 method: 'POST',
                 headers: {

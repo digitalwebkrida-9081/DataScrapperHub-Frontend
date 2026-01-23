@@ -30,7 +30,7 @@ const B2bDatasetDetail = ({ id }) => {
         e.preventDefault();
         setPurchaseLoading(true);
         try {
-            const API_URL = "https://stagservice.datasellerhub.com" ;
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
             const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -84,7 +84,7 @@ const B2bDatasetDetail = ({ id }) => {
 
                 // 2. Fallback to API for real database records
                 // Use the new scraper dataset endpoint
-                const API_URL = "https://stagservice.datasellerhub.com" ;
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
                 const response = await fetch(`${API_URL}/api/scraper/dataset/${id}`);
                 
                 if (!response.ok) throw new Error('Failed to fetch');

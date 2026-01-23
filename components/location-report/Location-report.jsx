@@ -20,7 +20,7 @@ const Locationreport = ({ initialCountrySlug = null }) => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const API_URL = "https://stagservice.datasellerhub.com" ;
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
                 const [countryRes, categoryRes] = await Promise.all([
                     fetch(`${API_URL}/api/country/get-countries`),
                     fetch(`${API_URL}/api/category`)
@@ -61,7 +61,7 @@ const Locationreport = ({ initialCountrySlug = null }) => {
             setLoading(true);
             try {
                 const query = selectedCountry ? `?country=${encodeURIComponent(selectedCountry)}` : '';
-                const API_URL = "https://stagservice.datasellerhub.com" ;
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
                 const response = await fetch(`${API_URL}/api/scraper/dataset/search${query}`);
                 const result = await response.json();
                 
