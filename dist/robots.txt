@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://stag.datasellerhub.com
+
+# Sitemaps
+Sitemap: https://stag.datasellerhub.com/sitemap.xml
