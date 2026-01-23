@@ -26,4 +26,4 @@
 :HL["images/svg/w6.svg","image"]
 :HL["images/svg/w7.svg","image"]
 :HL["/images/vector/team-illustration.png","image"]
-0:{"buildId":"8u3iuXB9qPVmP0LRzz8c0","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"hXYgefTB35uH9EgyW-F6L","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

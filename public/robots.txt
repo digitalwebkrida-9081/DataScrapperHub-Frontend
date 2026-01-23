@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://stag.datasellerhub.com
+Host: https://stagservice.datasellerhub.com
 
 # Sitemaps
-Sitemap: https://stag.datasellerhub.com/sitemap.xml
+Sitemap: https://stagservice.datasellerhub.com/sitemap.xml
