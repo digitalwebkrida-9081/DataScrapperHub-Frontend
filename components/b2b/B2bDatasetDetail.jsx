@@ -6,6 +6,7 @@ import { MdVerified, MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import WhyChoose from '../WhyChoose';
+import * as XLSX from 'xlsx';
 
 const B2bDatasetDetail = ({ id }) => {
     const searchParams = useSearchParams();
@@ -20,10 +21,71 @@ const B2bDatasetDetail = ({ id }) => {
         email: '',
         phoneNumber: ''
     });
+    const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+    const [sampleForm, setSampleForm] = useState({
+        email: '',
+        phoneNumber: ''
+    });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSampleChange = (e) => {
+        const { name, value } = e.target;
+        setSampleForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSampleDownload = async (e) => {
+        e.preventDefault();
+        // Simulate processing
+        setPurchaseLoading(true); // Reuse loading state or create new one if needed
+        
+        setTimeout(() => {
+            // Generate Excel File
+            const wb = XLSX.utils.book_new();
+            
+            // Create data for Excel with masked/hidden fields
+            const exportData = dataset.sampleList.map(item => ({
+                "Business Name": item.name,
+                "Address": item.address || "Available in Full List",
+                "City": item.city,
+                "State": item.state,
+                "Country": item.country,
+                "Phone": "Available in Full List (Verified)", // Masked
+                "Email": "Available in Full List (Verified)", // Masked
+                "Website": item.website ? "Available" : "--",
+                "Rating": item.rating,
+                "Reviews": item.reviews
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            
+            // Adjust column widths
+            const wscols = [
+                {wch: 30}, // Name
+                {wch: 30}, // Address
+                {wch: 15}, // City
+                {wch: 15}, // State
+                {wch: 15}, // Country
+                {wch: 25}, // Phone
+                {wch: 25}, // Email
+                {wch: 20}, // Website
+                {wch: 10}, // Rating
+                {wch: 10}  // Reviews
+            ];
+            ws['!cols'] = wscols;
+
+            XLSX.utils.book_append_sheet(wb, ws, "Sample Leads");
+            
+            // Download file
+            XLSX.writeFile(wb, `${dataset.category}-${dataset.location}-SAMPLE.xlsx`);
+            
+            setPurchaseLoading(false);
+            setIsSampleModalOpen(false);
+            alert("Sample data downloaded successfully!");
+        }, 1500);
     };
 
     const handlePurchase = async (e) => {
@@ -221,7 +283,7 @@ const B2bDatasetDetail = ({ id }) => {
                                             <FaDownload /> Purchase Lead List
                                         </button>
                                         <button 
-                                            onClick={() => setIsModalOpen(true)}
+                                            onClick={() => setIsSampleModalOpen(true)}
                                             className="bg-white hover:bg-slate-100 text-slate-900 px-8 py-3.5 rounded font-bold flex items-center gap-2 transition uppercase tracking-wide border border-white cursor-pointer"
                                         >
                                             <FaDownload /> Free Sample Lead List
@@ -314,7 +376,7 @@ const B2bDatasetDetail = ({ id }) => {
                                     <FaDownload className="inline mr-2"/> Download Full List
                                 </button>
                                  <button
-                                 onClick={() => setIsModalOpen(true)}
+                                 onClick={() => setIsSampleModalOpen(true)}
                                  className="bg-white border border-slate-300 text-slate-700 px-6 py-2 rounded text-sm font-bold hover:bg-slate-50 transition cursor-pointer">
                                     Request Sample
                                 </button>
@@ -376,7 +438,7 @@ const B2bDatasetDetail = ({ id }) => {
                          
                          <div className="mt-8 flex justify-center gap-4">
                              <button className="bg-blue-600 text-white px-6 py-2 rounded font-bold text-sm">Buy Full Dataset</button>
-                             <button className="bg-slate-800 text-white px-6 py-2 rounded font-bold text-sm flex items-center gap-2"><FaDownload/> Download Sample</button>
+                             <button className="bg-slate-800 text-white px-6 py-2 rounded font-bold text-sm flex items-center gap-2" onClick={() => setIsSampleModalOpen(true)}><FaDownload/> Download Sample</button>
                          </div>
                      </div>
                      
@@ -555,6 +617,92 @@ const B2bDatasetDetail = ({ id }) => {
                                         <FaShoppingCart className="text-sm" />
                                     </div>
                                     BUY NOW
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* --- SAMPLE REQUEST MODAL --- */}
+            {isSampleModalOpen && (
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                        {/* Close button */}
+                        <button 
+                            onClick={() => setIsSampleModalOpen(false)}
+                            className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition"
+                        >
+                            <FaTimes className="text-xl" />
+                        </button>
+
+                        {/* Logo */}
+                        <div className="flex justify-center mb-6">
+                            <div className="flex items-center gap-2 text-slate-900 font-bold text-2xl">
+                                <img src="/images/logo.jpg" alt="logo" className='w-10 ' />
+                                Data Scraper Hub
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="text-center mb-8">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2">
+                                Download Free Sample
+                            </h3>
+                            <p className="text-slate-500 text-sm">Enter your details to download the sample list.</p>
+                        </div>
+
+                        {/* Form */}
+                        <form onSubmit={handleSampleDownload} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                    Email <span className="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="email" 
+                                    name="email"
+                                    required
+                                    value={sampleForm.email}
+                                    onChange={handleSampleChange}
+                                    placeholder="Email Address"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                    Phone Number <span className="text-red-500">*</span>
+                                </label>
+                                <div className="flex gap-2">
+                                    <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
+                                        <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
+                                        <span className="text-sm text-slate-600">+91</span>
+                                    </div>
+                                    <input 
+                                        type="tel" 
+                                        name="phoneNumber"
+                                        required
+                                        value={sampleForm.phoneNumber}
+                                        onChange={handleSampleChange}
+                                        placeholder="Phone Number"
+                                        className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <button 
+                                type="submit"
+                                disabled={purchaseLoading}
+                                className="w-full mt-6 bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition shadow-xl shadow-slate-900/20 group cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                            >
+                                {purchaseLoading ? (
+                                    <span>Processing...</span>
+                                ) : (
+                                    <>
+                                    <div className="w-8 h-8 bg-slate-700/50 rounded flex items-center justify-center group-hover:bg-slate-700 transition">
+                                        <FaDownload className="text-sm" />
+                                    </div>
+                                    DOWNLOAD SAMPLE
                                     </>
                                 )}
                             </button>

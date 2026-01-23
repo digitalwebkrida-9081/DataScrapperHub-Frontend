@@ -41,7 +41,7 @@ export default function Navbar(){
           {/* LOGO */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative overflow-hidden w-10 h-10 rounded-lg">
-                <img src="/images/logo.jpg" alt="DataSellerHub" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="/images/favicon.png" alt="DataSellerHub" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             </div>
             <span className="font-bold text-xl md:text-2xl tracking-tight text-slate-900">
               DataSellerHub

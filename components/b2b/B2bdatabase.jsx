@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding, FaStar, FaTimes, FaUser } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding, FaStar, FaTimes, FaUser, FaDownload } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown } from 'react-icons/md';
 import SearchableDropdown from '../ui/SearchableDropdown';
+import * as XLSX from 'xlsx';
 
 const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // State for data and loading
@@ -12,7 +13,11 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     const [datasets, setDatasets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+    const [selectedDatasetForSample, setSelectedDatasetForSample] = useState(null);
+    const [purchaseLoading, setPurchaseLoading] = useState(false);
     const [phoneCode, setPhoneCode] = useState('+91');
+    const [sampleForm, setSampleForm] = useState({ email: '', phoneNumber: '' });
 
     const countryCodes = [
         { code: '+91', flag: '🇮🇳', name: 'India' },
@@ -38,6 +43,56 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         state: initialFilters.state || '',
         city: initialFilters.city || ''
     });
+
+    const handleSampleChange = (e) => {
+        const { name, value } = e.target;
+        setSampleForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSampleDownload = async (e) => {
+        e.preventDefault();
+        setPurchaseLoading(true); // Reuse loading state
+        
+        // Mock dataset structure if we only have the summary from the list
+        // ideally we would fetch the detail or just mock a few rows based on the summary
+        
+        setTimeout(() => {
+            // Generate Excel File
+            const wb = XLSX.utils.book_new();
+            
+            // Create Mock/Sample data for Excel 
+            // Since we are in the list view, we might not have the full sample array. 
+            // We can generate dummy data effectively or use what we have.
+            // For now, let's create generic rows since we don't have the `sampleList` array in `datasets` state usually (unless we add it to search mapping)
+            const exportData = Array(5).fill(null).map((_, i) => ({
+                "Business Name": `${selectedDatasetForSample?.category || 'Business'} ${i+1}`,
+                "Address": "Available in Full List",
+                "City": selectedDatasetForSample?.displayLoc?.split(',')[0] || 'City',
+                "State": "State",
+                "Country": "Country",
+                "Phone": "Available in Full List (Verified)", 
+                "Email": "Available in Full List (Verified)",
+                "Website": "Available",
+                "Rating": (4 + Math.random()).toFixed(1),
+                "Reviews": Math.floor(Math.random() * 500)
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            
+             const wscols = [
+                {wch: 30}, {wch: 30}, {wch: 15}, {wch: 15}, {wch: 15}, 
+                {wch: 25}, {wch: 25}, {wch: 20}, {wch: 10}, {wch: 10}
+            ];
+            ws['!cols'] = wscols;
+
+            XLSX.utils.book_append_sheet(wb, ws, "Sample Leads");
+            XLSX.writeFile(wb, `${selectedDatasetForSample?.name?.replace(/ /g, '_') || 'Sample'}_Leads.xlsx`);
+            
+            setPurchaseLoading(false);
+            setIsSampleModalOpen(false);
+            alert("Sample data downloaded successfully!");
+        }, 1500);
+    };
 
     // Helper functions for fetching dropdown data
     const fetchCategories = async () => {
@@ -188,7 +243,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                         full_address: `Last Updated: ${ds.lastUpdate}`, 
                         price: ds.price,
                         isDataset: true,
-                        displayLoc: displayLoc 
+                        displayLoc: displayLoc,
+                        category: ds.category // Add category for mock data generation
                     };
                 });
                 setDatasets(mappedData);
@@ -203,7 +259,10 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     full_address: `Last Updated: ${ds.lastUpdate}`, 
                     price: ds.price,
                     isDataset: true,
-                    displayLoc: ds.location
+                    price: ds.price,
+                    isDataset: true,
+                    displayLoc: ds.location,
+                    category: ds.category // Add category for mock data generation
                 }]);
             } else {
                 setDatasets([]);
@@ -375,6 +434,15 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                                     >
                                                                     View & Purchase Report
                                                                 </Link>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedDatasetForSample(item);
+                                                                        setIsSampleModalOpen(true);
+                                                                    }}
+                                                                    className="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm hover:bg-slate-50 transition cursor-pointer whitespace-nowrap"
+                                                                >
+                                                                    Request Sample
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -594,6 +662,92 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 SUBMIT
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* --- SAMPLE REQUEST MODAL --- */}
+            {isSampleModalOpen && (
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                        {/* Close button */}
+                        <button 
+                            onClick={() => setIsSampleModalOpen(false)}
+                            className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition cursor-pointer"
+                        >
+                            <FaTimes className="text-xl" />
+                        </button>
+
+                        {/* Logo */}
+                        <div className="flex justify-center mb-6">
+                            <div className="flex items-center gap-2 text-slate-900 font-bold text-2xl">
+                                <img src="/images/logo.jpg" alt="logo" className='w-10 ' />
+                                Data Scraper Hub
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="text-center mb-8">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2">
+                                Download Free Sample
+                            </h3>
+                            <p className="text-slate-500 text-sm">Enter your details to download the sample list.</p>
+                        </div>
+
+                        {/* Form */}
+                        <form onSubmit={handleSampleDownload} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                    Email <span className="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="email" 
+                                    name="email"
+                                    required
+                                    value={sampleForm.email}
+                                    onChange={handleSampleChange}
+                                    placeholder="Email Address"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                    Phone Number <span className="text-red-500">*</span>
+                                </label>
+                                <div className="flex gap-2">
+                                    <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
+                                        <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
+                                        <span className="text-sm text-slate-600">+91</span>
+                                    </div>
+                                    <input 
+                                        type="tel" 
+                                        name="phoneNumber"
+                                        required
+                                        value={sampleForm.phoneNumber}
+                                        onChange={handleSampleChange}
+                                        placeholder="Phone Number"
+                                        className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <button 
+                                type="submit"
+                                disabled={purchaseLoading}
+                                className="w-full mt-6 bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition shadow-xl shadow-slate-900/20 group cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                            >
+                                {purchaseLoading ? (
+                                    <span>Processing...</span>
+                                ) : (
+                                    <>
+                                    <div className="w-8 h-8 bg-slate-700/50 rounded flex items-center justify-center group-hover:bg-slate-700 transition">
+                                        <FaDownload className="text-sm" />
+                                    </div>
+                                    DOWNLOAD SAMPLE
+                                    </>
+                                )}
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}

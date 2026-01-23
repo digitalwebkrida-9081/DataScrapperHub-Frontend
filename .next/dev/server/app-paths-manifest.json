@@ -1,0 +1,5 @@
+{
+  "/b2b/page": "app/b2b/page.js",
+  "/dataset-detail/page": "app/dataset-detail/page.js",
+  "/page": "app/page.js"
+}
