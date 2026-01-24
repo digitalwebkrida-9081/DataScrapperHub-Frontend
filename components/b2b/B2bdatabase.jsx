@@ -7,6 +7,37 @@ import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown } from 'rea
 import SearchableDropdown from '../ui/SearchableDropdown';
 import * as XLSX from 'xlsx';
 
+// Skeleton Loader Component for the Table
+const TableSkeleton = () => (
+    <div className="overflow-x-auto animate-pulse">
+        <table className="w-full text-left border-collapse">
+            <thead>
+                <tr className="bg-blue-50 text-blue-900 text-xs uppercase font-bold tracking-wider">
+                    <th className="p-4 border-b border-blue-100">Name</th>
+                    <th className="p-4 border-b border-blue-100 text-center">Number of Records</th>
+                    <th className="p-4 border-b border-blue-100 text-center">Emails</th>
+                    <th className="p-4 border-b border-blue-100 text-center">Phones</th>
+                    <th className="p-4 border-b border-blue-100"></th>
+                </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+                {[...Array(5)].map((_, i) => (
+                    <tr key={i} className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 align-middle">
+                            <div className="h-5 bg-slate-200 rounded w-3/4 mb-2"></div>
+                            <div className="h-3 bg-slate-100 rounded w-1/2"></div>
+                        </td>
+                        <td className="p-4 align-middle text-center"><div className="h-4 bg-slate-200 rounded w-16 mx-auto"></div></td>
+                        <td className="p-4 align-middle text-center"><div className="h-4 bg-slate-200 rounded w-12 mx-auto"></div></td>
+                        <td className="p-4 align-middle text-center"><div className="h-4 bg-slate-200 rounded w-12 mx-auto"></div></td>
+                        <td className="p-4 align-middle text-center"><div className="h-8 bg-slate-200 rounded w-24 mx-auto"></div></td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+);
+
 const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // State for data and loading
     // State for data and loading
@@ -137,11 +168,20 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     useEffect(() => {
         const initializePage = async () => {
             setLoading(true);
-            // Fetch essentials
-            await Promise.all([fetchCategories(), fetchCountries()]);
-            
-            if (isSeoPage) {
-                setLoading(false);
+            try {
+                // Fetch essentials in parallel
+                await Promise.all([
+                    fetchCategories(),
+                    fetchCountries()
+                ]);
+            } catch (error) {
+                console.error("Initialization error:", error);
+            } finally {
+                // Only unset loading if it's an SEO page (static), 
+                // otherwise handleSearch will take over or we wait for user interaction
+                if (isSeoPage) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -198,8 +238,9 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     const handleSearch = async () => {
         const { category, country, state, city } = filters;
         
-        // No validation needed
         setLoading(true);
+        // Do NOT clear datasets immediately to avoid flash of "No results"
+        // setDatasets([]); 
 
         try {
             const queryParams = new URLSearchParams({
@@ -265,7 +306,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     category: ds.category // Add category for mock data generation
                 }]);
             } else {
-                setDatasets([]);
+                setDatasets([]); // Only now clear if 0 results found
             }
 
         } catch (error) {
@@ -393,19 +434,16 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                         <div className="lg:w-3/4">
                             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                                 {loading ? (
-                                    <div className="p-12 text-center text-slate-500">
-                                         <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-200 border-t-blue-600 mb-2"></div>
-                                         <p>Finding the comprehensive dataset...</p>
-                                    </div>
+                                    <TableSkeleton />
                                 ) : datasets.length === 0 ? (
-                                    <div className="p-12 text-center text-slate-500">
+                                    <div className="p-12 text-center text-slate-500 animate-in fade-in zoom-in duration-300">
                                         <p>No complete datasets found for this criteria.</p>
                                         <Link href="/maps-scraper" className="text-blue-600 hover:underline mt-2 inline-block">
                                             Need this data? Use our Scraper to compile it first.
                                         </Link>
                                     </div>
                                 ) : (
-                                    <div className="overflow-x-auto">
+                                    <div className="overflow-x-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
                                         <table className="w-full text-left border-collapse">
                                             <thead>
                                                 <tr className="bg-blue-50 text-blue-900 text-xs uppercase font-bold tracking-wider">
