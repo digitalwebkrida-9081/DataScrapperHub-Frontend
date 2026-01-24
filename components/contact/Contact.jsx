@@ -37,7 +37,7 @@ const [open, setOpen] = useState(false);
   return (
     <>
       {/* ================= HERO SECTION ================= */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#020617] via-[#020617] to-[#0a1f44] py-28">
+      <section className="relative overflow-hidden bg-linear-to-r from-[#020617] via-[#020617] to-[#0a1f44] py-28">
         {/* Subtle wave pattern */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.15),transparent_40%)]" />
 
@@ -101,7 +101,7 @@ const [open, setOpen] = useState(false);
                       Email Address
                     </p>
                     <p className="text-sm text-gray-500">
-                      info@DataSellerHub.com
+                      info@datasellerhub.com
                     </p>
                   </div>
                 </div>

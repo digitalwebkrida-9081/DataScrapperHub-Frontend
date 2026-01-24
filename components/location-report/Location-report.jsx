@@ -22,7 +22,6 @@ const Locationreport = ({ initialCountrySlug = null }) => {
         const fetchData = async () => {
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
                 const [countryRes] = await Promise.all([
                     fetch(`${API_URL}/api/country/get-countries`)
                 ]);
