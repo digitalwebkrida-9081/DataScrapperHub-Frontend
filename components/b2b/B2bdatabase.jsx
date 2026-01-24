@@ -6,6 +6,7 @@ import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaP
 import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown } from 'react-icons/md';
 import SearchableDropdown from '../ui/SearchableDropdown';
 import * as XLSX from 'xlsx';
+import staticCategories from '../../data/categories.json';
 
 // Skeleton Loader Component for the Table
 const TableSkeleton = () => (
@@ -62,7 +63,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     ];
 
     // Dropdown options
-    const [categories, setCategories] = useState([]);
+    const [categories] = useState(staticCategories || []);
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
@@ -126,16 +127,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     };
 
     // Helper functions for fetching dropdown data
-    const fetchCategories = async () => {
-        try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-            const catRes = await fetch(`${API_URL}/api/category`);
-            const catData = await catRes.json();
-            setCategories(catData.data || []);
-        } catch (error) {
-            console.error("Error fetching categories:", error);
-        }
-    };
+    // Categories are now loaded statically
 
     const fetchCountries = async () => {
         try {
@@ -171,7 +163,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
             try {
                 // Fetch essentials in parallel
                 await Promise.all([
-                    fetchCategories(),
+                    // fetchCategories(), // Removed: using static JSON
                     fetchCountries()
                 ]);
             } catch (error) {
