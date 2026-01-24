@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding } from 'react-icons/fa';
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import WhyChoose from '../WhyChoose';
+import staticCategories from '../../data/categories.json';
 
 const Locationreport = ({ initialCountrySlug = null }) => {
     const router = useRouter();
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState('United States');
     const [datasets, setDatasets] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState(staticCategories || []);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 30;
     const [loading, setLoading] = useState(true);
@@ -21,17 +22,16 @@ const Locationreport = ({ initialCountrySlug = null }) => {
         const fetchData = async () => {
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                const [countryRes, categoryRes] = await Promise.all([
-                    fetch(`${API_URL}/api/country/get-countries`),
-                    fetch(`${API_URL}/api/category`)
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+                const [countryRes] = await Promise.all([
+                    fetch(`${API_URL}/api/country/get-countries`)
                 ]);
 
                 const countryResult = await countryRes.json();
-                const categoryResult = await categoryRes.json();
-
+                
                 const fetchedCountries = countryResult.success ? (countryResult.data || []) : [];
                 setCountries(fetchedCountries);
-                if (categoryResult.success) setCategories(categoryResult.data || []);
+                // Categories now loaded statically
 
                 // Handle initial slug logic
                 if (initialCountrySlug && fetchedCountries.length > 0) {
