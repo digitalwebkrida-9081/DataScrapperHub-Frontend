@@ -123,7 +123,34 @@ const [open, setOpen] = useState(false);
                 .
               </p>
 
-              <form className="space-y-8">
+              <form className="space-y-8" onSubmit={async (e) => {
+                e.preventDefault();
+                const payload = {
+                    type: 'contact_form',
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    phone: `${selected.code} ${formData.phone}`, // Assuming user types number in phone field
+                    message: formData.message
+                };
+
+                try {
+                    const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+                    const res = await fetch(`${API_URL}/api/forms/submit`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (res.ok) {
+                        alert('Message sent successfully!');
+                        // Reset form if needed
+                    } else {
+                        alert('Failed to send message.');
+                    }
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    alert('An error occurred.');
+                }
+              }}>
                 {/* Row 1 */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -197,6 +224,8 @@ const [open, setOpen] = useState(false);
       {/* Phone Input */}
       <input
         type="tel"
+        name="phone"
+        onChange={handleChange}
         placeholder="(702) 123-4567"
         className="w-full px-4 py-3 text-sm outline-none"
       />
@@ -224,7 +253,6 @@ const [open, setOpen] = useState(false);
     )}
   </div>
 </div>
-
                 </div>
 
                 {/* Message */}
@@ -244,7 +272,7 @@ const [open, setOpen] = useState(false);
                 {/* Button */}
                 <button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 transition text-white text-sm font-medium px-8 py-3 rounded-md"
+                  className="bg-blue-600 hover:bg-blue-700 transition text-white text-sm font-medium px-8 py-3 rounded-md cursor-pointer"
                 >
                   Contact Us Now!
                 </button>

@@ -41,6 +41,27 @@ const B2bDatasetDetail = ({ id }) => {
         e.preventDefault();
         // Simulate processing
         setPurchaseLoading(true); // Reuse loading state or create new one if needed
+
+        try {
+            // Submit to Backend
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+            await fetch(`${API_URL}/api/forms/submit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'sample_request',
+                    email: sampleForm.email,
+                    phone: sampleForm.phoneNumber,
+                    datasetDetails: {
+                         id: dataset.id,
+                         category: dataset.category,
+                         location: dataset.location
+                    }
+                })
+            });
+        } catch (error) {
+            console.error("Error submitting sample request:", error);
+        }
         
         setTimeout(() => {
             // Generate Excel File

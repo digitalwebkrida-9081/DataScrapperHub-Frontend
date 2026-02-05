@@ -83,7 +83,26 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     const handleSampleDownload = async (e) => {
         e.preventDefault();
-        setPurchaseLoading(true); // Reuse loading state
+        setPurchaseLoading(true);
+
+        try {
+            // Submit to Backend
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+            await fetch(`${API_URL}/api/forms/submit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'sample_request',
+                    email: sampleForm.email,
+                    phone: sampleForm.phoneNumber,
+                    datasetDetails: selectedDatasetForSample
+                })
+            });
+        } catch (error) {
+            console.error("Error submitting sample request:", error);
+            // We continue to download even if submission fails, or you can choose to stop.
+            // For better UX, maybe we should still let them download but log the error?
+        }
         
         // Mock dataset structure if we only have the summary from the list
         // ideally we would fetch the detail or just mock a few rows based on the summary
@@ -645,12 +664,40 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                         </div>
                         
                         {/* Form */}
-                        <div className="p-6 space-y-5">
+                        <form onSubmit={async (e) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.target);
+                            const payload = {
+                                type: 'custom_database',
+                                name: formData.get('name'),
+                                email: formData.get('email'),
+                                phone: `${phoneCode} ${formData.get('phone')}`,
+                                message: formData.get('message')
+                            };
+
+                            try {
+                                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+                                const res = await fetch(`${API_URL}/api/forms/submit`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(payload)
+                                });
+                                if (res.ok) {
+                                    alert('Request submitted successfully!');
+                                    setIsModalOpen(false);
+                                } else {
+                                    alert('Failed to submit request.');
+                                }
+                            } catch (error) {
+                                console.error('Submission error:', error);
+                                alert('An error occurred.');
+                            }
+                        }} className="p-6 space-y-5">
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 mb-2">Full Name <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                      <span className="absolute left-3 top-3 text-slate-400"><FaUser /></span>
-                                    <input type="text" placeholder="Enter your full name" className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition" />
+                                    <input name="name" required type="text" placeholder="Enter your full name" className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition" />
                                 </div>
                             </div>
 
@@ -658,7 +705,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 <label className="block text-sm font-bold text-slate-700 mb-2">Email <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                      <span className="absolute left-3 top-3 text-slate-400"><MdEmail size={18} /></span>
-                                    <input type="email" placeholder="Enter your email" className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition" />
+                                    <input name="email" required type="email" placeholder="Enter your email" className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition" />
                                 </div>
                             </div>
                             
@@ -679,19 +726,19 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                             <MdKeyboardArrowDown size={20} />
                                         </div>
                                     </div>
-                                    <input type="tel" className="w-full px-4 py-3 border border-slate-200 rounded-r-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition z-0" placeholder="Required*" />
+                                    <input name="phone" required type="tel" className="w-full px-4 py-3 border border-slate-200 rounded-r-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition z-0" placeholder="Required*" />
                                 </div>
                             </div>
 
                              <div>
                                 <label className="block text-sm font-bold text-slate-700 mb-2">Message <span className="text-red-500">*</span></label>
-                                <textarea placeholder="Enter your message" className="w-full px-4 py-3 border border-slate-200 rounded-lg min-h-[100px] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition resize-none"></textarea>
+                                <textarea name="message" required placeholder="Enter your message" className="w-full px-4 py-3 border border-slate-200 rounded-lg min-h-[100px] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition resize-none"></textarea>
                             </div>
 
-                            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3.5 rounded-lg font-bold uppercase tracking-wide transition shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 mt-2 cursor-pointer">
+                            <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3.5 rounded-lg font-bold uppercase tracking-wide transition shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 mt-2 cursor-pointer">
                                 SUBMIT
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             )}
