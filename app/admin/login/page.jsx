@@ -9,28 +9,23 @@ export default function AdminLoginPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password })
-            });
-            
-            const data = await res.json();
+        // Simple Client-Side Check for Static Export
+        // Note: In a real static app, secrets are visible in JS. 
+        // ideally getting a token from an external API is better, but this matches the user's "simple" requirement.
+        const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
 
-            if (res.ok && data.success) {
-                router.push('/admin/leads');
-            } else {
-                setError(data.message || 'Login failed');
-            }
-        } catch (err) {
-            setError('An error occurred. Please try again.');
-        } finally {
+        if (password === correctPassword) {
+            localStorage.setItem('admin_auth', 'true');
+            // Set a cookie too just in case we switch back, but primarily rely on storage for client-side
+            document.cookie = "admin_auth=true; path=/";
+            router.push('/admin/leads');
+        } else {
+            setError('Invalid password');
             setLoading(false);
         }
     };

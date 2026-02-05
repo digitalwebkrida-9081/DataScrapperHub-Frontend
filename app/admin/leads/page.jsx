@@ -1,12 +1,20 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLeadsPage() {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
-        fetchLeads();
+        // Client-Side Auth Check
+        const isAuth = localStorage.getItem('admin_auth');
+        if (!isAuth) {
+            router.push('/admin/login');
+        } else {
+            fetchLeads();
+        }
     }, []);
 
     const fetchLeads = async () => {
