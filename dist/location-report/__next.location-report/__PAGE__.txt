@@ -1,6 +1,9 @@
 1:"$Sreact.fragment"
-2:I[88495,["/_next/static/chunks/64de6a6a91a3fc39.js","/_next/static/chunks/9a4848fce3f92fc7.js","/_next/static/chunks/ddfcfc874118d1cf.js","/_next/static/chunks/eb01deaf3f03061c.js","/_next/static/chunks/c6a85358f12f171b.js","/_next/static/chunks/8ec6b8d5eaaada30.js"],"default"]
-3:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/247eb132b7f7b574.js"],"OutletBoundary"]
-4:"$Sreact.suspense"
-0:{"buildId":"5Q7kyQY2ceEuTkCBOZwwJ","rsc":["$","$1","c",{"children":[["$","$L2",null,{}],[["$","script","script-0",{"src":"/_next/static/chunks/eb01deaf3f03061c.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/c6a85358f12f171b.js","async":true}],["$","script","script-2",{"src":"/_next/static/chunks/8ec6b8d5eaaada30.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
-5:null
+2:I[47257,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/247eb132b7f7b574.js"],"ClientPageRoot"]
+3:I[83384,["/_next/static/chunks/64de6a6a91a3fc39.js","/_next/static/chunks/9a4848fce3f92fc7.js","/_next/static/chunks/ddfcfc874118d1cf.js","/_next/static/chunks/4898d4437ce1c598.js","/_next/static/chunks/c6a85358f12f171b.js","/_next/static/chunks/8ec6b8d5eaaada30.js"],"default"]
+6:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/247eb132b7f7b574.js"],"OutletBoundary"]
+7:"$Sreact.suspense"
+0:{"buildId":"lwQkpzpHUOBVKQ4W5eq0H","rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/_next/static/chunks/4898d4437ce1c598.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/c6a85358f12f171b.js","async":true}],["$","script","script-2",{"src":"/_next/static/chunks/8ec6b8d5eaaada30.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"loading":null,"isPartial":false}
+4:{}
+5:{}
+8:null

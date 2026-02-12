@@ -3,8 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FaGlobe, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaGlobe, FaChevronDown, FaChevronUp, FaSearch } from 'react-icons/fa';
 import WhyChoose from '../WhyChoose';
+
+import { getCountryData } from '../../data/countryStates';
+import staticCategories from '../../data/categories.json';
 
 const B2bCountryDetail = ({ countrySlug }) => {
     const router = useRouter();
@@ -14,27 +17,49 @@ const B2bCountryDetail = ({ countrySlug }) => {
     const [loading, setLoading] = useState(true);
     const [showAllStates, setShowAllStates] = useState(false);
     const [checkingState, setCheckingState] = useState(null); // Track which state is being checked
+    const [searchTerm, setSearchTerm] = useState('');
 
     // Initial Data Fetching
     useEffect(() => {
         const fetchData = async () => {
-             // ... existing fetch logic ...
              setLoading(true);
             try {
                 // 1. Get Country Name from Slug
-                setCountryName(decodeURIComponent(countrySlug).replace(/-/g, ' '));
                 const formattedCountryName = decodeURIComponent(countrySlug).replace(/-/g, ' ');
+                setCountryName(formattedCountryName);
 
-                // 2. Fetch Categories
+                // 2. Show states INSTANTLY from static data (no network wait)
+                const staticCountry = getCountryData(formattedCountryName);
+                if (staticCountry) {
+                    setStates(staticCountry.states.map((name, i) => ({ name, isoCode: `S${i}` })));
+                    setLoading(false); // Unblock UI immediately
+                }
+
+                // 3. Show categories INSTANTLY from static JSON (first 48 items)
+                if (staticCategories && staticCategories.length > 0) {
+                    setCategories(staticCategories.slice(0, 48));
+                }
+
+                // 4. Fetch categories and API states in PARALLEL
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                const catRes = await fetch(`${API_URL}/api/category`);
-                const catResult = await catRes.json();
-                if (catResult.success) setCategories(catResult.data || []);
+                const [catRes, statesRes] = await Promise.all([
+                    fetch(`${API_URL}/api/category`),
+                    fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(formattedCountryName)}`)
+                ]);
 
-                // 3. Fetch States for this Country
-                const statesRes = await fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(formattedCountryName)}`);
+                const catResult = await catRes.json();
+                if (catResult.success && catResult.data) {
+                    // Start with static, then append more or replace if needed. 
+                    // To keep it fast and consistent, we might just stick with static or mix.
+                    // But let's overwrite with API data if it's better or just use API data if static was empty.
+                    // For now, replacing is fine, but since we already showed static, user won't see a blank space.
+                    setCategories(catResult.data);
+                }
+
                 const statesResult = await statesRes.json();
-                if (statesResult.success) setStates(statesResult.data || []);
+                if (statesResult.success && statesResult.data?.length > 0) {
+                    setStates(statesResult.data); // Replace with richer API data
+                }
 
             } catch (error) {
                 console.error("Error loading country details:", error);
@@ -181,8 +206,24 @@ const B2bCountryDetail = ({ countrySlug }) => {
                         Find B2B Leads In <span className="text-blue-600">{displayName}</span> Across Different Domains
                     </h2>
 
+                    {/* Search Bar */}
+                    <div className="max-w-md mx-auto mb-10 relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <FaSearch className="text-slate-400" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder={`Search ${categories.length} categories...`}
+                            className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:placeholder-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition shadow-sm"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+
                     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-8">
-                        {categories.map((cat, idx) => {
+                        {categories
+                            .filter(cat => cat.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .map((cat, idx) => {
                              // Random number simulation for "social proof" feel, or could use real counts if available
                             const randomNum = Math.floor(Math.random() * 5000) + 1000; 
                             return (

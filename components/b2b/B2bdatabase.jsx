@@ -469,7 +469,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                 {datasets.map((item) => (
                                                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                                                         <td className="p-4 font-medium text-slate-700 align-middle">
-                                                            <div className="font-semibold text-lg text-slate-700">{item.name}</div>
+                                                            <Link href={`/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-lg text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
                                                             <div className="text-xs text-slate-400 mt-1">{item.full_address}</div>
                                                         </td>
                                                         <td className="p-4 text-slate-600 font-bold text-center align-middle whitespace-nowrap">{item.records}</td>
@@ -543,10 +543,19 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-8 text-[14px] text-slate-500 max-w-6xl mx-auto">
                             {/* Generating a long list of domains using all actual countries */}
-                            {countries.length > 0 ? (
-                                countries.map((country, i) => {
+                            {countries.length > 0 ? (() => {
+                                // Priority countries first: India, United States, United Kingdom
+                                const priorityNames = ['India', 'United States', 'United Kingdom'];
+                                const getName = (c) => c.country_name || c.name;
+                                const priority = priorityNames
+                                    .map(name => countries.find(c => getName(c) === name))
+                                    .filter(Boolean);
+                                const rest = countries.filter(c => !priorityNames.includes(getName(c)));
+                                const ordered = [...priority, ...rest];
+
+                                return ordered.map((country, i) => {
                                     const randomNum = Math.floor(1000 + Math.random() * 9000);
-                                    const countryName = country.country_name || country.name;
+                                    const countryName = getName(country);
                                     const slug = countryName.toLowerCase().replace(/\s+/g, '-');
                                     const label = `Business Leads in ${countryName} (${randomNum})`;
                                     return (
@@ -555,8 +564,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                             <span>{label}</span>
                                         </Link>
                                     );
-                                })
-                            ) : (
+                                });
+                            })() : (
                                 [...Array(24)].map((_, i) => (
                                     <div key={i} className="flex items-start gap-2 text-slate-300">
                                         <span className="mt-1.5 w-1 h-1 bg-slate-200 rounded-full shrink-0"></span>

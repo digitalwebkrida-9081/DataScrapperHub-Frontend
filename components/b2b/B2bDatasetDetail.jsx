@@ -6,7 +6,48 @@ import { MdVerified, MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import WhyChoose from '../WhyChoose';
+import DatasetFaq from './DatasetFaq';
 import * as XLSX from 'xlsx';
+import dynamic from 'next/dynamic';
+import { getCountryData, generateSimulatedDistribution } from '../../data/countryStates';
+
+const CountryMapSection = dynamic(() => import('./CountryMapSection'), { ssr: false });
+
+// Enrich dataset with simulated state distribution if backend didn't provide one
+// Only for COUNTRY-level datasets (not state or city level)
+const enrichWithMapData = (ds) => {
+    // If backend already provided real state distribution data, use it
+    if (ds.stateDistribution && Object.keys(ds.stateDistribution).length > 0 && ds.countryCode) {
+        return ds;
+    }
+    // Only generate simulated data for country-level locations
+    // Country-level = location is JUST a country name (e.g. "INDIA", "UNITED STATES")
+    // State-level = "GUJARAT INDIA", City-level = "MUMBAI MAHARASHTRA INDIA" — skip these
+    const loc = (ds.location || '').toLowerCase().trim();
+    const countryInfo = getCountryData(loc);
+    if (!countryInfo) return ds;
+
+    // Exact match check: the normalized location must match a known country name exactly
+    const knownCountries = [
+        'india', 'united states', 'bangladesh', 'united kingdom', 'canada',
+        'australia', 'germany', 'france', 'brazil', 'japan', 'mexico',
+        'south africa', 'indonesia', 'italy', 'spain', 'turkey', 'pakistan',
+        'nigeria', 'egypt', 'thailand', 'philippines', 'malaysia', 'saudi arabia',
+        'uae', 'united arab emirates', 'south korea', 'nepal', 'sri lanka',
+        'singapore', 'new zealand', 'netherlands', 'sweden', 'switzerland',
+        'poland', 'argentina', 'colombia', 'chile', 'kenya'
+    ];
+    if (!knownCountries.includes(loc)) return ds; // Not a country-only location, skip
+
+    const totalRecords = typeof ds.totalRecords === 'string'
+        ? parseInt(ds.totalRecords.replace(/,/g, ''), 10)
+        : ds.totalRecords;
+    return {
+        ...ds,
+        countryCode: countryInfo.code,
+        stateDistribution: generateSimulatedDistribution(countryInfo.states, totalRecords || 5000)
+    };
+};
 
 const B2bDatasetDetail = ({ id }) => {
     const searchParams = useSearchParams();
@@ -159,7 +200,7 @@ const B2bDatasetDetail = ({ id }) => {
                     const simulatedList = JSON.parse(cachedSimulated);
                     const found = simulatedList.find(s => s.id === id || s._id === id);
                     if (found) {
-                        setDataset(found);
+                        setDataset(enrichWithMapData(found));
                         setLoading(false);
                         return;
                     }
@@ -174,7 +215,7 @@ const B2bDatasetDetail = ({ id }) => {
                 const result = await response.json();
                 
                 if (result.success && result.data) {
-                     setDataset(result.data);
+                     setDataset(enrichWithMapData(result.data));
                 } else {
                     // Fallback or error handling
                     console.error("Dataset not found details:", result);
@@ -189,6 +230,17 @@ const B2bDatasetDetail = ({ id }) => {
         if (id) fetchData();
     }, [id]);
 
+    // Auto-open sample popup with delay after dataset loads
+    useEffect(() => {
+        let timer;
+        if (dataset && !loading) {
+            timer = setTimeout(() => {
+                setIsSampleModalOpen(true);
+            }, 5000); // 5 second delay
+        }
+        return () => clearTimeout(timer);
+    }, [dataset, loading]);
+
     if (loading) {
         return <div className="min-h-screen flex items-center justify-center text-slate-500">Loading dataset details...</div>;
     }
@@ -200,7 +252,7 @@ const B2bDatasetDetail = ({ id }) => {
     return (
         <div className="bg-white min-h-screen font-sans text-slate-800">
             {/* --- HERO SECTION --- */}
-            <div className="bg-[#05051a] text-white pt-10 pb-20 relative overflow-hidden font-sans">
+            <div className="bg-[#05051a] text-white pt-15 pb-20 relative overflow-hidden font-sans">
                 <div className="container mx-auto px-4 relative z-10">
                     {/* Breadcrumb */}
                     <div className="text-xs font-medium text-slate-400 mb-6 flex gap-2 items-center tracking-wide">
@@ -408,7 +460,7 @@ const B2bDatasetDetail = ({ id }) => {
             </div>
 
             {/* --- VALUE PROPOSITION SECTION --- */}
-            <div className="py-20 bg-white">
+            <div className="py-20 pb-0 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-2xl font-bold text-slate-900">How DataSellerHub Data Services Helps Businesses</h2>
@@ -449,6 +501,17 @@ const B2bDatasetDetail = ({ id }) => {
                     </div>
                 </div>
             </div>
+
+            {/* --- COUNTRY MAP SECTION --- */}
+            {dataset.stateDistribution && Object.keys(dataset.stateDistribution).length > 0 && (
+                <CountryMapSection
+                    category={dataset.category}
+                    location={dataset.location}
+                    countryCode={dataset.countryCode}
+                    stateDistribution={dataset.stateDistribution}
+                    totalRecords={dataset.totalRecords}
+                />
+            )}
 
             {/* --- STATS SECTION --- */}
             <div className="py-16 bg-slate-50">
@@ -497,7 +560,7 @@ const B2bDatasetDetail = ({ id }) => {
                  </div>
 
                  {/* Unlock Monthly Insights */}
-                 <div className="container mx-auto px-4 py-16 text-center">
+                 <div className="container mx-auto px-4 py-16 pb-0 text-center">
                      <h2 className="text-2xl font-bold mb-8">Unlock Monthly Insights for Market Analysis and Explosive Growth</h2>
                      <div className="space-y-4 max-w-2xl mx-auto">
                          <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-sm font-medium text-slate-600">
@@ -517,7 +580,7 @@ const B2bDatasetDetail = ({ id }) => {
             </div>
 
             {/* --- SPECIAL FEATURES --- */}
-            <div className="bg-blue-50/50 py-16">
+            <div className="bg-blue-50/50 py-16 pt-0">
                  <div className="container mx-auto px-4">
                      <div className="text-center mb-10">
                          <h2 className="text-2xl font-bold">Special Features</h2>
@@ -541,6 +604,9 @@ const B2bDatasetDetail = ({ id }) => {
             <div>
                 <WhyChoose />
             </div>
+
+            {/* --- DYNAMIC FAQ SECTION --- */}
+            <DatasetFaq dataset={dataset} />
             
             {/* Reusing existing footer or relying on Layout for Footer */}
             {/* --- PURCHASE MODAL --- */}
@@ -669,9 +735,9 @@ const B2bDatasetDetail = ({ id }) => {
                         {/* Title */}
                         <div className="text-center mb-8">
                             <h3 className="text-xl font-bold text-slate-900 mb-2">
-                                Download Free Sample
+                                Free sample lead list of <span className="text-blue-600">{dataset.category}</span> in <span className="text-blue-600">{dataset.location}</span>
                             </h3>
-                            <p className="text-slate-500 text-sm">Enter your details to download the sample list.</p>
+                            <p className="text-slate-500 text-sm">Fill in the below details</p>
                         </div>
 
                         {/* Form */}

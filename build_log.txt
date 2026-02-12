@@ -1,0 +1,23 @@
+
+> data-scraper-frontend@0.1.0 build
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Γû▓ Next.js 16.0.8 (Turbopack)
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ Γ£ô Compiled successfully in 11.9s
+   Running TypeScript ...
+   Collecting page data using 3 workers ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Generating static pages using 3 workers (0/20) ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Generating static pages using 3 workers (5/20) 
+Error occurred prerendering page "/business-report-view". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route /business-report-view with `dynamic = "error"` couldn't be rendered statically because it used `await searchParams`, `searchParams.then`, or similar. See more info here: https://nextjs.org/docs/app/building-your-application/rendering/static-and-dynamic#dynamic-rendering
+Export encountered an error on /business-report-view/page: /business-report-view, exiting the build.
+ Γ¿» Next.js build worker exited with code: 1 and signal: null
