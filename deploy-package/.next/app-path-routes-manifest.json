@@ -1,0 +1,22 @@
+{
+  "/(marketing)/contact/page": "/contact",
+  "/(marketing)/faq/page": "/faq",
+  "/(marketing)/gdpr/page": "/gdpr",
+  "/(marketing)/privacy-policy/page": "/privacy-policy",
+  "/(marketing)/service/ecom-scraping/page": "/service/ecom-scraping",
+  "/(marketing)/service/news-monitoring-data-scraping/page": "/service/news-monitoring-data-scraping",
+  "/(marketing)/service/page": "/service",
+  "/(marketing)/service/real-estate-data-scraping/page": "/service/real-estate-data-scraping",
+  "/(marketing)/service/recruitment-scraping/page": "/service/recruitment-scraping",
+  "/(marketing)/service/research-data-scraping/page": "/service/research-data-scraping",
+  "/(marketing)/service/retail-data-scraping/page": "/service/retail-data-scraping",
+  "/(marketing)/service/sales-leads-data/page": "/service/sales-leads-data",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/b2b/page": "/b2b",
+  "/business-report-view/page": "/business-report-view",
+  "/dataset-detail/page": "/dataset-detail",
+  "/google-maps-scraper/page": "/google-maps-scraper",
+  "/location-report/page": "/location-report",
+  "/page": "/"
+}

@@ -1,0 +1,5 @@
+:HL["/_next/static/chunks/acf0df36bac19c1a.css","style"]
+:HL["/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["images/logos/main-logo/small-logo.png","image"]
+0:{"buildId":"xSBFCcZfjfkWtNSOIgm-u","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"(marketing)","paramType":null,"paramKey":"(marketing)","hasRuntimePrefetch":false,"slots":{"children":{"name":"service","paramType":null,"paramKey":"service","hasRuntimePrefetch":false,"slots":{"children":{"name":"sales-leads-data","paramType":null,"paramKey":"sales-leads-data","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

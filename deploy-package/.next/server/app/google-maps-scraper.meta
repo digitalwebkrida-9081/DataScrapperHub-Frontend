@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/google-maps-scraper/layout,_N_T_/google-maps-scraper/page,_N_T_/google-maps-scraper"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/google-maps-scraper/__PAGE__",
+    "/google-maps-scraper",
+    "/_index",
+    "/_head"
+  ]
+}
