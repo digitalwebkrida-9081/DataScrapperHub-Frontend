@@ -32,17 +32,32 @@ export async function generateMetadata(
 
      if (result.success && result.data) {
         const { category, location, totalRecords } = result.data;
+        
+        // Helper to title case strings
+        const toTitleCase = (str: string) => {
+            if (!str) return '';
+            return str.replace(
+                /\w\S*/g,
+                (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+            );
+        };
+
+        const titleCategory = toTitleCase(category);
+        const titleLocation = toTitleCase(location);
         const recordCount = totalRecords ? totalRecords.toLocaleString() : 'thousands of';
         
+        const infoTitle = `List of ${titleCategory} in ${titleLocation}`;
+        const infoDesc = `List of ${titleCategory} in ${titleLocation}. Get instant access to ${recordCount} verified ${titleCategory} leads in ${titleLocation}. Download email list, phone numbers, and key decision maker contacts.`;
+
         return {
-           title: `${category} in ${location} | Lead List & Business Data`,
-           description: `Get instant access to ${recordCount} verified ${category} leads in ${location}. Download email list, phone numbers, and key decision maker contacts.`,
+           title: infoTitle,
+           description: infoDesc,
            openGraph: {
-              title: `${category} in ${location} - Leads Database`,
-              description: `Download verified ${category} in ${location} dataset with emails and phone numbers.`,
+              title: infoTitle,
+              description: infoDesc,
            },
            alternates: {
-             canonical: `/dataset-detail?id=${id}&label=${encodeURIComponent(`${category} in ${location}`)}` 
+             canonical: `/dataset-detail?id=${id}&label=${encodeURIComponent(`${titleCategory} in ${titleLocation}`)}` 
            }
         };
      }
