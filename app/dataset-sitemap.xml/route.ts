@@ -19,34 +19,42 @@ function escapeXml(unsafe: string): string {
 }
 
 export async function GET() {
-  const priorityCountries = [
-      'United States', 
-      'United Kingdom', 
-      'Canada', 
-      'Australia', 
-      'Germany', 
-      'France', 
-      'India',
-      'United Arab Emirates'
-  ];
-
   let datasetUrls: any[] = [];
   
   try {
-      const datasetPromises = priorityCountries.map(async (country) => {
-           try {
-               const res = await fetch(`${apiUrl}/api/scraper/dataset/search?country=${encodeURIComponent(country)}&limit=100`, { next: { revalidate: 3600 } });
-               if (!res.ok) return [];
-               const result = await res.json();
-               return result.datasets || [];
-           } catch (e) {
-               console.error(`Sitemap: Error fetching datasets for ${country}`, e);
-               return [];
-           }
-      });
+    // 1. Fetch all available countries
+    const countryRes = await fetch(`${apiUrl}/api/country/get-countries`, { next: { revalidate: 3600 } });
+    let countries: any[] = [];
+    if (countryRes.ok) {
+        const countryData = await countryRes.json();
+        countries = countryData.data || [];
+    }
 
-      const datasetsArrays = await Promise.all(datasetPromises);
-      const allDatasets = datasetsArrays.flat();
+    // 2. Fetch datasets for each country with batching to avoid server overload
+    const BATCH_SIZE = 5;
+    const allDatasets: any[] = [];
+    
+    for (let i = 0; i < countries.length; i += BATCH_SIZE) {
+        const batch = countries.slice(i, i + BATCH_SIZE);
+        const batchPromises = batch.map(async (country: any) => {
+            const countryName = country.country_name || country.name;
+            if (!countryName) return [];
+
+            try {
+                // Fetch datasets for this country
+                const res = await fetch(`${apiUrl}/api/scraper/dataset/search?country=${encodeURIComponent(countryName)}&limit=1000`, { next: { revalidate: 3600 } });
+                if (!res.ok) return [];
+                const result = await res.json();
+                return result.datasets || [];
+            } catch (e) {
+                console.error(`Sitemap: Error fetching datasets for ${countryName}`, e);
+                return [];
+            }
+        });
+
+        const batchResults = await Promise.all(batchPromises);
+        batchResults.forEach(datasets => allDatasets.push(...datasets));
+    }
 
       datasetUrls = allDatasets.map((ds: any) => {
            const locationPart = ds.location ? ds.location.split(',').pop().trim() : 'global';
