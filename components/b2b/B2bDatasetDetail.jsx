@@ -42,8 +42,15 @@ const enrichWithMapData = (ds) => {
     const totalRecords = typeof ds.totalRecords === 'string'
         ? parseInt(ds.totalRecords.replace(/,/g, ''), 10)
         : ds.totalRecords;
+    
+    // Parse prices for calculation
+    const rawPrice = ds.price ? String(ds.price).replace(/[^0-9.]/g, '') : '199';
+    const rawPrev = ds.previousPrice ? String(ds.previousPrice).replace(/[^0-9.]/g, '') : '398';
+    
     return {
         ...ds,
+        price: parseFloat(rawPrice),
+        previousPrice: parseFloat(rawPrev),
         countryCode: countryInfo.code,
         stateDistribution: generateSimulatedDistribution(countryInfo.states, totalRecords || 5000)
     };
@@ -64,6 +71,7 @@ const B2bDatasetDetail = ({ id }) => {
     });
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
     const [sampleForm, setSampleForm] = useState({
+        fullName: '',
         email: '',
         phoneNumber: ''
     });
@@ -91,6 +99,7 @@ const B2bDatasetDetail = ({ id }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     type: 'sample_request',
+                    name: sampleForm.fullName,
                     email: sampleForm.email,
                     phone: sampleForm.phoneNumber,
                     datasetDetails: {
@@ -194,7 +203,23 @@ const B2bDatasetDetail = ({ id }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 1. First check if it's a simulated dataset in sessionStorage
+                // 1. Try API first (Real Data from File System)
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+                try {
+                    const response = await fetch(`${API_URL}/api/scraper/dataset/${id}`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.data) {
+                             setDataset(enrichWithMapData(result.data));
+                             setLoading(false);
+                             return;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("API Fetch failed, checking cache...", e);
+                }
+
+                // 2. Fallback to Simulated/Session Data
                 const cachedSimulated = sessionStorage.getItem('simulatedDatasets');
                 if (cachedSimulated) {
                     const simulatedList = JSON.parse(cachedSimulated);
@@ -205,21 +230,9 @@ const B2bDatasetDetail = ({ id }) => {
                         return;
                     }
                 }
-
-                // 2. Fallback to API for real database records
-                // Use the new scraper dataset endpoint
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                const response = await fetch(`${API_URL}/api/scraper/dataset/${id}`);
                 
-                if (!response.ok) throw new Error('Failed to fetch');
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                     setDataset(enrichWithMapData(result.data));
-                } else {
-                    // Fallback or error handling
-                    console.error("Dataset not found details:", result);
-                }
+                // If both fail:
+                console.error("Dataset not found in API or Cache");
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching detail data:", error);
@@ -343,9 +356,25 @@ const B2bDatasetDetail = ({ id }) => {
                             <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
                                 <div>
                                     <div className="flex items-end gap-3 mb-4">
-                                        <span className="text-4xl font-extrabold text-blue-500">$199</span>
-                                        <span className="text-xl text-slate-500 line-through font-medium mb-1">$398</span>
-                                        <span className="text-white text-xl mb-1">(Holiday Discount: 50% OFF)</span>
+                                        {(() => {
+                                            const p = dataset.price || 199;
+                                            const pp = dataset.previousPrice || 398;
+                                            const formatPrice = (val) => String(val).startsWith('$') ? val : `$${val}`;
+                                            const priceVal = String(p).replace(/[^0-9.]/g, '');
+                                            const prevVal = String(pp).replace(/[^0-9.]/g, '');
+                                            // Calculate discount if both are parseable numbers
+                                            const discount = (priceVal && prevVal) 
+                                                ? Math.round(((parseFloat(prevVal) - parseFloat(priceVal)) / parseFloat(prevVal)) * 100)
+                                                : 50;
+                                            
+                                            return (
+                                                <>
+                                                    <span className="text-4xl font-extrabold text-blue-500">{formatPrice(p)}</span>
+                                                    <span className="text-xl text-slate-500 line-through font-medium mb-1">{formatPrice(pp)}</span>
+                                                    <span className="text-white text-xl mb-1">(Holiday Discount: {discount}% OFF)</span>
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                     
                                     <div className="flex gap-4">
@@ -742,6 +771,20 @@ const B2bDatasetDetail = ({ id }) => {
 
                         {/* Form */}
                         <form onSubmit={handleSampleDownload} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                    Full Name <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="fullName"
+                                    required
+                                    value={sampleForm.fullName}
+                                    onChange={handleSampleChange}
+                                    placeholder="Full Name"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                />
+                            </div>
                             <div>
                                 <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
                                     Email <span className="text-red-500">*</span>

@@ -49,7 +49,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     const [selectedDatasetForSample, setSelectedDatasetForSample] = useState(null);
     const [purchaseLoading, setPurchaseLoading] = useState(false);
     const [phoneCode, setPhoneCode] = useState('+91');
-    const [sampleForm, setSampleForm] = useState({ email: '', phoneNumber: '' });
+    const [sampleForm, setSampleForm] = useState({ fullName: '', email: '', phoneNumber: '' });
 
     const countryCodes = [
         { code: '+91', flag: '🇮🇳', name: 'India' },
@@ -93,6 +93,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     type: 'sample_request',
+                    name: sampleForm.fullName,
                     email: sampleForm.email,
                     phone: sampleForm.phoneNumber,
                     datasetDetails: selectedDatasetForSample
@@ -782,6 +783,20 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
                         {/* Form */}
                         <form onSubmit={handleSampleDownload} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                    Full Name <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="fullName"
+                                    required
+                                    value={sampleForm.fullName}
+                                    onChange={handleSampleChange}
+                                    placeholder="Full Name"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                />
+                            </div>
                             <div>
                                 <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
                                     Email <span className="text-red-500">*</span>
