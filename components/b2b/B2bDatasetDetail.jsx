@@ -56,7 +56,7 @@ const enrichWithMapData = (ds) => {
     };
 };
 
-const B2bDatasetDetail = ({ id }) => {
+const B2bDatasetDetail = ({ id, country, category }) => {
     const searchParams = useSearchParams();
     const displayLabel = searchParams.get('label');
 
@@ -164,33 +164,99 @@ const B2bDatasetDetail = ({ id }) => {
         setPurchaseLoading(true);
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-            const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: id,
-                    ...form
-                })
-            });
-            
-            if (response.ok) {
-                // Success: Download file
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${dataset.category}-${dataset.location}.xlsx`; 
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
 
-                alert(`Purchase Successful! Downloading file...`);
+            // ===== MERGED DATA: download from merged API =====
+            if (dataset?.mergedData && country && category) {
+                // 1. Submit form for tracking
+                try {
+                    await fetch(`${API_URL}/api/forms/submit`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'purchase',
+                            name: form.fullName,
+                            email: form.email,
+                            phone: form.phoneNumber,
+                            datasetDetails: {
+                                category: dataset.category,
+                                location: dataset.location,
+                                country: country,
+                                totalRecords: dataset.totalRecords
+                            }
+                        })
+                    });
+                } catch (e) {
+                    console.warn('Form submission failed:', e);
+                }
+
+                // 2. Fetch all data from merged API (in batches)
+                let allRows = [];
+                let page = 1;
+                const batchSize = 5000;
+                let hasMore = true;
+
+                while (hasMore) {
+                    const res = await fetch(`${API_URL}/api/merged/data?country=${country}&category=${category}&page=${page}&limit=${batchSize}`);
+                    const result = await res.json();
+                    
+                    if (result.success && result.data?.data?.length > 0) {
+                        allRows = allRows.concat(result.data.data);
+                        hasMore = result.data.pagination?.page < result.data.pagination?.totalPages;
+                        page++;
+                    } else {
+                        hasMore = false;
+                    }
+                }
+
+                if (allRows.length === 0) {
+                    alert('No data available for download.');
+                    setPurchaseLoading(false);
+                    return;
+                }
+
+                // 3. Generate Excel file
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(allRows);
+                
+                // Auto-fit column widths
+                const colWidths = Object.keys(allRows[0]).map(key => ({
+                    wch: Math.max(key.length, 15)
+                }));
+                ws['!cols'] = colWidths;
+
+                XLSX.utils.book_append_sheet(wb, ws, 'Data');
+                XLSX.writeFile(wb, `${dataset.category}-${dataset.location}.xlsx`);
+
+                alert(`Purchase Successful! Downloaded ${allRows.length.toLocaleString()} records.`);
                 setIsModalOpen(false);
             } else {
-                // Failure: Parse JSON error
-                const result = await response.json();
-                alert(`Purchase Failed: ${result.message}`);
+                // ===== OLD DATA: use existing purchase API =====
+                const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id,
+                        ...form
+                    })
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${dataset.category}-${dataset.location}.xlsx`; 
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+
+                    alert(`Purchase Successful! Downloading file...`);
+                    setIsModalOpen(false);
+                } else {
+                    const result = await response.json();
+                    alert(`Purchase Failed: ${result.message}`);
+                }
             }
         } catch (error) {
             console.error("Purchase error:", error);
@@ -203,36 +269,123 @@ const B2bDatasetDetail = ({ id }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 1. Try API first (Real Data from File System)
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                try {
-                    const response = await fetch(`${API_URL}/api/scraper/dataset/${id}`);
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.success && result.data) {
-                             setDataset(enrichWithMapData(result.data));
-                             setLoading(false);
-                             return;
-                        }
-                    }
-                } catch (e) {
-                    console.warn("API Fetch failed, checking cache...", e);
-                }
 
-                // 2. Fallback to Simulated/Session Data
-                const cachedSimulated = sessionStorage.getItem('simulatedDatasets');
-                if (cachedSimulated) {
-                    const simulatedList = JSON.parse(cachedSimulated);
-                    const found = simulatedList.find(s => s.id === id || s._id === id);
-                    if (found) {
-                        setDataset(enrichWithMapData(found));
+                // ===== MERGED DATA: fetch by country + category =====
+                if (country && category) {
+                    try {
+                        // Fetch sample data rows + category info in parallel
+                        const [dataRes, catRes] = await Promise.all([
+                            fetch(`${API_URL}/api/merged/data?country=${country}&category=${category}&page=1&limit=10`),
+                            fetch(`${API_URL}/api/merged/categories?country=${country}&limit=1000`)
+                        ]);
+                        
+                        const dataResult = await dataRes.json();
+                        const catResult = await catRes.json();
+
+                        // Find this category's info
+                        const catInfo = catResult.success && catResult.data?.categories
+                            ? catResult.data.categories.find(c => c.name === category)
+                            : null;
+
+                        const totalRecords = catInfo?.records || dataResult.data?.pagination?.total || 0;
+                        const rows = dataResult.success ? (dataResult.data?.data || dataResult.data?.rows || []) : [];
+                        const locationName = displayLabel || country.toUpperCase();
+                        const categoryDisplayName = catInfo?.displayName || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+                        // Detect field columns from the data
+                        const firstRow = rows[0] || {};
+                        const columns = Object.keys(firstRow);
+                        const hasEmail = catInfo?.hasEmail || columns.some(c => c.toLowerCase().includes('email'));
+                        const hasPhone = catInfo?.hasPhone || columns.some(c => c.toLowerCase().includes('phone'));
+                        const hasWebsite = catInfo?.hasWebsite || columns.some(c => c.toLowerCase().includes('website') || c.toLowerCase().includes('url'));
+
+                        // Map rows to sample list format
+                        const sampleList = rows.slice(0, 10).map((row, idx) => {
+                            const nameCol = columns.find(c => /^(name|business|company|title)/i.test(c)) || columns[0];
+                            const cityCol = columns.find(c => /^city/i.test(c));
+                            const stateCol = columns.find(c => /^(state|province|region)/i.test(c));
+                            const countryCol = columns.find(c => /^country/i.test(c));
+                            const websiteCol = columns.find(c => /^(website|url)/i.test(c));
+                            const ratingCol = columns.find(c => /^(rating|stars)/i.test(c));
+                            const reviewCol = columns.find(c => /^(review|total.?review)/i.test(c));
+                            
+                            return {
+                                name: row[nameCol] || `${categoryDisplayName} ${idx + 1}`,
+                                city: cityCol ? row[cityCol] : '',
+                                state: stateCol ? row[stateCol] : '',
+                                country: countryCol ? row[countryCol] : locationName,
+                                website: websiteCol ? row[websiteCol] : '',
+                                rating: ratingCol ? row[ratingCol] : (4 + Math.random()).toFixed(1),
+                                reviews: reviewCol ? row[reviewCol] : Math.floor(Math.random() * 500)
+                            };
+                        });
+
+                        // Build dataset object matching the existing template
+                        const mergedDataset = {
+                            id: `merged-${country}-${category}`,
+                            category: categoryDisplayName,
+                            location: locationName,
+                            totalRecords: totalRecords,
+                            emailCount: hasEmail ? totalRecords : 0,
+                            totalEmails: hasEmail ? totalRecords : 0,
+                            phones: hasPhone ? totalRecords : 0,
+                            totalPhones: hasPhone ? totalRecords : 0,
+                            websiteCount: hasWebsite ? Math.floor(totalRecords * 0.7) : 0,
+                            totalWebsites: hasWebsite ? Math.floor(totalRecords * 0.7) : 0,
+                            linkedinCount: 0, totalLinkedin: 0,
+                            facebookCount: 0, totalFacebook: 0,
+                            instagramCount: 0, totalInstagram: 0,
+                            twitterCount: 0, totalTwitter: 0,
+                            tiktokCount: 0, totalTiktok: 0,
+                            youtubeCount: 0, totalYoutube: 0,
+                            price: 199,
+                            previousPrice: 398,
+                            lastUpdate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                            sampleList: sampleList,
+                            countryCode: country.toUpperCase(),
+                            mergedData: true
+                        };
+
+                        setDataset(enrichWithMapData(mergedDataset));
                         setLoading(false);
                         return;
+                    } catch (e) {
+                        console.warn("Merged data fetch failed:", e);
+                    }
+                }
+
+                // ===== OLD DATA: fetch by ID =====
+                if (id) {
+                    try {
+                        const response = await fetch(`${API_URL}/api/scraper/dataset/${id}`);
+                        if (response.ok) {
+                            const result = await response.json();
+                            if (result.success && result.data) {
+                                 setDataset(enrichWithMapData(result.data));
+                                 setLoading(false);
+                                 return;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("API Fetch failed, checking cache...", e);
+                    }
+
+                    // Fallback to Simulated/Session Data
+                    const cachedSimulated = sessionStorage.getItem('simulatedDatasets');
+                    if (cachedSimulated) {
+                        const simulatedList = JSON.parse(cachedSimulated);
+                        const found = simulatedList.find(s => s.id === id || s._id === id);
+                        if (found) {
+                            setDataset(enrichWithMapData(found));
+                            setLoading(false);
+                            return;
+                        }
                     }
                 }
                 
-                // If both fail:
-                console.error("Dataset not found in API or Cache");
+                // If all fail:
+                console.error("Dataset not found");
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching detail data:", error);
@@ -240,8 +393,8 @@ const B2bDatasetDetail = ({ id }) => {
             }
         };
 
-        if (id) fetchData();
-    }, [id]);
+        fetchData();
+    }, [id, country, category]);
 
     // Auto-open sample popup with delay after dataset loads
     useEffect(() => {

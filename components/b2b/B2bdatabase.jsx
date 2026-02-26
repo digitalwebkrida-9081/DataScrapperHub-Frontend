@@ -63,7 +63,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     ];
 
     // Dropdown options
-    const [categories] = useState(staticCategories || []);
+    const [categories, setCategories] = useState(staticCategories || []);
+    const [mergedCats, setMergedCats] = useState([]);
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
@@ -75,6 +76,12 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         state: initialFilters.state || '',
         city: initialFilters.city || ''
     });
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalCategories, setTotalCategories] = useState(0);
+    const ITEMS_PER_PAGE = 20;
 
     const handleSampleChange = (e) => {
         const { name, value } = e.target;
@@ -152,9 +159,18 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     const fetchCountries = async () => {
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-            const countryRes = await fetch(`${API_URL}/api/country/get-countries`);
-            const countryData = await countryRes.json();
-            setCountries(countryData.data || []);
+            const res = await fetch(`${API_URL}/api/merged/countries`);
+            const result = await res.json();
+            if (result.success && result.data?.countries) {
+                // Map merged countries to the format the dropdowns expect
+                const mapped = result.data.countries.map(c => ({
+                    country_name: c.name,
+                    name: c.name,
+                    code: c.code,
+                    totalCategories: c.totalCategories
+                }));
+                setCountries(mapped);
+            }
         } catch (error) {
             console.error("Error fetching countries:", error);
         }
@@ -200,17 +216,35 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         initializePage();
     }, []);
 
-    // Auto-search when filters change
+    // Auto-search when filters or page change
     useEffect(() => {
         if (!isSeoPage) {
             handleSearch();
         }
-    }, [filters]);
+    }, [filters, currentPage, countries]);
 
     // Fetch states when country changes
     useEffect(() => {
         if (filters.country && countries.length > 0) {
             fetchStates();
+            // Also fetch merged categories for the category dropdown
+            const fetchMergedCategories = async () => {
+                const countryObj = countries.find(c => (c.country_name || c.name) === filters.country);
+                if (!countryObj?.code) return;
+                try {
+                    const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+                    const res = await fetch(`${API_URL}/api/merged/categories?country=${countryObj.code}&limit=1000`);
+                    const result = await res.json();
+                    if (result.success && result.data?.categories) {
+                        setMergedCats(result.data.categories);
+                        // Update category dropdown options
+                        setCategories(result.data.categories.map(c => ({ name: c.displayName, _id: c.name })));
+                    }
+                } catch (error) {
+                    console.error('Error fetching merged categories:', error);
+                }
+            };
+            fetchMergedCategories();
         }
     }, [filters.country, countries]);
 
@@ -239,6 +273,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
+        setCurrentPage(1); // Reset to page 1 on filter change
         setFilters(prev => ({
             ...prev,
             [name]: value,
@@ -251,74 +286,80 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         const { category, country, state, city } = filters;
         
         setLoading(true);
-        // Do NOT clear datasets immediately to avoid flash of "No results"
-        // setDatasets([]); 
 
         try {
-            const queryParams = new URLSearchParams({
-                country: country || '',
-                state: state || '',
-                city: city || '',
-                category: category || ''
-            });
-
             const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-            const response = await fetch(`${API_URL}/api/scraper/dataset/search?${queryParams}`);
-            const result = await response.json();
             
-            if (result.success && result.datasets) {
-                const mappedData = result.datasets.map(ds => {
-                    // Dynamic Location Label based on Active Filters
-                    let displayLoc = ds.location; // Default: "City, State, Country"
-                    
-                    if (city) {
-                        displayLoc = ds.location;
-                    } else if (state) {
-                        // Show "State, Country"
-                        const parts = ds.location.split(',');
-                        if (parts.length >= 2) {
-                            displayLoc = parts.slice(-2).join(', ').trim();
-                        }
-                    } else if (country) {
-                        // Show "Country" only
-                        const parts = ds.location.split(',');
-                        if (parts.length >= 1) {
-                             displayLoc = parts.slice(-1).join('').trim();
-                        }
-                    }
+            // Find the country code from the selected country name
+            const countryObj = countries.find(c => (c.country_name || c.name) === country);
+            const countryCode = countryObj?.code;
+            
+            if (!countryCode) {
+                setDatasets([]);
+                setLoading(false);
+                return;
+            }
+
+            // Build query — if filtering by category, fetch all to filter client-side; otherwise paginate
+            let url = `${API_URL}/api/merged/categories?country=${countryCode}`;
+            if (category) {
+                url += `&limit=1000`; // Get all so we can filter client-side
+            } else {
+                url += `&page=${currentPage}&limit=${ITEMS_PER_PAGE}`;
+            }
+
+            const catRes = await fetch(url);
+            const catResult = await catRes.json();
+
+            if (catResult.success && catResult.data?.categories) {
+                let cats = catResult.data.categories;
+                
+                // Filter by category if selected
+                if (category) {
+                    cats = cats.filter(c => 
+                        c.displayName.toLowerCase() === category.toLowerCase() ||
+                        c.name.toLowerCase() === category.toLowerCase().replace(/\s+/g, '_')
+                    );
+                }
+
+                // Update pagination from response
+                if (catResult.data.pagination && !category) {
+                    setTotalPages(catResult.data.pagination.totalPages);
+                    setTotalCategories(catResult.data.pagination.totalCategories);
+                } else {
+                    setTotalPages(1);
+                    setTotalCategories(cats.length);
+                }
+
+                // Build display location
+                let displayLoc = country;
+                if (state) displayLoc = `${state}, ${country}`;
+                if (city) displayLoc = `${city}, ${state}, ${country}`;
+
+                const mappedData = cats.map((cat, idx) => {
+                    const records = cat.records || 0;
 
                     return {
-                        id: ds.id,
-                        name: `List Of ${ds.category} in ${displayLoc}`,
-                        records: ds.totalRecords.toLocaleString(),
-                        emails: ds.emailCount.toLocaleString(), 
-                        phones: ds.phones.toLocaleString(),
-                        full_address: `Last Updated: ${ds.lastUpdate}`, 
-                        price: ds.price,
+                        id: `merged-${countryCode}-${cat.name}-${idx}`,
+                        name: `List Of ${cat.displayName} in ${displayLoc}`,
+                        records: records > 0 ? records.toLocaleString() : '—',
+                        emails: cat.hasEmail ? records.toLocaleString() : '0',
+                        phones: cat.hasPhone ? records.toLocaleString() : '0',
+                        full_address: `Last Updated: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
+                        price: '$199',
                         isDataset: true,
                         displayLoc: displayLoc,
-                        category: ds.category // Add category for mock data generation
+                        category: cat.displayName,
+                        categorySlug: cat.name,
+                        countryCode: countryCode,
+                        countryName: country
                     };
                 });
                 setDatasets(mappedData);
-            } else if (result.success && result.dataset) {
-                const ds = result.dataset;
-                setDatasets([{
-                    id: ds.id,
-                    name: `List Of ${ds.category} in ${ds.location}`,
-                    records: ds.totalRecords.toLocaleString(),
-                    emails: ds.emailCount.toLocaleString(), 
-                    phones: ds.phones.toLocaleString(),
-                    full_address: `Last Updated: ${ds.lastUpdate}`, 
-                    price: ds.price,
-                    isDataset: true,
-                    price: ds.price,
-                    isDataset: true,
-                    displayLoc: ds.location,
-                    category: ds.category // Add category for mock data generation
-                }]);
             } else {
-                setDatasets([]); // Only now clear if 0 results found
+                setDatasets([]);
+                setTotalPages(1);
+                setTotalCategories(0);
             }
 
         } catch (error) {
@@ -470,7 +511,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                 {datasets.map((item) => (
                                                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                                                         <td className="p-4 font-medium text-slate-700 align-middle">
-                                                            <Link href={`/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-lg text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
+                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-lg text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
                                                             <div className="text-xs text-slate-400 mt-1">{item.full_address}</div>
                                                         </td>
                                                         <td className="p-4 text-slate-600 font-bold text-center align-middle whitespace-nowrap">{item.records}</td>
@@ -479,7 +520,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                         <td className="p-4 align-middle whitespace-nowrap">
                                                             <div className="flex gap-2 items-center justify-center">
                                                                     <Link 
-                                                                        href={`/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
+                                                                        href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
                                                                         className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
                                                                     >
                                                                     View & Purchase Report
@@ -502,8 +543,47 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                     </div>
                                 )}
                                 
-                                <div className="p-4 border-t border-slate-100 flex justify-center">
-                                    {/* Pagination or load more if mostly needed for many datasets */}
+                                <div className="p-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-3">
+                                    <span className="text-sm text-slate-500">
+                                        {totalCategories > 0 && `Showing ${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(currentPage * ITEMS_PER_PAGE, totalCategories)} of ${totalCategories} datasets`}
+                                    </span>
+                                    {totalPages > 1 && (
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); }}
+                                                disabled={currentPage === 1}
+                                                className="px-3 py-1.5 text-sm border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                                            >← Prev</button>
+                                            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+                                                let pageNum;
+                                                if (totalPages <= 7) {
+                                                    pageNum = i + 1;
+                                                } else if (currentPage <= 4) {
+                                                    pageNum = i + 1;
+                                                } else if (currentPage >= totalPages - 3) {
+                                                    pageNum = totalPages - 6 + i;
+                                                } else {
+                                                    pageNum = currentPage - 3 + i;
+                                                }
+                                                return (
+                                                    <button
+                                                        key={pageNum}
+                                                        onClick={() => setCurrentPage(pageNum)}
+                                                        className={`w-9 h-9 text-sm rounded-lg transition cursor-pointer ${
+                                                            currentPage === pageNum
+                                                                ? 'bg-blue-600 text-white font-bold shadow'
+                                                                : 'border border-slate-200 hover:bg-slate-50'
+                                                        }`}
+                                                    >{pageNum}</button>
+                                                );
+                                            })}
+                                            <button
+                                                onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); }}
+                                                disabled={currentPage === totalPages}
+                                                className="px-3 py-1.5 text-sm border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                                            >Next →</button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
