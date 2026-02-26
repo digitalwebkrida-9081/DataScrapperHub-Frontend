@@ -289,7 +289,7 @@ const B2bDatasetDetail = ({ id }) => {
 
                             {/* STATS GRID */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8 mb-8 text-sm md:text-base">
-                                 {/* Column 1 */}
+                                 {/* Column 1 - Core Data */}
                                  <div className="space-y-3">
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
@@ -298,51 +298,51 @@ const B2bDatasetDetail = ({ id }) => {
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{dataset.emailCount ? dataset.emailCount.toLocaleString() : Math.floor(dataset.totalRecords * 0.4).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.emailCount || dataset.totalEmails || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Email Addresses</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{dataset.phones ? dataset.phones.toLocaleString() : Math.floor(dataset.totalRecords * 0.85).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.phones || dataset.totalPhones || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Phone Numbers</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.6).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.websiteCount || dataset.totalWebsites || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">With Websites</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.3).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.linkedinCount || dataset.totalLinkedin || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">LinkedIn Profiles</span>
                                      </div>
                                  </div>
 
-                                 {/* Column 2 */}
+                                 {/* Column 2 - Social Media */}
                                  <div className="space-y-3">
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.55).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.facebookCount || dataset.totalFacebook || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Facebook Profiles</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.45).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.instagramCount || dataset.totalInstagram || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">Instagram Handles</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.15).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.twitterCount || dataset.totalTwitter || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">X Handles</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.05).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.tiktokCount || dataset.totalTiktok || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">TikTok Profiles</span>
                                      </div>
                                      <div className="flex items-center gap-3">
                                          <FaCheckCircle className="text-green-500 shrink-0"/>
-                                         <span className="font-bold text-white text-[18px]">{Math.floor(dataset.totalRecords * 0.12).toLocaleString()}</span>
+                                         <span className="font-bold text-white text-[18px]">{(dataset.youtubeCount || dataset.totalYoutube || 0).toLocaleString()}</span>
                                          <span className="text-slate-300 hover:text-white cursor-pointer hover:underline decoration-slate-500 underline-offset-4">YouTube Channels</span>
                                      </div>
                                  </div>
@@ -559,13 +559,13 @@ const B2bDatasetDetail = ({ id }) => {
                         <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 text-center">
                             <div className="text-blue-600 text-4xl mb-4 flex justify-center"><FaPhone/></div>
                             <h4 className="font-bold text-slate-700 mb-2">Number of phone numbers in the list</h4>
-                            <div className="text-5xl font-black text-slate-800 mb-4">{dataset.totalRecords}</div>
+                            <div className="text-5xl font-black text-slate-800 mb-4">{(dataset.phones || dataset.totalPhones || 0).toLocaleString()}</div>
                             <button className="text-xs uppercase font-bold border border-slate-300 px-4 py-1 rounded text-slate-500">View Data Availability</button>
                         </div>
                          <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 text-center">
                             <div className="text-blue-600 text-4xl mb-4 flex justify-center"><MdEmail/></div>
                             <h4 className="font-bold text-slate-700 mb-2">Number of email addresses in the list</h4>
-                            <div className="text-5xl font-black text-slate-800 mb-4">{dataset.emailCount}</div>
+                            <div className="text-5xl font-black text-slate-800 mb-4">{(dataset.emailCount || dataset.totalEmails || 0).toLocaleString()}</div>
                             <button className="text-xs uppercase font-bold border border-slate-300 px-4 py-1 rounded text-slate-500">View Data Availability</button>
                         </div>
                      </div>
