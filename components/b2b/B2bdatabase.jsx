@@ -308,6 +308,11 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 let url = `${API_URL}/api/merged/categories-count?country=${countryCode}`;
                 if (state) url += `&state=${encodeURIComponent(state)}`;
                 if (city) url += `&city=${encodeURIComponent(city)}`;
+                if (category) {
+                     const catObj = categories.find(c => c.name === category);
+                     const categorySlug = catObj ? (catObj._id || category) : category;
+                     url += `&category=${encodeURIComponent(categorySlug)}`;
+                }
 
                 const countRes = await fetch(url);
                 const countResult = await countRes.json();
