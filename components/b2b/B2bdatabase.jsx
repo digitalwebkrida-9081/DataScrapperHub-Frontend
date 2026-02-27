@@ -312,15 +312,22 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                      const catObj = categories.find(c => c.name === category);
                      const categorySlug = catObj ? (catObj._id || category) : category;
                      url += `&category=${encodeURIComponent(categorySlug)}`;
+                } else {
+                     // Add pagination if no specific category is requested
+                     url += `&page=${currentPage}&limit=${ITEMS_PER_PAGE}`;
                 }
 
                 const countRes = await fetch(url);
                 const countResult = await countRes.json();
-
+                
                 if (countResult.success && countResult.data?.categories) {
                     cats = countResult.data.categories;
                     // Filter out categories with 0 records
                     cats = cats.filter(c => c.records > 0);
+                    // Handle pagination returned from backend
+                    if (countResult.data.pagination && !category) {
+                        paginationData = countResult.data.pagination;
+                    }
                 }
             } else {
                 // No state/city filter — use the fast cached categories endpoint
