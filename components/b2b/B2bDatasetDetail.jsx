@@ -59,6 +59,8 @@ const enrichWithMapData = (ds) => {
 const B2bDatasetDetail = ({ id, country, category }) => {
     const searchParams = useSearchParams();
     const displayLabel = searchParams.get('label');
+    const filterState = searchParams.get('state') || '';
+    const filterCity = searchParams.get('city') || '';
 
     const [dataset, setDataset] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -196,7 +198,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                 let hasMore = true;
 
                 while (hasMore) {
-                    const res = await fetch(`${API_URL}/api/merged/data?country=${country}&category=${category}&page=${page}&limit=${batchSize}`);
+                    const res = await fetch(`${API_URL}/api/merged/data?country=${country}&category=${category}&page=${page}&limit=${batchSize}${filterState ? `&state=${encodeURIComponent(filterState)}` : ''}${filterCity ? `&city=${encodeURIComponent(filterCity)}` : ''}`);
                     const result = await res.json();
                     
                     if (result.success && result.data?.data?.length > 0) {
@@ -275,8 +277,13 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                 if (country && category) {
                     try {
                         // Fetch sample data rows + category info in parallel
+                        // Build data URL with optional state/city filters
+                        let dataUrl = `${API_URL}/api/merged/data?country=${country}&category=${category}&page=1&limit=10`;
+                        if (filterState) dataUrl += `&state=${encodeURIComponent(filterState)}`;
+                        if (filterCity) dataUrl += `&city=${encodeURIComponent(filterCity)}`;
+
                         const [dataRes, catRes] = await Promise.all([
-                            fetch(`${API_URL}/api/merged/data?country=${country}&category=${category}&page=1&limit=10`),
+                            fetch(dataUrl),
                             fetch(`${API_URL}/api/merged/categories?country=${country}&limit=1000`)
                         ]);
                         
@@ -288,7 +295,9 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                             ? catResult.data.categories.find(c => c.name === category)
                             : null;
 
-                        const totalRecords = catInfo?.records || dataResult.data?.pagination?.total || 0;
+                        // Use filtered data total when state/city is set, otherwise use category total
+                        const dataTotal = dataResult.data?.pagination?.total || 0;
+                        const totalRecords = (filterState || filterCity) ? dataTotal : (catInfo?.records || dataTotal || 0);
                         const rows = dataResult.success ? (dataResult.data?.data || dataResult.data?.rows || []) : [];
                         const locationName = displayLabel || country.toUpperCase();
                         const categoryDisplayName = catInfo?.displayName || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -394,7 +403,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         };
 
         fetchData();
-    }, [id, country, category]);
+    }, [id, country, category, filterState, filterCity]);
 
     // Auto-open sample popup with delay after dataset loads
     useEffect(() => {

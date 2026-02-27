@@ -300,67 +300,87 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 return;
             }
 
-            // Build query — if filtering by category, fetch all to filter client-side; otherwise paginate
-            let url = `${API_URL}/api/merged/categories?country=${countryCode}`;
-            if (category) {
-                url += `&limit=1000`; // Get all so we can filter client-side
+            let cats = [];
+            let paginationData = null;
+
+            // If state or city is selected, use the filtered count endpoint
+            if (state || city) {
+                let url = `${API_URL}/api/merged/categories-count?country=${countryCode}`;
+                if (state) url += `&state=${encodeURIComponent(state)}`;
+                if (city) url += `&city=${encodeURIComponent(city)}`;
+
+                const countRes = await fetch(url);
+                const countResult = await countRes.json();
+
+                if (countResult.success && countResult.data?.categories) {
+                    cats = countResult.data.categories;
+                    // Filter out categories with 0 records
+                    cats = cats.filter(c => c.records > 0);
+                }
             } else {
-                url += `&page=${currentPage}&limit=${ITEMS_PER_PAGE}`;
-            }
-
-            const catRes = await fetch(url);
-            const catResult = await catRes.json();
-
-            if (catResult.success && catResult.data?.categories) {
-                let cats = catResult.data.categories;
-                
-                // Filter by category if selected
+                // No state/city filter — use the fast cached categories endpoint
+                let url = `${API_URL}/api/merged/categories?country=${countryCode}`;
                 if (category) {
-                    cats = cats.filter(c => 
-                        c.displayName.toLowerCase() === category.toLowerCase() ||
-                        c.name.toLowerCase() === category.toLowerCase().replace(/\s+/g, '_')
-                    );
-                }
-
-                // Update pagination from response
-                if (catResult.data.pagination && !category) {
-                    setTotalPages(catResult.data.pagination.totalPages);
-                    setTotalCategories(catResult.data.pagination.totalCategories);
+                    url += `&limit=1000`;
                 } else {
-                    setTotalPages(1);
-                    setTotalCategories(cats.length);
+                    url += `&page=${currentPage}&limit=${ITEMS_PER_PAGE}`;
                 }
 
-                // Build display location
-                let displayLoc = country;
-                if (state) displayLoc = `${state}, ${country}`;
-                if (city) displayLoc = `${city}, ${state}, ${country}`;
+                const catRes = await fetch(url);
+                const catResult = await catRes.json();
 
-                const mappedData = cats.map((cat, idx) => {
-                    const records = cat.records || 0;
-
-                    return {
-                        id: `merged-${countryCode}-${cat.name}-${idx}`,
-                        name: `List Of ${cat.displayName} in ${displayLoc}`,
-                        records: records > 0 ? records.toLocaleString() : '—',
-                        emails: cat.hasEmail ? records.toLocaleString() : '0',
-                        phones: cat.hasPhone ? records.toLocaleString() : '0',
-                        full_address: `Last Updated: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
-                        price: '$199',
-                        isDataset: true,
-                        displayLoc: displayLoc,
-                        category: cat.displayName,
-                        categorySlug: cat.name,
-                        countryCode: countryCode,
-                        countryName: country
-                    };
-                });
-                setDatasets(mappedData);
-            } else {
-                setDatasets([]);
-                setTotalPages(1);
-                setTotalCategories(0);
+                if (catResult.success && catResult.data?.categories) {
+                    cats = catResult.data.categories;
+                    if (catResult.data.pagination && !category) {
+                        paginationData = catResult.data.pagination;
+                    }
+                }
             }
+
+            // Filter by category name if selected
+            if (category) {
+                cats = cats.filter(c => 
+                    c.displayName.toLowerCase() === category.toLowerCase() ||
+                    c.name.toLowerCase() === category.toLowerCase().replace(/\s+/g, '_')
+                );
+            }
+
+            // Update pagination
+            if (paginationData) {
+                setTotalPages(paginationData.totalPages);
+                setTotalCategories(paginationData.totalCategories);
+            } else {
+                setTotalPages(1);
+                setTotalCategories(cats.length);
+            }
+
+            // Build display location
+            let displayLoc = country;
+            if (state) displayLoc = `${state}, ${country}`;
+            if (city) displayLoc = `${city}, ${state}, ${country}`;
+
+            const mappedData = cats.map((cat, idx) => {
+                const records = cat.records || 0;
+
+                return {
+                    id: `merged-${countryCode}-${cat.name}-${idx}`,
+                    name: `List Of ${cat.displayName} in ${displayLoc}`,
+                    records: records > 0 ? records.toLocaleString() : '—',
+                    emails: cat.hasEmail ? records.toLocaleString() : '0',
+                    phones: cat.hasPhone ? records.toLocaleString() : '0',
+                    full_address: `Last Updated: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
+                    price: '$199',
+                    isDataset: true,
+                    displayLoc: displayLoc,
+                    category: cat.displayName,
+                    categorySlug: cat.name,
+                    countryCode: countryCode,
+                    countryName: country,
+                    stateName: state || '',
+                    cityName: city || ''
+                };
+            });
+            setDatasets(mappedData);
 
         } catch (error) {
             console.error("Error searching data:", error);
@@ -511,7 +531,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                 {datasets.map((item) => (
                                                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                                                         <td className="p-4 font-medium text-slate-700 align-middle">
-                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-lg text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
+                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-lg text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
                                                             <div className="text-xs text-slate-400 mt-1">{item.full_address}</div>
                                                         </td>
                                                         <td className="p-4 text-slate-600 font-bold text-center align-middle whitespace-nowrap">{item.records}</td>
@@ -520,7 +540,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                         <td className="p-4 align-middle whitespace-nowrap">
                                                             <div className="flex gap-2 items-center justify-center">
                                                                     <Link 
-                                                                        href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
+                                                                        href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
                                                                         className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
                                                                     >
                                                                     View & Purchase Report
