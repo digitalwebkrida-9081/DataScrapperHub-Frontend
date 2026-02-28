@@ -10,6 +10,7 @@ import DatasetFaq from './DatasetFaq';
 import * as XLSX from 'xlsx';
 import dynamic from 'next/dynamic';
 import { getCountryData, generateSimulatedDistribution } from '../../data/countryStates';
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 const CountryMapSection = dynamic(() => import('./CountryMapSection'), { ssr: false });
 
@@ -77,6 +78,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         email: '',
         phoneNumber: ''
     });
+    const [isFormComplete, setIsFormComplete] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -161,8 +163,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         }, 1500);
     };
 
-    const handlePurchase = async (e) => {
-        e.preventDefault();
+    const processDownloadAfterPayment = async () => {
         setPurchaseLoading(true);
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -231,6 +232,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
 
                 alert(`Purchase Successful! Downloaded ${allRows.length.toLocaleString()} records.`);
                 setIsModalOpen(false);
+                setIsFormComplete(false);
             } else {
                 // ===== OLD DATA: use existing purchase API =====
                 const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
@@ -255,6 +257,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
 
                     alert(`Purchase Successful! Downloading file...`);
                     setIsModalOpen(false);
+                    setIsFormComplete(false);
                 } else {
                     const result = await response.json();
                     alert(`Purchase Failed: ${result.message}`);
@@ -806,7 +809,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
                         {/* Close button */}
                         <button 
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={() => { setIsModalOpen(false); setIsFormComplete(false); }}
                             className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition"
                         >
                             <FaTimes className="text-xl" />
@@ -832,73 +835,157 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                         </div>
 
                         {/* Form */}
-                        <form onSubmit={handlePurchase} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
-                                    Full Name <span className="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    name="fullName"
-                                    required
-                                    value={form.fullName}
-                                    onChange={handleInputChange}
-                                    placeholder="Full Name"
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
-                                    Email <span className="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="email" 
-                                    name="email"
-                                    required
-                                    value={form.email}
-                                    onChange={handleInputChange}
-                                    placeholder="Email"
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
-                                    Phone Number <span className="text-red-500">*</span>
-                                </label>
-                                <div className="flex gap-2">
-                                    <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
-                                        <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
-                                        <span className="text-sm text-slate-600">+91</span>
-                                    </div>
+                        {!isFormComplete ? (
+                            <form onSubmit={(e) => { e.preventDefault(); setIsFormComplete(true); }} className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                        Full Name <span className="text-red-500">*</span>
+                                    </label>
                                     <input 
-                                        type="tel" 
-                                        name="phoneNumber"
+                                        type="text" 
+                                        name="fullName"
                                         required
-                                        value={form.phoneNumber}
+                                        value={form.fullName}
                                         onChange={handleInputChange}
-                                        placeholder="Phone Number"
-                                        className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                        placeholder="Full Name"
+                                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                     />
                                 </div>
-                            </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                        Email <span className="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        name="email"
+                                        required
+                                        value={form.email}
+                                        onChange={handleInputChange}
+                                        placeholder="Email"
+                                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
+                                        Phone Number <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
+                                            <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
+                                            <span className="text-sm text-slate-600">+91</span>
+                                        </div>
+                                        <input 
+                                            type="tel" 
+                                            name="phoneNumber"
+                                            required
+                                            value={form.phoneNumber}
+                                            onChange={handleInputChange}
+                                            placeholder="Phone Number"
+                                            className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                        />
+                                    </div>
+                                </div>
 
-                            <button 
-                                type="submit"
-                                disabled={purchaseLoading}
-                                className="w-full mt-6 bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition shadow-xl shadow-slate-900/20 group cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-                            >
-                                {purchaseLoading ? (
-                                    <span>Processing...</span>
-                                ) : (
-                                    <>
+                                <button 
+                                    type="submit"
+                                    className="w-full mt-6 bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition shadow-xl shadow-slate-900/20 group cursor-pointer"
+                                >
                                     <div className="w-8 h-8 bg-slate-700/50 rounded flex items-center justify-center group-hover:bg-slate-700 transition">
                                         <FaShoppingCart className="text-sm" />
                                     </div>
-                                    BUY NOW
-                                    </>
+                                    PROCEED TO PAYMENT
+                                </button>
+                            </form>
+                        ) : (
+                            <div className="space-y-6">
+                                <div className="bg-slate-50 p-4 rounded-xl text-sm border border-slate-200 relative">
+                                    <button 
+                                        onClick={() => setIsFormComplete(false)}
+                                        className="absolute top-4 right-4 text-blue-600 text-xs font-bold hover:underline cursor-pointer"
+                                    >
+                                        Edit Details
+                                    </button>
+                                    <p className="mb-1"><span className="font-bold text-slate-700">Name:</span> {form.fullName}</p>
+                                    <p className="mb-1"><span className="font-bold text-slate-700">Email:</span> {form.email}</p>
+                                    <p className="mb-0"><span className="font-bold text-slate-700">Phone:</span> {form.phoneNumber}</p>
+                                </div>
+
+                                {purchaseLoading ? (
+                                    <div className="text-center py-8">
+                                        <div className="inline-block animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
+                                        <p className="text-slate-600 font-bold">Processing your data...</p>
+                                        <p className="text-sm text-slate-500">Please do not close this window.</p>
+                                    </div>
+                                ) : (
+                                    <div className="relative z-0">
+                                        <PayPalButtons 
+                                            style={{ layout: "vertical", color: "blue", shape: "rect", label: "paypal" }}
+                                            createOrder={async (data, actions) => {
+                                               const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://stagservice.datasellerhub.com';
+                                                let finalPrice = dataset.price || "199.00";
+                                                try { finalPrice = parseFloat(dataset.price).toFixed(2); } catch(e){}
+
+                                                const response = await fetch(`${API_URL}/api/payment/create-paypal-order`, {
+                                                    method: "POST",
+                                                    headers: { "Content-Type": "application/json" },
+                                                    body: JSON.stringify({
+                                                        datasetDetails: {
+                                                            category: dataset.category,
+                                                            location: dataset.location
+                                                        },
+                                                        price: finalPrice
+                                                    }),
+                                                });
+                                                
+                                                const orderData = await response.json();
+                                                
+                                                if (orderData.data?.id) {
+                                                    return orderData.data.id;
+                                                } else if (orderData.id) {
+                                                    return orderData.id;
+                                                } else {
+                                                    throw new Error("Could not initiate PayPal order.");
+                                                }
+                                            }}
+                                            onApprove={async (data, actions) => {
+                                                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://stagservice.datasellerhub.com';
+                                                try {
+                                                    const response = await fetch(`${API_URL}/api/payment/capture-paypal-order`, {
+                                                        method: "POST",
+                                                        headers: { "Content-Type": "application/json" },
+                                                        body: JSON.stringify({
+                                                            orderID: data.orderID,
+                                                            name: form.fullName,
+                                                            email: form.email,
+                                                            phone: form.phoneNumber,
+                                                            datasetDetails: {
+                                                                category: dataset.category,
+                                                                location: dataset.location,
+                                                                country: country,
+                                                            }
+                                                        })
+                                                    });
+
+                                                    const orderData = await response.json();
+                                                    if (orderData.success) {
+                                                        await processDownloadAfterPayment();
+                                                    } else {
+                                                        alert("Payment capture failed. Please try again or contact support.");
+                                                    }
+                                                } catch (err) {
+                                                    console.error(err);
+                                                    alert("An error occurred during payment capture.");
+                                                }
+                                            }}
+                                            onError={(err) => {
+                                                console.error("PayPal UI Error:", err);
+                                                alert("An error occurred loading the payment gateway.");
+                                            }}
+                                        />
+                                    </div>
                                 )}
-                            </button>
-                        </form>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
