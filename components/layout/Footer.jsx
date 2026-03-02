@@ -12,12 +12,14 @@ export default function Footer() {
     <footer className="bg-[#2F66F6] text-white">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-6 py-16 grid gap-10 md:grid-cols-4">
-
         {/* Brand Section */}
         <div>
           <div className="flex items-center gap-2 text-xl font-bold">
             <span className="text-[#2F66F6] rounded-full px-2 py-1">
-              <img src="images/logos/main-logo/small-logo.png" alt="DataSellerHub Logo" />
+              <img
+                src="images/logos/main-logo/small-logo.png"
+                alt="DataSellerHub Logo"
+              />
             </span>
             DataSellerHub
           </div>
@@ -30,10 +32,18 @@ export default function Footer() {
 
           {/* Social Icons */}
           <div className="flex gap-3 mt-6">
-            <SocialIcon><FaFacebookF /></SocialIcon>
-            <SocialIcon><FaXTwitter /></SocialIcon>
-            <SocialIcon><FaInstagram /></SocialIcon>
-            <SocialIcon><FaLinkedinIn /></SocialIcon>
+            <SocialIcon>
+              <FaFacebookF />
+            </SocialIcon>
+            <SocialIcon>
+              <FaXTwitter />
+            </SocialIcon>
+            <SocialIcon>
+              <FaInstagram />
+            </SocialIcon>
+            <SocialIcon>
+              <FaLinkedinIn />
+            </SocialIcon>
           </div>
         </div>
 
@@ -42,12 +52,14 @@ export default function Footer() {
           <h4 className="font-semibold mb-4">Navigations</h4>
           <ul className="space-y-2 text-sm text-blue-100">
             <li className="hover:text-white cursor-pointer">
-              <Link href="/">Home</Link></li>
+              <Link href="/">Home</Link>
+            </li>
             <li className="hover:text-white cursor-pointer">
               <Link href="/faq">FAQs</Link>
             </li>
-            {/* <li className="hover:text-white cursor-pointer">Blog</li>
-            <li className="hover:text-white cursor-pointer">Sites</li> */}
+            <li className="hover:text-white cursor-pointer">
+              <Link href="/blog">Blog</Link>
+            </li>
             <li className="hover:text-white cursor-pointer">
               <Link href="/contact">Contact Us</Link>
             </li>
@@ -56,9 +68,10 @@ export default function Footer() {
             </li>
             <li className="hover:text-white cursor-pointer">
               <Link href="/privacy-policy">Privacy Policy</Link>
-              </li>
+            </li>
             <li className="hover:text-white cursor-pointer">
-              <Link href="/location-report">Location Based Data</Link></li>
+              <Link href="/location-report">Location Based Data</Link>
+            </li>
             <li className="hover:text-white cursor-pointer">
               <Link href="/b2b">B2B Database</Link>
             </li>
@@ -70,25 +83,37 @@ export default function Footer() {
           <h4 className="font-semibold mb-4">Services</h4>
           <ul className="space-y-2 text-sm text-blue-100">
             <li className="hover:text-white cursor-pointer">
-             <Link href="/service/real-estate-data-scraping">Real Estate Data Scraping</Link>
+              <Link href="/service/real-estate-data-scraping">
+                Real Estate Data Scraping
+              </Link>
             </li>
             <li className="hover:text-white cursor-pointer">
               <Link href="/service/sales-leads-data">Sales Lead Data</Link>
             </li>
             <li className="hover:text-white cursor-pointer">
-              <Link href="/service/ecom-scraping">E-Commerce Data Scraping</Link>
+              <Link href="/service/ecom-scraping">
+                E-Commerce Data Scraping
+              </Link>
             </li>
             <li className="hover:text-white cursor-pointer">
-              <Link href="/service/recruitment-scraping">Recruitment Data Scraping</Link>
+              <Link href="/service/recruitment-scraping">
+                Recruitment Data Scraping
+              </Link>
             </li>
             <li className="hover:text-white cursor-pointer">
-              <Link href="/service/news-monitoring-data-scraping">News Monitoring Data Scraping</Link>
+              <Link href="/service/news-monitoring-data-scraping">
+                News Monitoring Data Scraping
+              </Link>
             </li>
             <li className="hover:text-white cursor-pointer">
-              <Link href="/service/retail-data-scraping">Retail Store Data Scraping</Link>
+              <Link href="/service/retail-data-scraping">
+                Retail Store Data Scraping
+              </Link>
             </li>
             <li className="hover:text-white cursor-pointer">
-              <Link href="/service/research-data-scraping">Research & Journalism Data Scraping</Link>
+              <Link href="/service/research-data-scraping">
+                Research & Journalism Data Scraping
+              </Link>
             </li>
           </ul>
         </div>
@@ -101,7 +126,8 @@ export default function Footer() {
               <IoCall className="text-white" /> <span>+91 90814 66782</span>
             </p>
             <p className="flex items-center gap-2">
-              <IoMail className="text-white" /> <span>info@DataSellerHub.com</span>
+              <IoMail className="text-white" />{" "}
+              <span>info@DataSellerHub.com</span>
             </p>
           </div>
         </div>
