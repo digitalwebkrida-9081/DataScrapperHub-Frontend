@@ -79,6 +79,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         phoneNumber: ''
     });
     const [isFormComplete, setIsFormComplete] = useState(false);
+    const [hasAutoOpened, setHasAutoOpened] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -408,16 +409,24 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         fetchData();
     }, [id, country, category, filterState, filterCity]);
 
+    // Track if sample modal has been opened manually or automatically
+    useEffect(() => {
+        if (isSampleModalOpen && !hasAutoOpened) {
+            setHasAutoOpened(true);
+        }
+    }, [isSampleModalOpen, hasAutoOpened]);
+
     // Auto-open sample popup with delay after dataset loads
     useEffect(() => {
         let timer;
-        if (dataset && !loading) {
+        if (dataset && !loading && !isModalOpen && !hasAutoOpened) {
             timer = setTimeout(() => {
                 setIsSampleModalOpen(true);
-            }, 5000); // 5 second delay
+                setHasAutoOpened(true);
+            }, 10000); // 10 second delay
         }
         return () => clearTimeout(timer);
-    }, [dataset, loading]);
+    }, [dataset, loading, isModalOpen, hasAutoOpened]);
 
     if (loading) {
         return <div className="min-h-screen flex items-center justify-center text-slate-500">Loading dataset details...</div>;

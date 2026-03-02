@@ -14,10 +14,10 @@ const TableSkeleton = () => (
         <table className="w-full text-left border-collapse">
             <thead>
                 <tr className="bg-blue-50 text-blue-900 text-xs uppercase font-bold tracking-wider">
-                    <th className="p-4 border-b border-blue-100">Name</th>
-                    <th className="p-4 border-b border-blue-100 text-center">Number of Records</th>
-                    <th className="p-4 border-b border-blue-100 text-center">Emails</th>
-                    <th className="p-4 border-b border-blue-100 text-center">Phones</th>
+                    <th className="p-4 border-b border-blue-100 whitespace-nowrap">Name</th>
+                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap">Number of Records</th>
+                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap">Emails</th>
+                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap">Phones</th>
                     <th className="p-4 border-b border-blue-100"></th>
                 </tr>
             </thead>
@@ -31,7 +31,7 @@ const TableSkeleton = () => (
                         <td className="p-4 align-middle text-center"><div className="h-4 bg-slate-200 rounded w-16 mx-auto"></div></td>
                         <td className="p-4 align-middle text-center"><div className="h-4 bg-slate-200 rounded w-12 mx-auto"></div></td>
                         <td className="p-4 align-middle text-center"><div className="h-4 bg-slate-200 rounded w-12 mx-auto"></div></td>
-                        <td className="p-4 align-middle text-center"><div className="h-8 bg-slate-200 rounded w-24 mx-auto"></div></td>
+                        <td className="p-4 align-middle text-right"><div className="h-8 bg-slate-200 rounded w-48 ml-auto"></div></td>
                     </tr>
                 ))}
             </tbody>
@@ -523,49 +523,48 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 ) : datasets.length === 0 ? (
                                     <div className="p-12 text-center text-slate-500 animate-in fade-in zoom-in duration-300">
                                         <p>No complete datasets found for this criteria.</p>
-                                        <Link href="/maps-scraper" className="text-blue-600 hover:underline mt-2 inline-block">
-                                            Need this data? Use our Scraper to compile it first.
+                                        <Link href="/contact" className="text-blue-600 hover:underline mt-2 inline-block">
+                                            Need this data? Contact us to compile it first.
                                         </Link>
                                     </div>
                                 ) : (
                                     <div className="overflow-x-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
                                         <table className="w-full text-left border-collapse">
-                                            <thead>
-                                                <tr className="bg-blue-50 text-blue-900 text-xs uppercase font-bold tracking-wider">
-                                                    <th className="p-4 border-b border-blue-100 text-left">Name</th>
-                                                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap"><span className="flex items-center justify-center gap-1">Number of Records</span></th>
-                                                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap"><span className="flex items-center justify-center gap-1"><MdEmail/> Emails</span></th>
-                                                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap"><span className="flex items-center justify-center gap-1"><MdPhone/> Phones</span></th>
-                                                    <th className="p-4 border-b border-blue-100 text-center whitespace-nowrap"><span className="flex items-center justify-center gap-1"></span></th>
+                                            <thead className="border-b-2 border-slate-100">
+                                                <tr className="text-blue-600 text-sm font-semibold">
+                                                    <th className="px-6 py-5 text-left whitespace-nowrap">Name</th>
+                                                    <th className="px-6 py-5 text-center whitespace-nowrap">Number of records</th>
+                                                    <th className="px-6 py-5 text-center whitespace-nowrap"><span className="flex items-center justify-center gap-1"><MdEmail/> Email</span></th>
+                                                    <th className="px-6 py-5 text-center whitespace-nowrap"><span className="flex items-center justify-center gap-1"><MdPhone/> Phone</span></th>
+                                                    <th className="px-6 py-5 text-right whitespace-nowrap"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-slate-100">
+                                            <tbody className="divide-y divide-slate-100/50">
                                                 {datasets.map((item) => (
-                                                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                                                        <td className="p-4 font-medium text-slate-700 align-middle">
-                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-[16px] text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
-                                                            {/* <div className="text-xs text-slate-400 mt-1">{item.full_address}</div> */}
+                                                    <tr key={item.id} className="hover:bg-slate-50 transition-colors group">
+                                                        <td className="px-3 py-3 font-medium text-slate-500 align-middle whitespace-wrap">
+                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="text-[14px] hover:text-blue-600 transition group-hover:text-blue-600 font-medium">{item.name}</Link>
                                                         </td>
-                                                        <td className="p-4 text-slate-600 font-bold text-center align-middle whitespace-nowrap">{item.records}</td>
-                                                        <td className="p-4 text-slate-600 text-center align-middle whitespace-nowrap">{item.emails}</td>
-                                                        <td className="p-4 text-slate-600 text-center align-middle whitespace-nowrap">{item.phones}</td>
-                                                        <td className="p-4 align-middle whitespace-nowrap">
-                                                            <div className="flex gap-2 items-center justify-center">
-                                                                    <Link 
-                                                                        href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
-                                                                        className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
-                                                                    >
-                                                                    View & Purchase Report
-                                                                </Link>
+                                                        <td className="px-6 py-5 text-slate-500 text-[14px] text-center align-middle whitespace-nowrap font-bold">{item.records}</td>
+                                                        <td className="px-6 py-5 text-slate-500 text-[14px] text-center align-middle whitespace-nowrap">{item.emails}</td>
+                                                        <td className="px-6 py-5 text-slate-500 text-[14px] text-center align-middle whitespace-nowrap">{item.phones}</td>
+                                                        <td className="px-6 py-5 align-middle whitespace-nowrap text-right">
+                                                            <div className="flex gap-3 justify-end items-center opacity-90 group-hover:opacity-100 transition-opacity">
                                                                 <button
                                                                     onClick={() => {
                                                                         setSelectedDatasetForSample(item);
                                                                         setIsSampleModalOpen(true);
                                                                     }}
-                                                                    className="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm hover:bg-slate-50 transition cursor-pointer whitespace-nowrap"
+                                                                    className="bg-white border border-slate-300 text-slate-700 px-5 py-2 rounded-full font-semibold text-[13px] hover:bg-slate-50 transition cursor-pointer whitespace-nowrap"
                                                                 >
-                                                                    Request Sample
+                                                                    Sample Leads
                                                                 </button>
+                                                                <Link 
+                                                                    href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
+                                                                    className="bg-blue-600 text-white px-5 py-2 rounded-full font-bold text-[13px] hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
+                                                                >
+                                                                    Purchase Leads
+                                                                </Link>
                                                             </div>
                                                         </td>
                                                     </tr>
