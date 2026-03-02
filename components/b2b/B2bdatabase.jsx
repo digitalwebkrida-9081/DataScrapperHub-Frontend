@@ -543,8 +543,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                 {datasets.map((item) => (
                                                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                                                         <td className="p-4 font-medium text-slate-700 align-middle">
-                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-lg text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
-                                                            <div className="text-xs text-slate-400 mt-1">{item.full_address}</div>
+                                                            <Link href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} className="font-semibold text-[16px] text-slate-600 hover:text-blue-700 hover:underline transition">{item.name}</Link>
+                                                            {/* <div className="text-xs text-slate-400 mt-1">{item.full_address}</div> */}
                                                         </td>
                                                         <td className="p-4 text-slate-600 font-bold text-center align-middle whitespace-nowrap">{item.records}</td>
                                                         <td className="p-4 text-slate-600 text-center align-middle whitespace-nowrap">{item.emails}</td>
@@ -553,7 +553,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                                             <div className="flex gap-2 items-center justify-center">
                                                                     <Link 
                                                                         href={item.countryCode ? `/dataset-detail?country=${item.countryCode}&category=${item.categorySlug}&label=${encodeURIComponent(item.displayLoc || "")}${item.stateName ? `&state=${encodeURIComponent(item.stateName)}` : ''}${item.cityName ? `&city=${encodeURIComponent(item.cityName)}` : ''}` : `/dataset-detail?id=${item.id}&label=${encodeURIComponent(item.displayLoc || "")}`} 
-                                                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
+                                                                        className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-700 transition inline-flex items-center justify-center whitespace-nowrap"
                                                                     >
                                                                     View & Purchase Report
                                                                 </Link>
