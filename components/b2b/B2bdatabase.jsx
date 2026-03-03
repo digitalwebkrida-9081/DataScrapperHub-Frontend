@@ -233,7 +233,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 if (!countryObj?.code) return;
                 try {
                     const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                    const res = await fetch(`${API_URL}/api/merged/categories?country=${countryObj.code}&limit=1000`);
+                    const res = await fetch(`${API_URL}/api/merged/categories?country=${countryObj.code}&limit=10000`);
                     const result = await res.json();
                     if (result.success && result.data?.categories) {
                         setMergedCats(result.data.categories);
@@ -303,8 +303,8 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
             let cats = [];
             let paginationData = null;
 
-            // If state or city is selected, use the filtered count endpoint
-            if (state || city) {
+            // If state, city, or category is selected, use the filtered count endpoint
+            if (state || city || category) {
                 let url = `${API_URL}/api/merged/categories-count?country=${countryCode}`;
                 if (state) url += `&state=${encodeURIComponent(state)}`;
                 if (city) url += `&city=${encodeURIComponent(city)}`;
@@ -330,32 +330,22 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     }
                 }
             } else {
-                // No state/city filter — use the fast cached categories endpoint
+                // No state/city/category filter — use the fast cached categories endpoint
                 let url = `${API_URL}/api/merged/categories?country=${countryCode}`;
-                if (category) {
-                    url += `&limit=1000`;
-                } else {
-                    url += `&page=${currentPage}&limit=${ITEMS_PER_PAGE}`;
-                }
+                url += `&page=${currentPage}&limit=${ITEMS_PER_PAGE}`;
 
                 const catRes = await fetch(url);
                 const catResult = await catRes.json();
 
                 if (catResult.success && catResult.data?.categories) {
                     cats = catResult.data.categories;
-                    if (catResult.data.pagination && !category) {
+                    if (catResult.data.pagination) {
                         paginationData = catResult.data.pagination;
                     }
                 }
             }
 
-            // Filter by category name if selected
-            if (category) {
-                cats = cats.filter(c => 
-                    c.displayName.toLowerCase() === category.toLowerCase() ||
-                    c.name.toLowerCase() === category.toLowerCase().replace(/\s+/g, '_')
-                );
-            }
+            // No longer need client-side category filtering since backend does it if category is provided
 
             // Update pagination
             if (paginationData) {

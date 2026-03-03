@@ -32,8 +32,8 @@ export async function generateMetadata(
   if (country && category) {
     const titleCategory = toTitleCase(category.replace(/_/g, ' '));
     const titleLocation = label ? decodeURIComponent(label as string) : country.toUpperCase();
-    const infoTitle = `List of ${titleCategory} in ${titleLocation}`;
-    const infoDesc = `List of ${titleCategory} in ${titleLocation}. Get instant access to verified ${titleCategory} leads. Download email list, phone numbers, and key decision maker contacts.`;
+    const infoTitle = `Buy ${titleCategory} B2B Leads -${titleLocation} Business Data | DataSellerHub`;
+    const infoDesc = `Download updated ${titleCategory} B2B leads data in ${titleLocation} with verified emails, direct phone numbers, company details, and geo-targeted data for high-converting outreach.`;
 
     return {
       title: infoTitle,
