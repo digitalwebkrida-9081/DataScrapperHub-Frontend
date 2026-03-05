@@ -15,10 +15,6 @@ export async function GET() {
     <loc>${baseUrl}/blog-sitemap.xml</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>
-  // <sitemap>
-  //   <loc>${baseUrl}/business-reports-sitemap.xml</loc>
-  //   <lastmod>${new Date().toISOString()}</lastmod>
-  // </sitemap> 
   <sitemap>
     <loc>${baseUrl}/b2b-sitemap.xml</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
