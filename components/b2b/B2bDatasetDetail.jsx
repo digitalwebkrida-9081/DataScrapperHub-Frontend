@@ -312,6 +312,12 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                         const hasEmail = catInfo?.hasEmail || columns.some(c => c.toLowerCase().includes('email'));
                         const hasPhone = catInfo?.hasPhone || columns.some(c => c.toLowerCase().includes('phone'));
                         const hasWebsite = catInfo?.hasWebsite || columns.some(c => c.toLowerCase().includes('website') || c.toLowerCase().includes('url'));
+                        const hasLinkedin = catInfo?.hasLinkedin || columns.some(c => c.toLowerCase().includes('linkedin'));
+                        const hasFacebook = catInfo?.hasFacebook || columns.some(c => c.toLowerCase().includes('facebook'));
+                        const hasInstagram = catInfo?.hasInstagram || columns.some(c => c.toLowerCase().includes('instagram'));
+                        const hasTwitter = catInfo?.hasTwitter || columns.some(c => c.toLowerCase().includes('twitter'));
+                        const hasTiktok = catInfo?.hasTiktok || columns.some(c => c.toLowerCase().includes('tiktok'));
+                        const hasYoutube = catInfo?.hasYoutube || columns.some(c => c.toLowerCase().includes('youtube'));
 
                         // Map rows to sample list format
                         const sampleList = rows.slice(0, 10).map((row, idx) => {
@@ -346,12 +352,12 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                             totalPhones: hasPhone ? totalRecords : 0,
                             websiteCount: hasWebsite ? Math.floor(totalRecords * 0.7) : 0,
                             totalWebsites: hasWebsite ? Math.floor(totalRecords * 0.7) : 0,
-                            linkedinCount: 0, totalLinkedin: 0,
-                            facebookCount: 0, totalFacebook: 0,
-                            instagramCount: 0, totalInstagram: 0,
-                            twitterCount: 0, totalTwitter: 0,
-                            tiktokCount: 0, totalTiktok: 0,
-                            youtubeCount: 0, totalYoutube: 0,
+                            linkedinCount: hasLinkedin ? Math.floor(totalRecords * 0.6) : 0, totalLinkedin: hasLinkedin ? Math.floor(totalRecords * 0.6) : 0,
+                            facebookCount: hasFacebook ? Math.floor(totalRecords * 0.65) : 0, totalFacebook: hasFacebook ? Math.floor(totalRecords * 0.65) : 0,
+                            instagramCount: hasInstagram ? Math.floor(totalRecords * 0.5) : 0, totalInstagram: hasInstagram ? Math.floor(totalRecords * 0.5) : 0,
+                            twitterCount: hasTwitter ? Math.floor(totalRecords * 0.3) : 0, totalTwitter: hasTwitter ? Math.floor(totalRecords * 0.3) : 0,
+                            tiktokCount: hasTiktok ? Math.floor(totalRecords * 0.2) : 0, totalTiktok: hasTiktok ? Math.floor(totalRecords * 0.2) : 0,
+                            youtubeCount: hasYoutube ? Math.floor(totalRecords * 0.25) : 0, totalYoutube: hasYoutube ? Math.floor(totalRecords * 0.25) : 0,
                             price: 199,
                             previousPrice: 398,
                             lastUpdate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
