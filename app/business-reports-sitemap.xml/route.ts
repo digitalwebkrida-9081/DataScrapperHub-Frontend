@@ -19,47 +19,38 @@ function escapeXml(unsafe: string): string {
 }
 
 export async function GET() {
-  let urls: any[] = [];
+  let countryUrls: any[] = [];
+
   try {
-    // Use merged countries — only countries with actual data
+    // Use merged countries API — only countries we actually have data for
     const res = await fetch(`${apiUrl}/api/merged/countries`, { next: { revalidate: 3600 } });
     if (res.ok) {
       const result = await res.json();
       const countries = result.data?.countries || [];
 
-      urls = countries.flatMap((country: any) => {
+      countryUrls = countries.map((country: any) => {
         const name = country.name;
-        if (!name) return [];
+        if (!name) return null;
         const slug = name.toLowerCase().replace(/\s+/g, '-');
-        
-        return [
-          {
-            url: `${baseUrl}/business-reports/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: '0.7',
-          },
-          {
-            url: `${baseUrl}/location-report?country=${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: '0.6',
-          },
-        ];
-      });
+
+        return {
+          url: `${baseUrl}/business-reports/${slug}`,
+          lastModified: new Date().toISOString(),
+        };
+      }).filter(Boolean);
     }
   } catch (error) {
-    console.error('Sitemap: Error fetching countries', error);
+    console.error('Sitemap: Error fetching merged countries', error);
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${urls.map((item) => `
+  ${countryUrls.map((item) => `
   <url>
     <loc>${escapeXml(item.url)}</loc>
     <lastmod>${item.lastModified}</lastmod>
-    <changefreq>${item.changeFrequency}</changefreq>
-    <priority>${item.priority}</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>`).join('')}
 </urlset>`;
 

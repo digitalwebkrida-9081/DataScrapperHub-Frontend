@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export const revalidate = 3600;
 
-const baseUrl = 'https://stag.datasellerhub.com';
+const baseUrl = 'https://datasellerhub.com';
 
 export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -12,7 +12,11 @@ export async function GET() {
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>
   <sitemap>
-    <loc>${baseUrl}/country-sitemap.xml</loc>
+    <loc>${baseUrl}/blog-sitemap.xml</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${baseUrl}/business-reports-sitemap.xml</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>
   <sitemap>

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export const revalidate = 3600;
 
-const baseUrl = 'https://stag.datasellerhub.com';
+const baseUrl = 'https://datasellerhub.com';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://stagservice.datasellerhub.com';
 
 function escapeXml(unsafe: string): string {
@@ -20,26 +20,25 @@ function escapeXml(unsafe: string): string {
 
 export async function GET() {
   let sitemaps: any[] = [];
-  
-  try {
-    // Fetch all available countries
-    const res = await fetch(`${apiUrl}/api/country/get-countries`, { next: { revalidate: 3600 } });
-    if (res.ok) {
-        const data = await res.json();
-        const countries = data.data || [];
 
-        sitemaps = countries.map((country: any) => {
-            const countryName = country.country_name || country.name;
-            if (!countryName) return null;
-            // Use country name as query param
-            return {
-                url: `${baseUrl}/b2b-country-sitemap?country=${encodeURIComponent(countryName)}`,
-                lastModified: new Date().toISOString()
-            };
-        }).filter(Boolean);
+  try {
+    // Fetch only the countries we actually have merged data for
+    const res = await fetch(`${apiUrl}/api/merged/countries`, { next: { revalidate: 3600 } });
+    if (res.ok) {
+      const result = await res.json();
+      const countries = result.data?.countries || [];
+
+      sitemaps = countries.map((country: any) => {
+        const code = country.code;
+        if (!code) return null;
+        return {
+          url: `${baseUrl}/b2b-country-sitemap?country=${encodeURIComponent(code)}`,
+          lastModified: new Date().toISOString(),
+        };
+      }).filter(Boolean);
     }
   } catch (error) {
-    console.error('Sitemap: Error fetching countries', error);
+    console.error('Sitemap: Error fetching merged countries', error);
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -48,8 +47,7 @@ export async function GET() {
   <sitemap>
     <loc>${escapeXml(item.url)}</loc>
     <lastmod>${item.lastModified}</lastmod>
-  </sitemap>
-  `).join('')}
+  </sitemap>`).join('')}
 </sitemapindex>`;
 
   return new NextResponse(xml, {
