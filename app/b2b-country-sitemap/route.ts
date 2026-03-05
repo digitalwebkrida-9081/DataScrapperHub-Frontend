@@ -47,7 +47,7 @@ export async function GET(request: Request) {
                 const label = `${ds.category}-in-${locationPart}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
                 
                 return {
-                   url: `${baseUrl}/dataset-detail?id=${ds.id}&label=${label}`,
+                   url: `${baseUrl}/business-report-details/list-of-${label}`,
                    lastModified: ds.lastUpdate ? new Date(ds.lastUpdate).toISOString() : new Date().toISOString(),
                    changeFrequency: 'weekly',
                    priority: '0.6',

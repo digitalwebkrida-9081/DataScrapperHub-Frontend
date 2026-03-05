@@ -21,7 +21,6 @@ export async function GET() {
   const staticRoutes = [
     '',
     '/b2b',
-    '/business-report-view',
     '/location-report',
     '/maps-scraper',
     '/contact',

@@ -230,7 +230,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                             const randomNum = Math.floor(Math.random() * 5000) + 1000; 
                             const categorySlug = cat.slug ? cat.slug.split('/').pop() : cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
                             const targetHref = countryCode 
-                                ? `/dataset-detail?country=${countryCode}&category=${categorySlug}&label=${encodeURIComponent(displayName)}`
+                                ? `/business-report-details/list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`
                                 : `/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(cat.name)}`;
                                 
                             return (

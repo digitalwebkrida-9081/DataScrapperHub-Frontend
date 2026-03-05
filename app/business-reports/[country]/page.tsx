@@ -1,18 +1,17 @@
-
 import React, { Suspense } from 'react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import B2bCountryDetail from '@/components/b2b/B2bCountryDetail';
 
 type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  params: Promise<{ country: string }>
 }
 
 export async function generateMetadata(
-  { searchParams }: Props,
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const params = await searchParams;
-  const countrySlug = params.country;
+  const resolvedParams = await params;
+  const countrySlug = resolvedParams.country;
   
   if (!countrySlug || typeof countrySlug !== 'string') {
       return {
@@ -32,14 +31,14 @@ export async function generateMetadata(
           description: `Get verified B2B leads in ${countryName}.`,
       },
       alternates: {
-        canonical: `/business-report-view?country=${encodeURIComponent(countrySlug)}`
+        canonical: `/business-reports/${encodeURIComponent(countrySlug)}`
       }
   };
 }
 
-export default async function BusinessReportPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const country = params.country;
+export default async function BusinessReportPage({ params }: Props) {
+  const resolvedParams = await params;
+  const country = resolvedParams.country;
 
   if (!country || typeof country !== 'string') {
       return <div>Invalid Country Parameter</div>;

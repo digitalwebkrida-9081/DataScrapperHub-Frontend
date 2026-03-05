@@ -33,7 +33,7 @@ export async function GET() {
         
         return [
           {
-            url: `${baseUrl}/business-report-view?country=${slug}`,
+            url: `${baseUrl}/business-reports/${slug}`,
             lastModified: new Date().toISOString(),
             changeFrequency: 'weekly',
             priority: '0.7',
