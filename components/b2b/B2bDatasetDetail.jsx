@@ -57,11 +57,35 @@ const enrichWithMapData = (ds) => {
     };
 };
 
+// Map full country names to country codes (backend expects codes like 'US', not 'United States')
+const countryNameToCode = (name) => {
+    const map = {
+        'united states': 'US', 'united kingdom': 'UK', 'canada': 'CA',
+        'australia': 'AU', 'india': 'IN', 'germany': 'DE',
+        'france': 'FR', 'japan': 'JP', 'brazil': 'BR', 'mexico': 'MX',
+        'bangladesh': 'BD', 'south africa': 'ZA', 'indonesia': 'ID',
+        'italy': 'IT', 'spain': 'ES', 'turkey': 'TR', 'pakistan': 'PK',
+        'nigeria': 'NG', 'egypt': 'EG', 'thailand': 'TH',
+        'philippines': 'PH', 'malaysia': 'MY', 'saudi arabia': 'SA',
+        'uae': 'AE', 'united arab emirates': 'AE', 'south korea': 'KR',
+        'nepal': 'NP', 'sri lanka': 'LK', 'singapore': 'SG',
+        'new zealand': 'NZ', 'netherlands': 'NL', 'sweden': 'SE',
+        'switzerland': 'CH', 'poland': 'PL', 'argentina': 'AR',
+        'colombia': 'CO', 'chile': 'CL', 'kenya': 'KE'
+    };
+    const lower = (name || '').toLowerCase().trim();
+    // If it's already a short code (2-3 chars), return as-is
+    if (lower.length <= 3 && !lower.includes(' ')) return name.toUpperCase();
+    return map[lower] || name;
+};
+
 const B2bDatasetDetail = ({ id, country, category }) => {
     const searchParams = useSearchParams();
     const displayLabel = searchParams.get('label');
     const filterState = searchParams.get('state') || '';
     const filterCity = searchParams.get('city') || '';
+    // Resolve country to code for API calls (e.g. "United States" -> "US")
+    const countryApiCode = countryNameToCode(country);
 
     const [dataset, setDataset] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -200,7 +224,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                 let hasMore = true;
 
                 while (hasMore) {
-                    const res = await fetch(`${API_URL}/api/merged/data?country=${country}&category=${category}&page=${page}&limit=${batchSize}${filterState ? `&state=${encodeURIComponent(filterState)}` : ''}${filterCity ? `&city=${encodeURIComponent(filterCity)}` : ''}`);
+                    const res = await fetch(`${API_URL}/api/merged/data?country=${countryApiCode}&category=${category}&page=${page}&limit=${batchSize}${filterState ? `&state=${encodeURIComponent(filterState)}` : ''}${filterCity ? `&city=${encodeURIComponent(filterCity)}` : ''}`);
                     const result = await res.json();
                     
                     if (result.success && result.data?.data?.length > 0) {
@@ -282,13 +306,13 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     try {
                         // Fetch sample data rows + category info in parallel
                         // Build data URL with optional state/city filters
-                        let dataUrl = `${API_URL}/api/merged/data?country=${country}&category=${category}&page=1&limit=10`;
+                        let dataUrl = `${API_URL}/api/merged/data?country=${countryApiCode}&category=${category}&page=1&limit=10`;
                         if (filterState) dataUrl += `&state=${encodeURIComponent(filterState)}`;
                         if (filterCity) dataUrl += `&city=${encodeURIComponent(filterCity)}`;
 
                         const [dataRes, catRes] = await Promise.all([
                             fetch(dataUrl),
-                            fetch(`${API_URL}/api/merged/categories?country=${country}&limit=1000`)
+                            fetch(`${API_URL}/api/merged/categories?country=${countryApiCode}&limit=1000`)
                         ]);
                         
                         const dataResult = await dataRes.json();
