@@ -656,10 +656,9 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 const ordered = [...priority, ...rest];
 
                                 return ordered.map((country, i) => {
-                                    const randomNum = Math.floor(1000 + Math.random() * 9000);
                                     const countryName = getName(country);
                                     const slug = countryName.toLowerCase().replace(/\s+/g, '-');
-                                    const label = `Business Leads in ${countryName} (${randomNum})`;
+                                    const label = `Business Leads in ${countryName} (${totalCategories})`;
                                     return (
                                         <Link key={i} href={`/business-report-view?country=${slug}`} className="flex items-start gap-2 text-slate-500 text-[14px] font-semibold hover:text-blue-600 transition">
                                             <span className="mt-1.5 w-1 h-1 bg-slate-400 rounded-full shrink-0"></span>

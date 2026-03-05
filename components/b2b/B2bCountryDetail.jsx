@@ -102,6 +102,8 @@ const B2bCountryDetail = ({ countrySlug }) => {
 
     // Capitalize for display
     const displayName = countryName.replace(/\b\w/g, l => l.toUpperCase());
+    const countryCodeData = getCountryData(displayName);
+    const countryCode = countryCodeData ? countryCodeData.code.toUpperCase() : '';
 
     return (
         <div className="bg-white min-h-screen font-sans text-slate-800">
@@ -226,10 +228,15 @@ const B2bCountryDetail = ({ countrySlug }) => {
                             .map((cat, idx) => {
                              // Random number simulation for "social proof" feel, or could use real counts if available
                             const randomNum = Math.floor(Math.random() * 5000) + 1000; 
+                            const categorySlug = cat.slug ? cat.slug.split('/').pop() : cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                            const targetHref = countryCode 
+                                ? `/dataset-detail?country=${countryCode}&category=${categorySlug}&label=${encodeURIComponent(displayName)}`
+                                : `/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(cat.name)}`;
+                                
                             return (
                                 <Link 
                                     key={idx}
-                                    href={`/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(cat.name)}`}
+                                    href={targetHref}
                                     className="flex items-start gap-2 text-slate-500 hover:text-blue-600 transition group text-[14px]"
                                 >
                                     <span className="mt-1.5 w-1.5 h-1.5 bg-slate-400 group-hover:bg-blue-500 rounded-full shrink-0"></span>
