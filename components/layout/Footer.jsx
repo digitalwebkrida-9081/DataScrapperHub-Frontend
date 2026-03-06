@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="flex items-center gap-2 text-xl font-bold">
             <span className="text-[#2F66F6] rounded-full px-2 py-1">
               <img
-                src="images/logos/main-logo/small-logo.png"
+                src="/images/logos/main-logo/small-logo.png"
                 alt="DataSellerHub Logo"
               />
             </span>
