@@ -695,9 +695,49 @@ const B2bDatasetDetail = ({ id, country, category }) => {
             {/* --- VALUE PROPOSITION SECTION --- */}
             <div className="py-20 pb-0 bg-white">
                 <div className="container mx-auto px-4">
-                    <div className="text-center mb-16">
-                        <h2 className="text-2xl font-bold text-slate-900">How DataSellerHub Data Services Helps Businesses</h2>
-                        <p className="text-slate-500 mt-2">Explore the strategic advantages of our data scraping solutions for your business.</p>
+                    <div className="mb-12 text-left">
+                        <h2 className="text-2xl lg:text-2xl font-bold text-slate-900 mb-4">How DataSellerHub Data Services Helps Businesses</h2>
+                        <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-4xl">Explore the strategic advantages of our data scraping solutions for your business.</p>
+                    </div>
+                    
+                    <div className="text-left space-y-8 max-w-auto mb-16">
+                        <div>
+                            <h3 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3 block border-none pb-0">Find the Best {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} | Verified Business Directory</h3>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed">Are you searching for a reliable partner to handle your business needs? Identifying the right <strong>{dataset.category}</strong> in <strong>{displayLabel || dataset.location.split(',').slice(-2).join(',').trim()}</strong> is the first step toward successful product development and innovation. Our comprehensive database offers an exhaustive list of {dataset.category} currently operating across {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()}, providing you with the exact contact points needed to move your project forward.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 className="text-lg lg:text-xl font-bold text-slate-900 mb-3">Why Choose {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()}?</h4>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed">The landscape for {dataset.category} is evolving rapidly. By focusing your search on {dataset.category} within {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()}, you gain access to high-tier engineering talent and advanced additive manufacturing technologies. The {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} market is known for its strict quality controls, making {dataset.category} in this region some of the most dependable in the global market.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 className="text-lg lg:text-xl font-bold text-slate-900 mb-3">Why DataSellerHub is Your Trusted Source for {dataset.category} Data</h4>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-4">When it comes to sourcing a list of {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()}, data accuracy is paramount. DataSellerHub stands out as the industry leader for several reasons:</p>
+                            <ul className="list-disc pl-6 space-y-2 text-slate-600 text-sm md:text-base leading-relaxed">
+                                <li><strong>Verified Authenticity:</strong> Unlike automated scrapers, DataSellerHub ensures that every entry for {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} is verified for accuracy, reducing bounce rates in your outreach.</li>
+                                <li><strong>Deep Market Insight:</strong> We don&apos;t just provide names; our {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} report offers deep insights into the operational scale of these {dataset.category}.</li>
+                                <li><strong>Frequent Updates:</strong> The {dataset.category} sector in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} changes fast. DataSellerHub refreshes its database regularly to reflect new company formations and contact changes.</li>
+                                <li><strong>Compliance Guaranteed:</strong> Our data collection for {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} follows all local data protection regulations, ensuring your marketing remains ethical and legal.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="text-lg lg:text-xl font-bold text-slate-900 mb-3">Strategic Benefits of our {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} {dataset.category} Report</h4>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-4">Acquiring our detailed report on {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} allows your business to:</p>
+                            <ol className="list-decimal pl-6 space-y-2 text-slate-600 text-sm md:text-base leading-relaxed">
+                                <li><strong>Accelerate Procurement:</strong> Instantly find {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} that match your specific material requirements (Resin, Metal, Carbon Fiber).</li>
+                                <li><strong>Competitor Analysis:</strong> Map out where the top {dataset.category} are located throughout {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} to identify market gaps.</li>
+                                <li><strong>Direct Outreach:</strong> Connect directly with decision-makers at {dataset.category} across {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} without gatekeepers.</li>
+                            </ol>
+                        </div>
+
+                        <div>
+                            <h4 className="text-lg lg:text-xl font-bold text-slate-900 mb-3">Maximize Your ROI in the {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} Market</h4>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-4">Investing in a high-quality list of {dataset.category} is an investment in your company&apos;s growth. Whether you are selling software to {dataset.category} or looking to outsource your production to {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()}, our data provides the foundation for success.</p>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">Stop wasting time with outdated spreadsheets. Trust DataSellerHub to provide the most authentic, up-to-date, and actionable list of {dataset.category} in {displayLabel || dataset.location.split(',').slice(-2).join(',').trim()} available on the market today.</p>
+                            <div><button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm md:text-base font-bold transition uppercase tracking-wide cursor-pointer shadow-lg shadow-blue-500/20 inline-flex items-center gap-2">Get Instant Access to the {dataset.category} Report</button></div>
+                        </div>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">

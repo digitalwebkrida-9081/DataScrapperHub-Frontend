@@ -123,7 +123,7 @@ export default function Footer() {
           <h4 className="font-semibold mb-4">Contact Us</h4>
           <div className="space-y-3 text-sm text-blue-100">
             <p className="flex items-center gap-2">
-              <IoCall className="text-white" /> <span>+61 414 003 350</span>
+              <IoCall className="text-white" /> <span>+61 416 806 368</span>
             </p>
             <p className="flex items-center gap-2">
               <IoMail className="text-white" />{" "}

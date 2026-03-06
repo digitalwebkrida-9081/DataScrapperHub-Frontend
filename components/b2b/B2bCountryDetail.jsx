@@ -42,18 +42,19 @@ const B2bCountryDetail = ({ countrySlug }) => {
 
                 // 4. Fetch categories and API states in PARALLEL
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+                const countryCodeToUse = staticCountry ? staticCountry.code : 'US';
                 const [catRes, statesRes] = await Promise.all([
-                    fetch(`${API_URL}/api/category`),
+                    fetch(`${API_URL}/api/merged/categories?country=${countryCodeToUse}&limit=200`),
                     fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(formattedCountryName)}`)
                 ]);
 
                 const catResult = await catRes.json();
                 if (catResult.success && catResult.data) {
-                    // Start with static, then append more or replace if needed. 
-                    // To keep it fast and consistent, we might just stick with static or mix.
-                    // But let's overwrite with API data if it's better or just use API data if static was empty.
-                    // For now, replacing is fine, but since we already showed static, user won't see a blank space.
-                    setCategories(catResult.data);
+                    if (catResult.data.categories) {
+                        setCategories(catResult.data.categories);
+                    } else if (Array.isArray(catResult.data)) {
+                        setCategories(catResult.data);
+                    }
                 }
 
                 const statesResult = await statesRes.json();
@@ -224,14 +225,18 @@ const B2bCountryDetail = ({ countrySlug }) => {
 
                     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-8">
                         {categories
-                            .filter(cat => cat.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .filter(cat => {
+                                const catName = cat.displayName || cat.name || '';
+                                return catName.toLowerCase().includes(searchTerm.toLowerCase());
+                            })
                             .map((cat, idx) => {
                              // Random number simulation for "social proof" feel, or could use real counts if available
                             const randomNum = Math.floor(Math.random() * 5000) + 1000; 
-                            const categorySlug = cat.slug ? cat.slug.split('/').pop() : cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                            const catDisplayName = cat.displayName || cat.name;
+                            const categorySlug = cat.displayName ? cat.name : (cat.name || '').replace(/\s+/g, '_');
                             const targetHref = countryCode 
                                 ? `/business-report-details/list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`
-                                : `/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(cat.name)}`;
+                                : `/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(catDisplayName)}`;
                                 
                             return (
                                 <Link 
@@ -241,7 +246,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                                 >
                                     <span className="mt-1.5 w-1.5 h-1.5 bg-slate-400 group-hover:bg-blue-500 rounded-full shrink-0"></span>
                                     <span className="font-medium">
-                                        {cat.name} Leads in {displayName}
+                                        {catDisplayName} Leads in {displayName}
                                     </span>
                                 </Link>
                             );

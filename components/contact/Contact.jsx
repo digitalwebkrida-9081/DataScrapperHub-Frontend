@@ -86,7 +86,7 @@ const [open, setOpen] = useState(false);
                   <div>
                     <p className="text-sm font-medium text-gray-800">Phone</p>
                     <p className="text-sm text-gray-500">
-                      +61 414 003 350
+                      +61 416 806 368
                     </p>
                   </div>
                 </div>
