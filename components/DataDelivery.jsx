@@ -7,7 +7,7 @@ export default function DataDelivery() {
         {/* LEFT: Image / Diagram */}
         <div className="flex-1 flex justify-center">
           <img
-            src="images/vector/data-delivery-image-1.png"
+            src="images/vector/data-delivery-image.png"
             alt="Customizable data formats"
             className="w-full max-w-[520px] object-contain"
           />

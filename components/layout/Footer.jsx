@@ -127,7 +127,7 @@ export default function Footer() {
             </p>
             <p className="flex items-center gap-2">
               <IoMail className="text-white" />{" "}
-              <span>info@DataSellerHub.com</span>
+              <span>info@datasellerhub.com</span>
             </p>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-blue-400/40 py-4 text-center text-sm text-blue-100">
-        © DataSellerHub 2014–2024 All Rights Reserved
+        © DataSellerHub 2014–2026 All Rights Reserved
       </div>
     </footer>
   );
