@@ -255,9 +255,19 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                 XLSX.utils.book_append_sheet(wb, ws, 'Data');
                 XLSX.writeFile(wb, `${dataset.category}-${dataset.location}.xlsx`);
 
-                alert(`Purchase Successful! Downloaded ${allRows.length.toLocaleString()} records.`);
+                alert(`Purchase Successful! Downloaded records.`);
                 setIsModalOpen(false);
                 setIsFormComplete(false);
+
+                // Setup Google Ads Conversion Tracking
+                if (typeof window !== 'undefined' && window.gtag) {
+                    window.gtag('event', 'conversion', {
+                        'send_to': 'AW-17980750879/Us-BCLTm4YMcEJ_48f1C',
+                        'value': dataset?.price || 1.0,
+                        'currency': 'INR',
+                        'transaction_id': ''
+                    });
+                }
             } else {
                 // ===== OLD DATA: use existing purchase API =====
                 const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
@@ -283,6 +293,16 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     alert(`Purchase Successful! Downloading file...`);
                     setIsModalOpen(false);
                     setIsFormComplete(false);
+
+                    // Setup Google Ads Conversion Tracking
+                    if (typeof window !== 'undefined' && window.gtag) {
+                        window.gtag('event', 'conversion', {
+                            'send_to': 'AW-17980750879/Us-BCLTm4YMcEJ_48f1C',
+                            'value': dataset?.price || 1.0,
+                            'currency': 'INR',
+                            'transaction_id': ''
+                        });
+                    }
                 } else {
                     const result = await response.json();
                     alert(`Purchase Failed: ${result.message}`);
