@@ -371,7 +371,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     emails: cat.hasEmail ? records.toLocaleString() : '0',
                     phones: cat.hasPhone ? records.toLocaleString() : '0',
                     full_address: `Last Updated: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
-                    price: '$199',
+                    price: cat.price ? `$${cat.price}` : '$199',
                     isDataset: true,
                     displayLoc: displayLoc,
                     category: cat.displayName,
