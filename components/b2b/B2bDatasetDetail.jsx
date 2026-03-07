@@ -819,7 +819,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                          <p className="text-slate-500 mt-2">There are a total of {dataset.totalRecords} {dataset.category} stores in {dataset.location} as of {dataset.lastUpdate}.</p>
                          
                          <div className="mt-8 flex justify-center gap-4">
-                             <button className="bg-blue-600 text-white px-6 py-2 rounded font-bold text-sm">Buy Full Dataset</button>
+                             <button className="bg-blue-600 text-white px-6 py-2 rounded font-bold text-sm" onClick={() => setIsSampleModalOpen(true)}>Buy Full Dataset</button>
                              <button className="bg-slate-800 text-white px-6 py-2 rounded font-bold text-sm flex items-center gap-2" onClick={() => setIsSampleModalOpen(true)}><FaDownload/> Download Sample</button>
                          </div>
                      </div>
