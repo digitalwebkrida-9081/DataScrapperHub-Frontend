@@ -7,6 +7,7 @@ import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown } from 'rea
 import SearchableDropdown from '../ui/SearchableDropdown';
 import * as XLSX from 'xlsx';
 import staticCategories from '../../data/categories.json';
+import { countryCodes } from '../../utils/countryCodes';
 
 // Skeleton Loader Component for the Table
 const TableSkeleton = () => (
@@ -48,19 +49,10 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
     const [selectedDatasetForSample, setSelectedDatasetForSample] = useState(null);
     const [purchaseLoading, setPurchaseLoading] = useState(false);
-    const [phoneCode, setPhoneCode] = useState('+91');
+    const [phoneCode, setPhoneCode] = useState('+1');
+    const [samplePhoneCode, setSamplePhoneCode] = useState('+1');
     const [sampleForm, setSampleForm] = useState({ fullName: '', email: '', phoneNumber: '' });
 
-    const countryCodes = [
-        { code: '+91', flag: '🇮🇳', name: 'India' },
-        { code: '+1', flag: '🇺🇸', name: 'USA' },
-        { code: '+44', flag: '🇬🇧', name: 'UK' },
-        { code: '+971', flag: '🇦🇪', name: 'UAE' },
-        { code: '+1', flag: '🇨🇦', name: 'Canada' },
-        { code: '+61', flag: '🇦🇺', name: 'Australia' },
-        { code: '+49', flag: '🇩🇪', name: 'Germany' },
-        { code: '+33', flag: '🇫🇷', name: 'France' },
-    ];
 
     // Dropdown options
     const [categories, setCategories] = useState(staticCategories || []);
@@ -102,7 +94,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     type: 'sample_request',
                     name: sampleForm.fullName,
                     email: sampleForm.email,
-                    phone: sampleForm.phoneNumber,
+                    phone: `${samplePhoneCode} ${sampleForm.phoneNumber}`,
                     datasetDetails: selectedDatasetForSample
                 })
             });
@@ -915,10 +907,20 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
                                     Phone Number <span className="text-red-500">*</span>
                                 </label>
-                                <div className="flex gap-2">
-                                    <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
-                                        <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
-                                        <span className="text-sm text-slate-600">+91</span>
+                                <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+                                    <div className="relative bg-slate-50 border-r border-slate-200 flex items-center min-w-[100px]">
+                                        <select 
+                                            value={samplePhoneCode} 
+                                            onChange={(e) => setSamplePhoneCode(e.target.value)}
+                                            className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 text-sm font-medium cursor-pointer outline-none z-10"
+                                        >
+                                            {countryCodes.map((c, idx) => (
+                                                <option key={idx} value={c.code}>{c.flag} {c.code}</option>
+                                            ))}
+                                        </select>
+                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
+                                            <MdKeyboardArrowDown size={18} />
+                                        </div>
                                     </div>
                                     <input 
                                         type="tel" 
@@ -927,7 +929,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                         value={sampleForm.phoneNumber}
                                         onChange={handleSampleChange}
                                         placeholder="Phone Number"
-                                        className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                        className="flex-1 px-4 py-3 border-none focus:ring-0 outline-none w-full"
                                     />
                                 </div>
                             </div>

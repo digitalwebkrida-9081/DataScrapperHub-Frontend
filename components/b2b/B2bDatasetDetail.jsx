@@ -11,6 +11,8 @@ import * as XLSX from 'xlsx';
 import dynamic from 'next/dynamic';
 import { getCountryData, generateSimulatedDistribution } from '../../data/countryStates';
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import { countryCodes } from '../../utils/countryCodes';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 const CountryMapSection = dynamic(() => import('./CountryMapSection'), { ssr: false });
 
@@ -97,6 +99,8 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         phoneNumber: ''
     });
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+    const [purchasePhoneCode, setPurchasePhoneCode] = useState('+1');
+    const [samplePhoneCode, setSamplePhoneCode] = useState('+1');
     const [sampleForm, setSampleForm] = useState({
         fullName: '',
         email: '',
@@ -130,7 +134,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     type: 'sample_request',
                     name: sampleForm.fullName,
                     email: sampleForm.email,
-                    phone: sampleForm.phoneNumber,
+                    phone: `${samplePhoneCode} ${sampleForm.phoneNumber}`,
                     datasetDetails: {
                          id: dataset.id,
                          category: dataset.category,
@@ -204,7 +208,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                             type: 'purchase',
                             name: form.fullName,
                             email: form.email,
-                            phone: form.phoneNumber,
+                            phone: `${purchasePhoneCode} ${form.phoneNumber}`,
                             datasetDetails: {
                                 category: dataset.category,
                                 location: dataset.location,
@@ -275,7 +279,8 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         id: id,
-                        ...form
+                        ...form,
+                        phoneNumber: `${purchasePhoneCode} ${form.phoneNumber}`
                     })
                 });
                 
@@ -968,10 +973,20 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                                     <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
                                         Phone Number <span className="text-red-500">*</span>
                                     </label>
-                                    <div className="flex gap-2">
-                                        <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
-                                            <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
-                                            <span className="text-sm text-slate-600">+91</span>
+                                    <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+                                        <div className="relative bg-slate-50 border-r border-slate-200 flex items-center min-w-[100px]">
+                                            <select 
+                                                value={purchasePhoneCode} 
+                                                onChange={(e) => setPurchasePhoneCode(e.target.value)}
+                                                className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 text-sm font-medium cursor-pointer outline-none z-10"
+                                            >
+                                                {countryCodes.map((c, idx) => (
+                                                    <option key={idx} value={c.code}>{c.flag} {c.code}</option>
+                                                ))}
+                                            </select>
+                                            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
+                                                <MdKeyboardArrowDown size={18} />
+                                            </div>
                                         </div>
                                         <input 
                                             type="tel" 
@@ -980,7 +995,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                                             value={form.phoneNumber}
                                             onChange={handleInputChange}
                                             placeholder="Phone Number"
-                                            className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                            className="flex-1 px-4 py-3 border-none focus:ring-0 outline-none w-full"
                                         />
                                     </div>
                                 </div>
@@ -1151,10 +1166,20 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                                 <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
                                     Phone Number <span className="text-red-500">*</span>
                                 </label>
-                                <div className="flex gap-2">
-                                    <div className="flex items-center gap-2 px-3 border border-slate-200 rounded-xl bg-slate-50">
-                                        <img src="https://flagcdn.com/w20/in.png" alt="IN" className="h-3" />
-                                        <span className="text-sm text-slate-600">+91</span>
+                                <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+                                    <div className="relative bg-slate-50 border-r border-slate-200 flex items-center min-w-[100px]">
+                                        <select 
+                                            value={samplePhoneCode} 
+                                            onChange={(e) => setSamplePhoneCode(e.target.value)}
+                                            className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 text-sm font-medium cursor-pointer outline-none z-10"
+                                        >
+                                            {countryCodes.map((c, idx) => (
+                                                <option key={idx} value={c.code}>{c.flag} {c.code}</option>
+                                            ))}
+                                        </select>
+                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
+                                            <MdKeyboardArrowDown size={18} />
+                                        </div>
                                     </div>
                                     <input 
                                         type="tel" 
@@ -1163,7 +1188,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                                         value={sampleForm.phoneNumber}
                                         onChange={handleSampleChange}
                                         placeholder="Phone Number"
-                                        className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                        className="flex-1 px-4 py-3 border-none focus:ring-0 outline-none w-full"
                                     />
                                 </div>
                             </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { IoCall, IoMail } from "react-icons/io5";
+import { countryCodes } from "../../utils/countryCodes";
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -17,21 +18,8 @@ export default function ContactUsPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const [selected, setSelected] = useState({
-  code: "+91",
-  label: "IN",
-  flag: "🇮🇳",
-});
-const [open, setOpen] = useState(false);
-
-
-  const countries = [
-  { code: "+1", label: "US", flag: "🇺🇸" },
-  { code: "+44", label: "UK", flag: "🇬🇧" },
-  { code: "+61", label: "AU", flag: "🇦🇺" },
-  { code: "+91", label: "IN", flag: "🇮🇳" },
-  { code: "+81", label: "JP", flag: "🇯🇵" },
-];
+    const [selected, setSelected] = useState(countryCodes[0]);
+    const [open, setOpen] = useState(false);
 
 
   return (
@@ -234,9 +222,9 @@ const [open, setOpen] = useState(false);
     {/* Dropdown Menu */}
     {open && (
       <div className="absolute z-20 mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg">
-        {countries.map((c) => (
+        {countryCodes.map((c) => (
           <button
-            key={c.code}
+            key={c.code + c.label}
             type="button"
             onClick={() => {
               setSelected(c);
