@@ -910,7 +910,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
             {/* --- PURCHASE MODAL --- */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
                         {/* Close button */}
                         <button 
                             onClick={() => { setIsModalOpen(false); setIsFormComplete(false); }}
@@ -1107,7 +1107,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
             {/* --- SAMPLE REQUEST MODAL --- */}
             {isSampleModalOpen && (
                 <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
                         {/* Close button */}
                         <button 
                             onClick={() => setIsSampleModalOpen(false)}

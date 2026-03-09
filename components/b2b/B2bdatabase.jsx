@@ -756,7 +756,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
             {/* --- CUSTOM DATABASE MODAL --- */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 ">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg relative overflow-hidden animate-in fade-in zoom-in duration-200">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg relative overflow-hidden animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
                         {/* Header */}
                         <div className="flex justify-between items-center p-6 border-b border-slate-100">
                             <h3 className="text-xl font-bold text-slate-800">Request custom database</h3>
@@ -848,7 +848,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
             {/* --- SAMPLE REQUEST MODAL --- */}
             {isSampleModalOpen && (
                 <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                    <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
                         {/* Close button */}
                         <button 
                             onClick={() => setIsSampleModalOpen(false)}
