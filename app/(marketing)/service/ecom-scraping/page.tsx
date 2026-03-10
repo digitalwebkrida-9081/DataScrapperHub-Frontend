@@ -1,8 +1,8 @@
 import Ecom from "@/components/service/Ecom";
 
 export const metadata = {
-  title: "E-Commerce Data Scraping | DataSellerHub",
-  description: "Unlock E-commerce Success with DataSellerHub",
+  title: "Ecommerce Product Data Scraping & Price Monitoring | DataSellerHub",
+  description: "Extract ecommerce product data including prices, reviews, ratings, and inventory from online marketplaces. DataSellerHub provides structured ecommerce datasets for competitor analysis and pricing strategy.",
 };
 
 export default function Ecompage() {

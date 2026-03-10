@@ -1,8 +1,8 @@
 import ResearchData from "@/components/service/Research";
 
 export const metadata = {
-  title: "Research Data Scraping | DataSellerHub",
-  description: "Unlock Research Data Success with DataSellerHub",
+  title: "Research Data Scraping Services | DataSellerHub",
+  description: "Collect large datasets for academic research, journalism, and market analysis. DataSellerHub provides reliable research data scraping from websites, publications, and online sources.",
 };
 
 export default function ResearchDataPage() {

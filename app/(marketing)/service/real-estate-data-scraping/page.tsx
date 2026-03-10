@@ -1,8 +1,8 @@
 import RealEstate from "@/components/service/RealEstate";
 
 export const metadata = {
-  title: "Real Estate Data Scraping | DataSellerHub",
-  description: "Harness the power of real estate and housing data with DataSellerHub. Comprehensive data scraping solutions for real estate markets.",
+  title: "Real Estate Data Extraction & Property Data Scraping | DataSellerHub",
+  description: "Extract real estate data including property listings, prices, agent details, and historical sales trends. DataSellerHub delivers accurate housing data from global real estate platforms.",
 };
 
 export default function RealEstatePage() {

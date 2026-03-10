@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import B2bdatabase from '@/components/b2b/B2bdatabase';
 
 export const metadata: Metadata = {
-  title: 'List Of Businesses By Country - Leads Directory',
-  description: 'Access millions of B2B leads, verified company data, and market insights globally.',
+  title: 'B2B Database & Business Leads Provider | DataSellerHub',
+  description: 'Access targeted B2B databases including company details, emails, and phone numbers for lead generation, marketing, and sales. Get accurate business data with DataSellerHub.',
 };
 
 export default function B2bPage() {

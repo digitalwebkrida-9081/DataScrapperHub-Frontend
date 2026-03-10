@@ -1,9 +1,9 @@
 import BlogPage from "@/components/blog/BlogPage";
 
 export const metadata = {
-  title: "Blog | DataSellerHub - Web Scraping & Data Insights",
+  title: "Web Scraping, Data Extraction & Lead Generation Blog | DataSellerHub",
   description:
-    "Expert articles on web scraping, data extraction, B2B databases, lead generation, and industry insights from DataSellerHub.",
+    "Explore the DataSellerHub blog for insights on web scraping, data extraction, B2B databases, and lead generation strategies to help businesses make data-driven decisions.",
 };
 
 export default function Blog() {

@@ -26,8 +26,8 @@ export async function generateMetadata(
   }
  
   return {
-    title: 'Location Reports | Data Scraper Hub',
-    description: 'Find web scraping services by location.',
+    title: 'Location Data Reports & Store Location Intelligence | DataSellerHub',
+    description: 'Get detailed location reports including store details, contact information, pickup options, and amenities. Use accurate location intelligence to improve retail research and market analysis.',
   };
 }
 
