@@ -185,7 +185,7 @@ export default function ContactUsPage() {
                   </div>
 
                   {/* Phone Number */}
-                  <div className="md:col-span-2">
+                  <div>
                     <PhoneInputField
                       value={formData.phone}
                       onChange={handleChange}
