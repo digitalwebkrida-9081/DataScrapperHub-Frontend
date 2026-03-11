@@ -4,6 +4,7 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[400px]">
+      <link rel="preload" as="image" href="/images/hero-bg.avif" imagesrcset="/images/hero-bg.avif 1x, /images/hero-bg@2x.avif 2x" />
 
       {/* Background Image */}
       <Image
@@ -13,6 +14,7 @@ export default function Hero() {
         priority
         sizes="100vw"
         quality={80}
+        blurDataURL="/images/hero-bg-blur.avif"
         className="object-cover"
       />
 

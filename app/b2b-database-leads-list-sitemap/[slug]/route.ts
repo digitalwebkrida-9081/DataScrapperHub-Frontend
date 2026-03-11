@@ -5,20 +5,6 @@ export const revalidate = 3600;
 const baseUrl = 'https://datasellerhub.com';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://stagservice.datasellerhub.com';
 
-// Map country codes to full names for URL slugs
-const countryCodeToName: Record<string, string> = {
-  'US': 'united-states',
-  'GB': 'united-kingdom',
-  'UK': 'united-kingdom',
-  'CA': 'canada',
-  'AU': 'australia',
-  'IN': 'india',
-  'DE': 'germany',
-  'FR': 'france',
-  'NL': 'netherlands',
-  'AE': 'uae',
-};
-
 function escapeXml(unsafe: string): string {
   return unsafe.replace(/[<>&'"]/g, (c) => {
     switch (c) {
@@ -32,40 +18,52 @@ function escapeXml(unsafe: string): string {
   });
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const countryCode = searchParams.get('country');
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+}
 
-  if (!countryCode) {
-    return new NextResponse(
-      `<?xml version="1.0" encoding="UTF-8"?>
-       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`,
-      { headers: { 'Content-Type': 'application/xml' } }
-    );
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
+  const { slug } = params;
+
+  // Expected format: leads-list-[country-slug].xml
+  if (!slug.startsWith('leads-list-') || !slug.endsWith('.xml')) {
+    return new NextResponse('Invalid sitemap format', { status: 404 });
   }
 
+  const countrySlug = slug.replace('leads-list-', '').replace('.xml', '');
+
   let datasetUrls: any[] = [];
+  let countryCode = '';
 
   try {
-    // First, get the country name from the merged countries API
-    let countrySlug = countryCodeToName[countryCode.toUpperCase()] || countryCode.toLowerCase();
+    // 1. Fetch countries to find the matching code for the countrySlug
+    const countriesRes = await fetch(`${apiUrl}/api/merged/countries`, { next: { revalidate: 3600 } });
+    if (countriesRes.ok) {
+      const countriesResult = await countriesRes.json();
+      const countries = countriesResult.data?.countries || [];
+      
+      const match = countries.find((c: any) => {
+        const nameSlug = c.name ? slugify(c.name) : '';
+        const codeSlug = c.code ? c.code.toLowerCase() : '';
+        // Special case for UK/GB
+        if (countrySlug === 'united-kingdom' && (c.code === 'UK' || c.code === 'GB')) return true;
+        return nameSlug === countrySlug || codeSlug === countrySlug;
+      });
 
-    // Try to get actual country name from API if not in our map
-    try {
-      const countriesRes = await fetch(`${apiUrl}/api/merged/countries`, { next: { revalidate: 3600 } });
-      if (countriesRes.ok) {
-        const countriesResult = await countriesRes.json();
-        const countries = countriesResult.data?.countries || [];
-        const match = countries.find((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
-        if (match?.name) {
-          countrySlug = match.name.toLowerCase().replace(/\s+/g, '-');
-        }
+      if (match) {
+        countryCode = match.code;
       }
-    } catch (e) {
-      // Use fallback from map
     }
 
-    // Fetch ALL categories for this country using the merged data API
+    if (!countryCode) {
+      console.error(`Sitemap: Country not found for slug: ${countrySlug}`);
+      return new NextResponse('Country not found', { status: 404 });
+    }
+
+    // 2. Fetch ALL categories for this country using the merged data API
     const res = await fetch(
       `${apiUrl}/api/merged/categories?country=${encodeURIComponent(countryCode)}&limit=10000`,
       { next: { revalidate: 3600 } }
@@ -79,7 +77,7 @@ export async function GET(request: Request) {
         const categorySlug = cat.name; // Already slugified (e.g., "schools", "restaurants")
 
         return {
-          url: `${baseUrl}/business-report-details/list-of-${categorySlug}-in-${countrySlug}`,
+          url: `${baseUrl}/b2b-database/leads-list-of-${categorySlug}-in-${countrySlug}`,
           lastModified: cat.lastModified ? new Date(cat.lastModified).toISOString() : new Date().toISOString(),
           changeFrequency: 'weekly',
           priority: '0.6',
@@ -87,7 +85,7 @@ export async function GET(request: Request) {
       });
     }
   } catch (error) {
-    console.error(`Sitemap: Error fetching categories for ${countryCode}`, error);
+    console.error(`Sitemap: Error fetching categories for ${countrySlug}`, error);
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -31,25 +31,19 @@ export async function generateMetadata(
     };
   }
 
-  // Expecting format: list-of-{category}-in-{country}
-  // OR just the old id for backward compatibility/simplicity if needed, but the prompt asks for the format:
-  // "http://localhost:3000/business-report-details/list-of-remodelers-in-united-states"
-  
-  // Let's parse the slug
-  // Example slug: list-of-remodelers-in-united-states
-  // Or list-of-3d-printing-services-in-united-states
+  // Expecting format: leads-list-of-{category}-in-{country}
+  // New format requested by user: b2b-database/leads-list-of-Abbeys-in-united-states
   
   let categoryStr = '';
   let countryStr = '';
   
-  const match = slug.match(/^list-of-(.+)-in-(.+)$/);
+  const match = slug.match(/^leads-list-of-(.+)-in-(.+)$/);
   
   if (match) {
       categoryStr = match[1];
       countryStr = match[2];
   } else {
-      // Fallback if the URL structure isn't exactly matching (e.g. just the ID was passed as slug)
-      // Usually would do an API call here if it's an ID
+      // Fallback if the URL structure isn't exactly matching
       return {
           title: 'Business Data Report | Data Scraper Hub',
           description: 'View detailed business data and lead lists.'
@@ -67,7 +61,7 @@ export async function generateMetadata(
     description: infoDesc,
     openGraph: { title: infoTitle, description: infoDesc },
     alternates: {
-      canonical: `/business-report-details/${slug}`
+      canonical: `/b2b-database/${slug}`
     }
   };
 }
@@ -83,28 +77,18 @@ export default async function DatasetDetailPage({ params }: Props) {
   let categoryRaw = '';
   let countryRaw = '';
   
-  const match = slug.match(/^list-of-(.+)-in-(.+)$/);
+  const match = slug.match(/^leads-list-of-(.+)-in-(.+)$/);
   
   if (match) {
       categoryRaw = match[1];
       countryRaw = match[2];
   } else {
-      // If it doesn't match the new pattern, perhaps it's an old ID
-      // but let's assume the new pattern for the new route
       return <div className="min-h-screen flex items-center justify-center text-slate-500">Invalid url format</div>;
   }
   
-  // Reconstruct category slug as expected by backend (some use hyphens, others rely on exact match. We might need to pass it as it was constructed)
-  // The original category was passed like: category=3d-printing-services
-  // The original country was passed like: country=united-states or country=US (we will need to handle decoding if it was "united-states")
-  
-  // Our new format: list-of-category-slug-in-country-name-slug
-  // We'll pass the extracted strings to the component and let it handle mapping if needed
-  // Note: the component B2bDatasetDetail expects `country` and `category` strings.
-  // It uses country internally to fetch `countryCode` by exact matching the country name, so we should convert countryRaw to Title Case spaces.
-  
+  // Reconstruct country name as expected by the component
   const countryFormatted = countryRaw.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  const categoryFormatted = categoryRaw; // Keep hyphens for the slug, or format if the backend expects something else
+  const categoryFormatted = categoryRaw;
 
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Loading details...</div>}>

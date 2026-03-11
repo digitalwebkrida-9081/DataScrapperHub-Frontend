@@ -5,6 +5,20 @@ export const revalidate = 3600;
 const baseUrl = 'https://datasellerhub.com';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://stagservice.datasellerhub.com';
 
+// Map country codes to full names for URL slugs
+const countryCodeToName: Record<string, string> = {
+  'US': 'united-states',
+  'GB': 'united-kingdom',
+  'UK': 'united-kingdom',
+  'CA': 'canada',
+  'AU': 'australia',
+  'IN': 'india',
+  'DE': 'germany',
+  'FR': 'france',
+  'NL': 'netherlands',
+  'AE': 'uae',
+};
+
 function escapeXml(unsafe: string): string {
   return unsafe.replace(/[<>&'"]/g, (c) => {
     switch (c) {
@@ -16,6 +30,10 @@ function escapeXml(unsafe: string): string {
       default: return c;
     }
   });
+}
+
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 }
 
 export async function GET() {
@@ -30,9 +48,13 @@ export async function GET() {
 
       sitemaps = countries.map((country: any) => {
         const code = country.code;
+        const name = country.name;
         if (!code) return null;
+
+        const countrySlug = name ? slugify(name) : (countryCodeToName[code.toUpperCase()] || code.toLowerCase());
+
         return {
-          url: `${baseUrl}/b2b-country-sitemap?country=${encodeURIComponent(code)}`,
+          url: `${baseUrl}/b2b-database-leads-list-sitemap/leads-list-${countrySlug}.xml`,
           lastModified: new Date().toISOString(),
         };
       }).filter(Boolean);

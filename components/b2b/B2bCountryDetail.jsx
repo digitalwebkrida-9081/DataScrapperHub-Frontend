@@ -235,7 +235,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                             const catDisplayName = cat.displayName || cat.name;
                             const categorySlug = cat.displayName ? cat.name : (cat.name || '').replace(/\s+/g, '_');
                             const targetHref = countryCode 
-                                ? `/business-report-details/list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`
+                                ? `/b2b-database/leads-list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`
                                 : `/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(catDisplayName)}`;
                                 
                             return (
