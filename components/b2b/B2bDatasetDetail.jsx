@@ -7,8 +7,9 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import WhyChoose from '../WhyChoose';
 import DatasetFaq from './DatasetFaq';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx'; // Moved to dynamic import
 import dynamic from 'next/dynamic';
+import PayPalProvider from '../PayPalProvider';
 import { getCountryData, generateSimulatedDistribution } from '../../data/countryStates';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { countryCodes } from '../../utils/countryCodes';
@@ -126,6 +127,9 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         setPurchaseLoading(true); // Reuse loading state or create new one if needed
 
         try {
+            // Dynamically import XLSX
+            const XLSX = await import('xlsx');
+            
             // Submit to Backend
             const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
             await fetch(`${API_URL}/api/forms/submit`, {
@@ -247,6 +251,9 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     return;
                 }
 
+                // Dynamically import XLSX
+                const XLSX = await import('xlsx');
+
                 // 3. Generate Excel file
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.json_to_sheet(allRows);
@@ -275,6 +282,8 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                 }
             } else {
                 // ===== OLD DATA: use existing purchase API =====
+                // The backend handles XLSX generation for the old API, 
+                // but if we were doing it clientside, we'd import it here too.
                 const response = await fetch(`${API_URL}/api/scraper/dataset/purchase`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -493,7 +502,8 @@ const B2bDatasetDetail = ({ id, country, category }) => {
     }
 
     return (
-        <div className="bg-white min-h-screen font-sans text-slate-800">
+        <PayPalProvider>
+            <div className="bg-white min-h-screen font-sans text-slate-800">
             {/* --- HERO SECTION --- */}
             <div className="bg-[#05051a] text-white pt-15 pb-20 relative overflow-hidden font-sans">
                 <div className="container mx-auto px-4 relative z-10">
@@ -1172,7 +1182,8 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     </div>
                 </div>
             )}
-        </div>
+            </div>
+        </PayPalProvider>
     );
 };
 

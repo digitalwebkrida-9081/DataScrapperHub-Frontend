@@ -9,7 +9,7 @@ export default function BeyondJustLeads() {
 
         {/* Heading */}
         <div className="text-center max-w-3xl mx-auto">
-          <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+          <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
             Why SmartScrapers?
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-gray-900">
@@ -28,9 +28,9 @@ export default function BeyondJustLeads() {
           {/* Card 1 */}
           <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group">
                <div className="relative z-10">
-                    <h4 className="text-lg font-semibold opacity-90 mb-2">Close Faster</h4>
+                    <h4 className="text-lg font-semibold mb-2">Close Faster</h4>
                     <div className="text-5xl font-bold mb-2">62%</div>
-                    <p className="text-[13px] opacity-75">Increase in overall productivity</p>
+                    <p className="text-[13px] text-blue-50">Increase in overall productivity</p>
                </div>
                <FaChartLine className="absolute bottom-4 right-4 text-blue-500 text-8xl opacity-30 group-hover:scale-110 transition-transform" />
             </div>
@@ -38,9 +38,9 @@ export default function BeyondJustLeads() {
           {/* Card 2 */}
           <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group">
                <div className="relative z-10">
-                    <h4 className="text-lg font-semibold opacity-90 mb-2">Save Budgets</h4>
+                    <h4 className="text-lg font-semibold mb-2">Save Budgets</h4>
                     <div className="text-5xl font-bold mb-2">3x</div>
-                    <p className="text-[13px] opacity-75">Increase in win rates</p>
+                    <p className="text-[13px] text-blue-50">Increase in win rates</p>
                </div>
                <FaDatabase className="absolute bottom-4 right-4 text-blue-500 text-8xl opacity-30 group-hover:scale-110 transition-transform" />
             </div>
@@ -48,9 +48,9 @@ export default function BeyondJustLeads() {
           {/* Card 3 */}
           <div className="bg-blue-600 text-white p-8 rounded-xl relative overflow-hidden group">
                <div className="relative z-10">
-                    <h4 className="text-lg font-semibold opacity-90 mb-2">Attract Customers</h4>
+                    <h4 className="text-lg font-semibold mb-2">Attract Customers</h4>
                     <div className="text-5xl font-bold mb-2">74%</div>
-                    <p className="text-[13px] opacity-75">Decrease in marketing spend</p>
+                    <p className="text-[13px] text-blue-50">Decrease in marketing spend</p>
                </div>
                <FaUserFriends className="absolute bottom-4 right-4 text-blue-500 text-8xl opacity-30 group-hover:scale-110 transition-transform" />
             </div>

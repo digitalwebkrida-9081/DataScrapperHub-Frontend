@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding, FaStar, FaTimes, FaUser, FaDownload } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown } from 'react-icons/md';
 import SearchableDropdown from '../ui/SearchableDropdown';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx'; // Moved to dynamic import
 import staticCategories from '../../data/categories.json';
 import { countryCodes } from '../../utils/countryCodes';
 import PhoneInputField from '../ui/PhoneInputField';
@@ -108,7 +108,10 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
         // Mock dataset structure if we only have the summary from the list
         // ideally we would fetch the detail or just mock a few rows based on the summary
         
-        setTimeout(() => {
+        setTimeout(async () => {
+            // Dynamically import XLSX
+            const XLSX = await import('xlsx');
+            
             // Generate Excel File
             const wb = XLSX.utils.book_new();
             

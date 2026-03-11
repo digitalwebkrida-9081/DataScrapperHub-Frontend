@@ -111,7 +111,7 @@ export default function ServicesPage() {
               solution provider.
             </p>
 
-            <button className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-md text-sm font-medium cursor-pointer">
+            <button className="bg-blue-700 hover:bg-blue-800 transition px-6 py-3 rounded-md text-sm font-medium cursor-pointer">
               <Link href="/b2b">Explore B2B Database</Link>
             </button>
           </div>
@@ -178,7 +178,7 @@ export default function ServicesPage() {
       needs and drive smarter decision-making.
     </p>
 
-    <button className="bg-white text-blue-600 font-medium text-sm px-8 py-3 rounded-md hover:bg-blue-50 transition cursor-pointer">
+    <button className="bg-white text-blue-700 font-medium text-sm px-8 py-3 rounded-md hover:bg-blue-50 transition cursor-pointer">
       Get Started Today
     </button>
   </div>

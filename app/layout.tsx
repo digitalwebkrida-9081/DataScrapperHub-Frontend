@@ -5,7 +5,6 @@ import "./globals.css";
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import Newsletter from "@/components/layout/Newsletter"
-import PayPalProvider from "@/components/PayPalProvider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,12 +34,12 @@ export default function RootLayout({
       <head>
         {/* Google tag (gtag.js) */}
         <Script
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://www.googletagmanager.com/gtag/js?id=AW-17980750879"
         />
         <Script
           id="google-analytics"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -54,12 +53,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PayPalProvider>
-          <Newsletter />
-          <Header />
-          {children}
-          <Footer />
-        </PayPalProvider>
+        <Newsletter />
+        <Header />
+        {children}
+        <Footer />
       </body>
     </html>
   );

@@ -29,7 +29,7 @@ export default function Footer() {
             DataSellerHub
           </div>
 
-          <p className="mt-4 text-sm text-blue-100 leading-relaxed">
+          <p className="mt-4 text-sm text-blue-50 leading-relaxed">
             DataSellerHub is a web scraping service company that extracts any
             relevant website and helps you get data for all your business
             requirements with 100% accuracy.
@@ -55,7 +55,7 @@ export default function Footer() {
         {/* Navigation */}
         <div>
           <h4 className="font-semibold mb-4">Navigations</h4>
-          <ul className="space-y-2 text-sm text-blue-100">
+          <ul className="space-y-2 text-sm text-blue-50">
             <li className="hover:text-white cursor-pointer">
               <Link href="/">Home</Link>
             </li>
@@ -86,7 +86,7 @@ export default function Footer() {
         {/* Services */}
         <div>
           <h4 className="font-semibold mb-4">Services</h4>
-          <ul className="space-y-2 text-sm text-blue-100">
+          <ul className="space-y-2 text-sm text-blue-50">
             <li className="hover:text-white cursor-pointer">
               <Link href="/service/real-estate-data-scraping">
                 Real Estate Data Scraping
@@ -126,7 +126,7 @@ export default function Footer() {
         {/* Contact */}
         <div>
           <h4 className="font-semibold mb-4">Contact Us</h4>
-          <div className="space-y-3 text-sm text-blue-100">
+          <div className="space-y-3 text-sm text-blue-50">
             <p className="flex items-center gap-2">
               <IoCall className="text-white" /> <span>+61 414 003 350</span>
             </p>
@@ -139,7 +139,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-blue-400/40 py-4 text-center text-sm text-blue-100">
+      <div className="border-t border-blue-300/40 py-4 text-center text-sm text-blue-50">
         © DataSellerHub 2014–2026 All Rights Reserved
       </div>
     </footer>
