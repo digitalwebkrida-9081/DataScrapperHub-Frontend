@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function DataDelivery() {
   return (
     <section className="py-20 pt-0 bg-white">
@@ -6,10 +8,13 @@ export default function DataDelivery() {
         {/* First Part */}
         {/* LEFT: Image / Diagram */}
         <div className="flex-1 flex justify-center">
-          <img
-            src="images/vector/data-delivery-image.png"
+          <Image
+            src="/images/vector/data-delivery-image.avif"
             alt="Customizable data formats"
+            width={520}
+            height={410}
             className="w-full max-w-[520px] object-contain"
+            sizes="(max-width:768px) 100vw, 520px"
           />
         </div>
 
@@ -51,10 +56,13 @@ export default function DataDelivery() {
 
         {/* LEFT: Image / Diagram */}
         <div className="flex-1 flex justify-center">
-          <img
-            src="images/vector/data-delivery-image-2.png"
+          <Image
+            src="/images/vector/data-delivery-image-2.avif"
             alt="Customizable data formats"
+            width={520}
+            height={410}
             className="w-full max-w-[520px] object-contain"
+            sizes="(max-width:768px) 100vw, 520px"
           />
         </div>
 

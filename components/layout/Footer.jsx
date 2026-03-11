@@ -6,6 +6,7 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa6";
 import { IoCall, IoMail } from "react-icons/io5";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -16,9 +17,13 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-2 text-xl font-bold">
             <span className="text-[#2F66F6] rounded-full px-2 py-1">
-              <img
+              <Image
                 src="/images/logos/main-logo/small-logo.png"
                 alt="DataSellerHub Logo"
+                width={48} // specify actual display width
+                height={48} // specify actual display height
+                className="block"
+                priority={true} // optional if this is above-the-fold
               />
             </span>
             DataSellerHub
@@ -123,7 +128,7 @@ export default function Footer() {
           <h4 className="font-semibold mb-4">Contact Us</h4>
           <div className="space-y-3 text-sm text-blue-100">
             <p className="flex items-center gap-2">
-              <IoCall className="text-white" /> <span>+61 416 806 368</span>
+              <IoCall className="text-white" /> <span>+61 414 003 350</span>
             </p>
             <p className="flex items-center gap-2">
               <IoMail className="text-white" />{" "}

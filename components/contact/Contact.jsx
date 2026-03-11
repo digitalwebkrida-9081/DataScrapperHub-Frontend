@@ -75,7 +75,7 @@ export default function ContactUsPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-800">Phone</p>
                     <p className="text-sm text-gray-500">
-                      +61 416 806 368
+                      +61 414 003 350
                     </p>
                   </div>
                 </div>

@@ -43,7 +43,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative overflow-hidden w-10 h-10 rounded-lg">
               <img
-                src="/images/favicon.png"
+                src="/images/favicon.webp"
                 alt="DataSellerHub"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
@@ -79,7 +79,7 @@ export default function Navbar() {
               <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
                 <FaPhoneAlt size={12} />
               </div>
-              <span>+61 416 806 368</span>
+              <span>+61 414 003 350</span>
             </a>
             <Link
               href="/b2b"
@@ -158,7 +158,7 @@ export default function Navbar() {
               <div className="text-xs text-slate-500 font-normal">
                 Call Us Support
               </div>
-              <div>+61 416 806 368</div>
+              <div>+61 414 003 350</div>
             </div>
           </a>
           <Link

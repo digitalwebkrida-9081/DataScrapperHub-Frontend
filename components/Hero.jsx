@@ -1,16 +1,20 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Background Image */}
-      <img
-        src="/images/hero-bg.jpg"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+    <section className="relative overflow-hidden min-h-[400px]">
 
- 
+      {/* Background Image */}
+      <Image
+        src="/images/hero-bg.avif"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        quality={80}
+        className="object-cover"
+      />
 
       {/* Content */}
       <div className="relative z-10 text-white">
@@ -36,8 +40,6 @@ export default function Hero() {
         </div>
       </div>
 
-
-      
     </section>
   );
 }

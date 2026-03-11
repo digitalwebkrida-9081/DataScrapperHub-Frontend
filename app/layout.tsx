@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Web Scraping & Data Extraction Services | DataSellerHub",
   description: "DataSellerHub provides professional web scraping and data extraction services. Convert website data into Excel, CSV, or JSON formats for research, business intelligence, and automation.",
   icons: {
-    icon: "/images/favicon.png",
+    icon: "/images/favicon.webp",
   },
 };
 

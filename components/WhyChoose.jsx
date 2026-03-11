@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaChartLine, FaDatabase, FaUserFriends } from "react-icons/fa";
+import Image from "next/image";
 
 export default function BeyondJustLeads() {
   return (
@@ -81,10 +82,12 @@ export default function BeyondJustLeads() {
 
           {/* Right Illustration */}
           <div className="flex-1 flex justify-center">
-            <img
-              src="/images/vector/team-illustration.png"
+            <Image
+              src="/images/vector/team-illustration.avif"
               alt=" Team collaboration"
-              className="w-full max-w-[360px] object-contain"
+              width={360}
+              height={360}
+              className="w-full max-w-[360px] object-contain" 
             />
           </div>
 
