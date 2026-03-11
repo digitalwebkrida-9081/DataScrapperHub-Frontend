@@ -90,12 +90,12 @@ const B2bCountryDetail = ({ countrySlug }) => {
                 router.push(`/dataset-detail?id=${datasetId}&label=${encodeURIComponent(label)}`);
             } else {
                 // No specific dataset found, fall back to general search
-                router.push(`/b2b?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
+                router.push(`/b2b-database?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
             }
         } catch (error) {
             console.error("Error checking state data:", error);
             // Fallback on error
-            router.push(`/b2b?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
+            router.push(`/b2b-database?country=${encodeURIComponent(countryName)}&state=${encodeURIComponent(stateName)}`);
         } finally {
             setCheckingState(null);
         }
@@ -115,7 +115,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                         {/* LEFT CONTENT */}
                         <div className="lg:w-1/2 text-center lg:text-left">
                             <div className="text-xs font-semibold text-blue-400 mb-4 tracking-wider uppercase">
-                                <Link href="/" className="hover:text-blue-300 transition">Home</Link> / <Link href="/b2b" className="hover:text-blue-300 transition">B2B Database</Link> / {displayName}
+                                <Link href="/" className="hover:text-blue-300 transition">Home</Link> / <Link href="/b2b-database" className="hover:text-blue-300 transition">B2B Database</Link> / {displayName}
                             </div>
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
                                 <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-emerald-400">
@@ -236,7 +236,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
                             const categorySlug = cat.displayName ? cat.name : (cat.name || '').replace(/\s+/g, '_');
                             const targetHref = countryCode 
                                 ? `/b2b-database/leads-list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`
-                                : `/b2b?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(catDisplayName)}`;
+                                : `/b2b-database?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(catDisplayName)}`;
                                 
                             return (
                                 <Link 

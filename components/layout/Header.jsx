@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Services", href: "/service" },
-    { name: "B2B Database", href: "/b2b" },
+    { name: "B2B Database", href: "/b2b-database" },
     { name: "Location Reports", href: "/location-report" },
     { name: "Blog", href: "/blog" },
     { name: "Contact Us", href: "/contact" },
@@ -82,7 +82,7 @@ export default function Navbar() {
               <span>+61 414 003 350</span>
             </a>
             <Link
-              href="/b2b"
+              href="/b2b-database"
               className="bg-[#030e21] text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20 hover:bg-slate-900 transition flex items-center gap-2 group"
             >
               Get Data{" "}
@@ -162,7 +162,7 @@ export default function Navbar() {
             </div>
           </a>
           <Link
-            href="/b2b"
+            href="/b2b-database"
             onClick={() => setOpen(false)}
             className="block w-full text-center bg-[#030e21] text-white py-3.5 rounded-xl font-bold shadow-lg"
           >

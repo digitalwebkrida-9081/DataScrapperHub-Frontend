@@ -20,7 +20,7 @@ function escapeXml(unsafe: string): string {
 export async function GET() {
   const staticRoutes = [
     { path: '', priority: '1.0', changefreq: 'daily' },
-    { path: '/b2b', priority: '0.9', changefreq: 'daily' },
+    { path: '/b2b-database', priority: '0.9', changefreq: 'daily' },
     { path: '/blog', priority: '0.8', changefreq: 'daily' },
     { path: '/location-report', priority: '0.8', changefreq: 'weekly' },
     { path: '/google-maps-scraper', priority: '0.8', changefreq: 'weekly' },

@@ -32,7 +32,7 @@ export default function Hero() {
 
             <div className="mt-8 flex gap-4">
               <Link
-                href="/b2b"
+                href="/b2b-database"
                 className="inline-flex items-center px-5 py-3 bg-blue-500 hover:bg-blue-600 transition text-white rounded-md font-semibold shadow"
               >
                 Explore B2B Database
