@@ -24,9 +24,9 @@ function slugify(text: string): string {
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = params;
+  const { slug } = await params;
 
   // Expected format: leads-list-[country-slug].xml
   if (!slug.startsWith('leads-list-') || !slug.endsWith('.xml')) {
