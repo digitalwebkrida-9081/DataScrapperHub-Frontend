@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { IoCall, IoMail } from "react-icons/io5";
 import { countryCodes } from "../../utils/countryCodes";
+import PhoneInputField from "../ui/PhoneInputField";
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -117,7 +118,7 @@ export default function ContactUsPage() {
                     type: 'contact_form',
                     name: `${formData.firstName} ${formData.lastName}`,
                     email: formData.email,
-                    phone: `${selected.code} ${formData.phone}`, // Assuming user types number in phone field
+                    phone: formData.phone,
                     message: formData.message
                 };
 
@@ -184,63 +185,16 @@ export default function ContactUsPage() {
                   </div>
 
                   {/* Phone Number */}
-<div>
-  <label className="block text-sm font-medium text-gray-800 mb-2">
-    Phone Number
-  </label>
-
-  <div className="relative">
-    <div className="flex items-center border border-gray-200 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-      {/* Country Dropdown */}
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-3 bg-gray-50 border-r border-gray-200 text-sm"
-      >
-        <span>{selected.flag}</span>
-        <span>{selected.code}</span>
-        <svg
-          className="w-4 h-4 text-gray-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      {/* Phone Input */}
-      <input
-        type="tel"
-        name="phone"
-        onChange={handleChange}
-        placeholder="(702) 123-4567"
-        className="w-full px-4 py-3 text-sm outline-none"
-      />
-    </div>
-
-    {/* Dropdown Menu */}
-    {open && (
-      <div className="absolute z-20 mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg">
-        {countryCodes.map((c) => (
-          <button
-            key={c.code + c.label}
-            type="button"
-            onClick={() => {
-              setSelected(c);
-              setOpen(false);
-            }}
-            className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
-          >
-            <span>{c.flag}</span>
-            <span>{c.label}</span>
-            <span className="ml-auto text-gray-500">{c.code}</span>
-          </button>
-        ))}
-      </div>
-    )}
-  </div>
-</div>
+                  <div className="md:col-span-2">
+                    <PhoneInputField
+                      value={formData.phone}
+                      onChange={handleChange}
+                      name="phone"
+                      label="Phone Number"
+                      required={true}
+                      placeholder="Enter phone number"
+                    />
+                  </div>
                 </div>
 
                 {/* Message */}

@@ -13,6 +13,7 @@ import { getCountryData, generateSimulatedDistribution } from '../../data/countr
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { countryCodes } from '../../utils/countryCodes';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import PhoneInputField from '../ui/PhoneInputField';
 
 const CountryMapSection = dynamic(() => import('./CountryMapSection'), { ssr: false });
 
@@ -134,7 +135,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     type: 'sample_request',
                     name: sampleForm.fullName,
                     email: sampleForm.email,
-                    phone: `${samplePhoneCode} ${sampleForm.phoneNumber}`,
+                    phone: sampleForm.phoneNumber,
                     datasetDetails: {
                          id: dataset.id,
                          category: dataset.category,
@@ -208,7 +209,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                             type: 'purchase',
                             name: form.fullName,
                             email: form.email,
-                            phone: `${purchasePhoneCode} ${form.phoneNumber}`,
+                            phone: form.phoneNumber,
                             datasetDetails: {
                                 category: dataset.category,
                                 location: dataset.location,
@@ -280,7 +281,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                     body: JSON.stringify({
                         id: id,
                         ...form,
-                        phoneNumber: `${purchasePhoneCode} ${form.phoneNumber}`
+                        phoneNumber: form.phoneNumber
                     })
                 });
                 
@@ -970,34 +971,13 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
-                                        Phone Number <span className="text-red-500">*</span>
-                                    </label>
-                                    <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-                                        <div className="relative bg-slate-50 border-r border-slate-200 flex items-center min-w-[100px]">
-                                            <select 
-                                                value={purchasePhoneCode} 
-                                                onChange={(e) => setPurchasePhoneCode(e.target.value)}
-                                                className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 text-sm font-medium cursor-pointer outline-none z-10"
-                                            >
-                                                {countryCodes.map((c, idx) => (
-                                                    <option key={idx} value={c.code}>{c.flag} {c.code}</option>
-                                                ))}
-                                            </select>
-                                            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
-                                                <MdKeyboardArrowDown size={18} />
-                                            </div>
-                                        </div>
-                                        <input 
-                                            type="tel" 
-                                            name="phoneNumber"
-                                            required
-                                            value={form.phoneNumber}
-                                            onChange={handleInputChange}
-                                            placeholder="Phone Number"
-                                            className="flex-1 px-4 py-3 border-none focus:ring-0 outline-none w-full"
-                                        />
-                                    </div>
+                                    <PhoneInputField
+                                        value={form.phoneNumber}
+                                        onChange={handleInputChange}
+                                        name="phoneNumber"
+                                        label="Phone Number"
+                                        required={true}
+                                    />
                                 </div>
 
                                 <button 
@@ -1163,34 +1143,13 @@ const B2bDatasetDetail = ({ id, country, category }) => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
-                                    Phone Number <span className="text-red-500">*</span>
-                                </label>
-                                <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-                                    <div className="relative bg-slate-50 border-r border-slate-200 flex items-center min-w-[100px]">
-                                        <select 
-                                            value={samplePhoneCode} 
-                                            onChange={(e) => setSamplePhoneCode(e.target.value)}
-                                            className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 text-sm font-medium cursor-pointer outline-none z-10"
-                                        >
-                                            {countryCodes.map((c, idx) => (
-                                                <option key={idx} value={c.code}>{c.flag} {c.code}</option>
-                                            ))}
-                                        </select>
-                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
-                                            <MdKeyboardArrowDown size={18} />
-                                        </div>
-                                    </div>
-                                    <input 
-                                        type="tel" 
-                                        name="phoneNumber"
-                                        required
-                                        value={sampleForm.phoneNumber}
-                                        onChange={handleSampleChange}
-                                        placeholder="Phone Number"
-                                        className="flex-1 px-4 py-3 border-none focus:ring-0 outline-none w-full"
-                                    />
-                                </div>
+                                <PhoneInputField
+                                    value={sampleForm.phoneNumber}
+                                    onChange={handleSampleChange}
+                                    name="phoneNumber"
+                                    label="Phone Number"
+                                    required={true}
+                                />
                             </div>
 
                             <button 

@@ -8,6 +8,7 @@ import SearchableDropdown from '../ui/SearchableDropdown';
 import * as XLSX from 'xlsx';
 import staticCategories from '../../data/categories.json';
 import { countryCodes } from '../../utils/countryCodes';
+import PhoneInputField from '../ui/PhoneInputField';
 
 // Skeleton Loader Component for the Table
 const TableSkeleton = () => (
@@ -94,7 +95,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                     type: 'sample_request',
                     name: sampleForm.fullName,
                     email: sampleForm.email,
-                    phone: `${samplePhoneCode} ${sampleForm.phoneNumber}`,
+                    phone: sampleForm.phoneNumber,
                     datasetDetails: selectedDatasetForSample
                 })
             });
@@ -773,7 +774,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 type: 'custom_database',
                                 name: formData.get('name'),
                                 email: formData.get('email'),
-                                phone: `${phoneCode} ${formData.get('phone')}`,
+                                phone: formData.get('phone'),
                                 message: formData.get('message')
                             };
 
@@ -811,25 +812,14 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 </div>
                             </div>
                             
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Phone Number <span className="text-red-500">*</span></label>
-                                <div className="flex">
-                                    <div className="relative bg-slate-50 border border-r-0 border-slate-200 rounded-l-lg flex items-center min-w-[120px]">
-                                        <select 
-                                            value={phoneCode} 
-                                            onChange={(e) => setPhoneCode(e.target.value)}
-                                            className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 font-medium cursor-pointer outline-none z-10"
-                                        >
-                                            {countryCodes.map((c, idx) => (
-                                                <option key={idx} value={c.code}>{c.flag} {c.code}</option>
-                                            ))}
-                                        </select>
-                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
-                                            <MdKeyboardArrowDown size={20} />
-                                        </div>
-                                    </div>
-                                    <input name="phone" required type="tel" className="w-full px-4 py-3 border border-slate-200 rounded-r-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition z-0" placeholder="Required*" />
-                                </div>
+                            <div className="mt-4">
+                                <PhoneInputField
+                                    value={phoneCode}
+                                    onChange={(e) => setPhoneCode(e.target.value)}
+                                    name="phone"
+                                    label="Phone Number"
+                                    required={true}
+                                />
                             </div>
 
                              <div>
@@ -904,34 +894,13 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">
-                                    Phone Number <span className="text-red-500">*</span>
-                                </label>
-                                <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-                                    <div className="relative bg-slate-50 border-r border-slate-200 flex items-center min-w-[100px]">
-                                        <select 
-                                            value={samplePhoneCode} 
-                                            onChange={(e) => setSamplePhoneCode(e.target.value)}
-                                            className="appearance-none bg-transparent w-full py-3 h-full pl-3 pr-8 border-none focus:ring-0 text-slate-700 text-sm font-medium cursor-pointer outline-none z-10"
-                                        >
-                                            {countryCodes.map((c, idx) => (
-                                                <option key={idx} value={c.code}>{c.flag} {c.code}</option>
-                                            ))}
-                                        </select>
-                                        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-0">
-                                            <MdKeyboardArrowDown size={18} />
-                                        </div>
-                                    </div>
-                                    <input 
-                                        type="tel" 
-                                        name="phoneNumber"
-                                        required
-                                        value={sampleForm.phoneNumber}
-                                        onChange={handleSampleChange}
-                                        placeholder="Phone Number"
-                                        className="flex-1 px-4 py-3 border-none focus:ring-0 outline-none w-full"
-                                    />
-                                </div>
+                                <PhoneInputField
+                                    value={sampleForm.phoneNumber}
+                                    onChange={handleSampleChange}
+                                    name="phoneNumber"
+                                    label="Phone Number"
+                                    required={true}
+                                />
                             </div>
 
                             <button 

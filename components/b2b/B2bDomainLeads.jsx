@@ -8,6 +8,7 @@ import {
     FaStar, FaDownload, FaLock, FaMapMarkerAlt, FaUser, FaTimes, FaShoppingCart
 } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdKeyboardArrowRight, MdKeyboardArrowDown, MdVerified, MdLocationOn } from 'react-icons/md';
+import PhoneInputField from '../ui/PhoneInputField';
 
 const B2bDomainLeads = ({ country = "United States" }) => {
     const [dataset, setDataset] = useState(null);
@@ -424,6 +425,15 @@ const B2bDomainLeads = ({ country = "United States" }) => {
                                     onChange={handleInputChange}
                                     placeholder="Email"
                                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                />
+                            </div>
+                            <div>
+                                <PhoneInputField
+                                    value={form.phoneNumber}
+                                    onChange={handleInputChange}
+                                    name="phoneNumber"
+                                    label="Phone Number"
+                                    required={true}
                                 />
                             </div>
                             <button 
