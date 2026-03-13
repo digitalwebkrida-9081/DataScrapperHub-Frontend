@@ -753,7 +753,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {}, initialDatasets =
                       {/* Right Illustration */}
                       <div className="flex-1 flex justify-center">
                         <img
-                          src="images/vector/team-illustration.png"
+                          src="/images/vector/team-illustration.avif"
                           alt=" Team collaboration"
                           className="w-full max-w-[360px] object-contain"
                         />
