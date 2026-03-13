@@ -1118,7 +1118,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                         <div className="flex justify-center mb-6">
                             <div className="flex items-center gap-2 text-slate-900 font-bold text-2xl">
                                 <img src="/images/logo.jpg" alt="logo" className='w-10 ' />
-                                Data Scraper Hub
+                                Data Seller Hub
                             </div>
                         </div>
 

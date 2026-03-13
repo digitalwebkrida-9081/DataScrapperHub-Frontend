@@ -40,7 +40,7 @@ export default function ContactUsPage() {
 
           {/* Title */}
           <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
-            Let’s Connecting With Data Scraper Hub.
+            Let’s Connecting With Data Seller Hub.
           </h1>
 
           {/* Scroll Indicator */}

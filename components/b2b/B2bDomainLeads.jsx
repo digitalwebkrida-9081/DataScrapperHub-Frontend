@@ -389,7 +389,7 @@ const B2bDomainLeads = ({ country = "United States" }) => {
                         <div className="flex justify-center mb-6">
                             <img src="/images/logo.jpg" alt="logo" className='w-10 ' />
                             <div className="flex items-center gap-2 text-slate-900 font-bold text-2xl ml-2">
-                                Data Scraper Hub
+                                Data Seller Hub
                             </div>
                         </div>
                         <div className="text-center mb-8">
