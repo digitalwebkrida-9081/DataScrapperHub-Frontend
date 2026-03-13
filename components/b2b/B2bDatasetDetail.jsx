@@ -945,7 +945,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                     <div className="w-4 h-4 bg-white rounded-full"></div>
                                 </div> */}
                                 <img src="/images/logo.jpg" alt="logo" className='w-10 ' />
-                                Data Scraper Hub
+                                Data Seller Hub
                             </div>
                         </div>
 
