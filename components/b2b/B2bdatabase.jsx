@@ -41,11 +41,10 @@ const TableSkeleton = () => (
     </div>
 );
 
-const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
+const B2bdatabase = ({ isSeoPage = false, initialFilters = {}, initialDatasets = [], initialCountries = [], initialTotalPages = 1, initialTotalCategories = 0 }) => {
     // State for data and loading
-    // State for data and loading
-    const [datasets, setDatasets] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [datasets, setDatasets] = useState(initialDatasets || []);
+    const [loading, setLoading] = useState(initialDatasets.length === 0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
     const [selectedDatasetForSample, setSelectedDatasetForSample] = useState(null);
@@ -58,7 +57,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // Dropdown options
     const [categories, setCategories] = useState(staticCategories || []);
     const [mergedCats, setMergedCats] = useState([]);
-    const [countries, setCountries] = useState([]);
+    const [countries, setCountries] = useState(initialCountries || []);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
 
@@ -72,9 +71,12 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [totalCategories, setTotalCategories] = useState(0);
+    const [totalPages, setTotalPages] = useState(initialTotalPages || 1);
+    const [totalCategories, setTotalCategories] = useState(initialTotalCategories || 0);
     const ITEMS_PER_PAGE = 20;
+
+    // We need to know if it's the very first mount with initial data so we don't refetch immediately
+    const [isInitialMount, setIsInitialMount] = useState(true);
 
     const handleSampleChange = (e) => {
         const { name, value } = e.target;
@@ -191,6 +193,11 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
     // Initial data fetching on mount
     useEffect(() => {
         const initializePage = async () => {
+            if (initialCountries.length > 0) {
+                // Already fetched server-side
+                setIsInitialMount(false);
+                return;
+            }
             setLoading(true);
             try {
                 // Fetch essentials in parallel
@@ -206,6 +213,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
                 if (isSeoPage) {
                     setLoading(false);
                 }
+                setIsInitialMount(false);
             }
         };
 
@@ -214,7 +222,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {} }) => {
 
     // Auto-search when filters or page change
     useEffect(() => {
-        if (!isSeoPage) {
+        if (!isSeoPage && !isInitialMount) {
             handleSearch();
         }
     }, [filters, currentPage, countries]);

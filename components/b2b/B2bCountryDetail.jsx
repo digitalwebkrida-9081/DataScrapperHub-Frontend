@@ -9,12 +9,13 @@ import WhyChoose from '../WhyChoose';
 import { getCountryData } from '../../data/countryStates';
 import staticCategories from '../../data/categories.json';
 
-const B2bCountryDetail = ({ countrySlug }) => {
+const B2bCountryDetail = ({ countrySlug, initialStates = [], initialCategories = [] }) => {
     const router = useRouter();
     const [countryName, setCountryName] = useState('');
-    const [states, setStates] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [states, setStates] = useState(initialStates.length > 0 ? initialStates : []);
+    const [categories, setCategories] = useState(initialCategories.length > 0 ? initialCategories : (staticCategories.slice(0, 48) || []));
+    // If we received SSR data, we don't need to show a loading screen on initial mount
+    const [loading, setLoading] = useState(initialStates.length === 0 && initialCategories.length === 0);
     const [showAllStates, setShowAllStates] = useState(false);
     const [checkingState, setCheckingState] = useState(null); // Track which state is being checked
     const [searchTerm, setSearchTerm] = useState('');
@@ -22,12 +23,17 @@ const B2bCountryDetail = ({ countrySlug }) => {
     // Initial Data Fetching
     useEffect(() => {
         const fetchData = async () => {
+             // If SSR data is present, just set the country name and we're done
+             const formattedCountryName = decodeURIComponent(countrySlug).replace(/-/g, ' ');
+             setCountryName(formattedCountryName);
+             
+             if (initialStates.length > 0 && initialCategories.length > 0) {
+                 setLoading(false);
+                 return;
+             }
+
              setLoading(true);
             try {
-                // 1. Get Country Name from Slug
-                const formattedCountryName = decodeURIComponent(countrySlug).replace(/-/g, ' ');
-                setCountryName(formattedCountryName);
-
                 // 2. Show states INSTANTLY from static data (no network wait)
                 const staticCountry = getCountryData(formattedCountryName);
                 if (staticCountry) {
@@ -72,7 +78,7 @@ const B2bCountryDetail = ({ countrySlug }) => {
         if (countrySlug) {
             fetchData();
         }
-    }, [countrySlug]);
+    }, [countrySlug, initialStates, initialCategories]);
 
     // Handle State Click
     const handleStateClick = async (stateName) => {

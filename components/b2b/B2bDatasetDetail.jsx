@@ -83,7 +83,7 @@ const countryNameToCode = (name) => {
     return map[lower] || name;
 };
 
-const B2bDatasetDetail = ({ id, country, category }) => {
+const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
     const searchParams = useSearchParams();
     const displayLabel = searchParams.get('label');
     const filterState = searchParams.get('state') || '';
@@ -91,8 +91,8 @@ const B2bDatasetDetail = ({ id, country, category }) => {
     // Resolve country to code for API calls (e.g. "United States" -> "US")
     const countryApiCode = countryNameToCode(country);
 
-    const [dataset, setDataset] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [dataset, setDataset] = useState(initialDataset);
+    const [loading, setLoading] = useState(!initialDataset);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [purchaseLoading, setPurchaseLoading] = useState(false);
     const [form, setForm] = useState({
@@ -332,7 +332,15 @@ const B2bDatasetDetail = ({ id, country, category }) => {
     };
 
     useEffect(() => {
+        // If we already have the initial dataset from SSR and no filters are applied, don't refetch
+        if (initialDataset && !filterState && !filterCity) {
+            setDataset(initialDataset);
+            setLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -472,7 +480,7 @@ const B2bDatasetDetail = ({ id, country, category }) => {
         };
 
         fetchData();
-    }, [id, country, category, filterState, filterCity]);
+    }, [id, country, category, filterState, filterCity, initialDataset]);
 
     // Track if sample modal has been opened manually or automatically
     useEffect(() => {

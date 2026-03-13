@@ -7,19 +7,44 @@ import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from '
 import WhyChoose from '../WhyChoose';
 import staticCategories from '../../data/categories.json';
 
-const Locationreport = ({ initialCountrySlug = null }) => {
+const Locationreport = ({ initialCountrySlug = null, initialCountries = [], initialDatasets = [] }) => {
     const router = useRouter();
-    const [countries, setCountries] = useState([]);
+    const [countries, setCountries] = useState(initialCountries.length > 0 ? initialCountries : []);
     const [selectedCountry, setSelectedCountry] = useState('United States');
-    const [datasets, setDatasets] = useState([]);
+    const [datasets, setDatasets] = useState(initialDatasets.length > 0 ? initialDatasets : []);
     const [categories, setCategories] = useState(staticCategories || []);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 30;
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(initialCountries.length === 0 || initialDatasets.length === 0);
+    const [isInitialMount, setIsInitialMount] = useState(true);
 
     // Fetch Countries & Categories
     React.useEffect(() => {
         const fetchData = async () => {
+             // Handle initial slug logic (even if we already got SSR countries)
+             const countriesToUse = countries.length > 0 ? countries : [];
+             let finalSelectedCountry = 'United States';
+
+             if (initialCountrySlug && countriesToUse.length > 0) {
+                 const decodedSlug = decodeURIComponent(initialCountrySlug).replace(/-/g, ' ');
+                 const foundCountry = countriesToUse.find(c => 
+                     (c.country_name || c.name).toLowerCase() === decodedSlug.toLowerCase()
+                 );
+                 
+                 if (foundCountry) {
+                     finalSelectedCountry = foundCountry.country_name || foundCountry.name;
+                     setSelectedCountry(finalSelectedCountry);
+                     setCountrySearchQuery(finalSelectedCountry); 
+                 }
+             }
+
+            if (initialCountries.length > 0) {
+                // If we got Data from SSR, we just disable loading and stop
+                setLoading(false);
+                setIsInitialMount(false);
+                return;
+            }
+
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
                 const [countryRes] = await Promise.all([
@@ -30,11 +55,9 @@ const Locationreport = ({ initialCountrySlug = null }) => {
                 
                 const fetchedCountries = countryResult.success ? (countryResult.data || []) : [];
                 setCountries(fetchedCountries);
-                // Categories now loaded statically
 
-                // Handle initial slug logic
+                // Handle initial slug logic after fetch
                 if (initialCountrySlug && fetchedCountries.length > 0) {
-                    // Try to find exact match or fuzzy match
                     const decodedSlug = decodeURIComponent(initialCountrySlug).replace(/-/g, ' ');
                     const foundCountry = fetchedCountries.find(c => 
                         (c.country_name || c.name).toLowerCase() === decodedSlug.toLowerCase()
@@ -46,16 +69,20 @@ const Locationreport = ({ initialCountrySlug = null }) => {
                         setCountrySearchQuery(countryName); 
                     }
                 }
-
             } catch (error) {
                 console.error("Error fetching initial data:", error);
+            } finally {
+                setIsInitialMount(false);
             }
         };
         fetchData();
-    }, [initialCountrySlug]); // valid dependency
+    }, [initialCountrySlug, initialCountries]); // valid dependency
 
     // Fetch Datasets when country changes
     React.useEffect(() => {
+        if (isInitialMount && initialDatasets.length > 0) {
+            return; // Skip refetching on mount if we got SSR data
+        }
         const fetchDatasets = async () => {
             setLoading(true);
             try {

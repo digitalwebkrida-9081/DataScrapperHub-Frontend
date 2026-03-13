@@ -6,4 +6,4 @@ Allow: /
 Host: https://stagservice.datasellerhub.com
 
 # Sitemaps
-Sitemap: https://stagservice.datasellerhub.com/sitemap.xml
+Sitemap: https://datasellerhub.com/sitemap.xml

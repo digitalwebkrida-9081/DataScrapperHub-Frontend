@@ -35,9 +35,41 @@ export default async function LocationReportPage({ searchParams }: Props) {
   const params = await searchParams;
   const country = params.country as string | undefined;
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://service.datasellerhub.com';
+  let initialCountries = [];
+  let initialDatasets = [];
+  // Use user-provided country, or default to United States
+  const targetCountry = country ? decodeURIComponent(country).replace(/-/g, ' ') : 'United States';
+
+  try {
+      // 1. Fetch available countries
+      const countryRes = await fetch(`${API_URL}/api/country/get-countries`, { next: { revalidate: 3600 } });
+      const countryResult = await countryRes.json();
+      
+      if (countryResult.success) {
+          initialCountries = countryResult.data || [];
+      }
+
+      // 2. Fetch datasets for the initial country
+      const query = `?country=${encodeURIComponent(targetCountry)}`;
+      const datasetRes = await fetch(`${API_URL}/api/scraper/dataset/search${query}`, { next: { revalidate: 3600 } });
+      const datasetResult = await datasetRes.json();
+
+      if (datasetResult.success) {
+          initialDatasets = datasetResult.datasets || datasetResult.data || [];
+      }
+  } catch (error) {
+      console.error("Error fetching initial location report data:", error);
+  }
+
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Loading location report...</div>}>
-       <Locationreport initialCountrySlug={country as any} />
+       {/* @ts-ignore */}
+       <Locationreport 
+            initialCountrySlug={country as any} 
+            initialCountries={initialCountries} 
+            initialDatasets={initialDatasets} 
+       />
     </Suspense>
   );
 }
