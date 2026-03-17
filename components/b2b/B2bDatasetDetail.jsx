@@ -188,7 +188,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                     ws['!cols'] = wscols;
 
                     XLSX.utils.book_append_sheet(wb, ws, "Sample Leads");
-                    
+                      
                     // Download file
                     XLSX.writeFile(wb, `${dataset.category}-${dataset.location}-SAMPLE.xlsx`);
                     
