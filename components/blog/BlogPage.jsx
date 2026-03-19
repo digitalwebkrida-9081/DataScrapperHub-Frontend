@@ -449,7 +449,7 @@ export default function BlogPage() {
                   />
                 </Link>
                 <Link
-                  href="/b2b"
+                  href="/b2b-database"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-all border border-white/10"
                 >
                   Explore B2B Database
