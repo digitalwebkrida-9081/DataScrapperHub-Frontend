@@ -43,11 +43,16 @@ export default async function LocationReportPage({ searchParams }: Props) {
 
   try {
       // 1. Fetch available countries
-      const countryRes = await fetch(`${API_URL}/api/country/get-countries`, { next: { revalidate: 3600 } });
+      const countryRes = await fetch(`${API_URL}/api/merged/countries`, { next: { revalidate: 3600 } });
       const countryResult = await countryRes.json();
       
-      if (countryResult.success) {
-          initialCountries = countryResult.data || [];
+      if (countryResult.success && countryResult.data?.countries) {
+          initialCountries = countryResult.data.countries.map((c: any) => ({
+             country_name: c.name,
+             name: c.name,
+             code: c.code,
+             totalCategories: c.totalCategories
+          }));
       }
 
       // 2. Fetch datasets for the initial country

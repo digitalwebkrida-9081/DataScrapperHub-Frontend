@@ -5,14 +5,13 @@ import { useRouter } from 'next/navigation';
 import { FaSearch, FaFilter, FaCheckCircle, FaGlobe, FaDatabase, FaEnvelope, FaPhone, FaArrowRight, FaChartLine, FaUserFriends, FaBuilding } from 'react-icons/fa';
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import WhyChoose from '../WhyChoose';
-import staticCategories from '../../data/categories.json';
 
 const Locationreport = ({ initialCountrySlug = null, initialCountries = [], initialDatasets = [] }) => {
     const router = useRouter();
     const [countries, setCountries] = useState(initialCountries.length > 0 ? initialCountries : []);
     const [selectedCountry, setSelectedCountry] = useState('United States');
     const [datasets, setDatasets] = useState(initialDatasets.length > 0 ? initialDatasets : []);
-    const [categories, setCategories] = useState(staticCategories || []);
+    const [categories, setCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 30;
     const [loading, setLoading] = useState(initialCountries.length === 0 || initialDatasets.length === 0);
@@ -48,12 +47,20 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
                 const [countryRes] = await Promise.all([
-                    fetch(`${API_URL}/api/country/get-countries`)
+                    fetch(`${API_URL}/api/merged/countries`)
                 ]);
 
                 const countryResult = await countryRes.json();
                 
-                const fetchedCountries = countryResult.success ? (countryResult.data || []) : [];
+                let fetchedCountries = [];
+                if (countryResult.success && countryResult.data?.countries) {
+                    fetchedCountries = countryResult.data.countries.map(c => ({
+                        country_name: c.name,
+                        name: c.name,
+                        code: c.code,
+                        totalCategories: c.totalCategories
+                    }));
+                }
                 setCountries(fetchedCountries);
 
                 // Handle initial slug logic after fetch
@@ -78,34 +85,61 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
         fetchData();
     }, [initialCountrySlug, initialCountries]); // valid dependency
 
-    // Fetch Datasets when country changes
+    // Fetch Datasets and Categories when country changes
     React.useEffect(() => {
-        if (isInitialMount && initialDatasets.length > 0) {
-            return; // Skip refetching on mount if we got SSR data
-        }
-        const fetchDatasets = async () => {
+        const fetchDatasetsAndCategories = async () => {
             setLoading(true);
             try {
-                const query = selectedCountry ? `?country=${encodeURIComponent(selectedCountry)}` : '';
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-                const response = await fetch(`${API_URL}/api/scraper/dataset/search${query}`);
-                const result = await response.json();
                 
-                if (result.success) {
-                    setDatasets(result.datasets || result.data || []);
+                // Fetch datasets
+                const query = selectedCountry ? `?country=${encodeURIComponent(selectedCountry)}` : '';
+                const dsPromise = fetch(`${API_URL}/api/scraper/dataset/search${query}`).then(r => r.json()).catch(() => ({}));
+                
+                // Resolve country code for categories
+                const countryCode = (() => {
+                    const map = {
+                        'united states': 'US', 'united kingdom': 'UK', 'canada': 'CA',
+                        'australia': 'AU', 'india': 'IN', 'germany': 'DE', 'france': 'FR', 'japan': 'JP', 
+                        'brazil': 'BR', 'mexico': 'MX', 'bangladesh': 'BD', 'south africa': 'ZA', 
+                        'indonesia': 'ID', 'italy': 'IT', 'spain': 'ES', 'turkey': 'TR', 'pakistan': 'PK',
+                        'nigeria': 'NG', 'egypt': 'EG', 'thailand': 'TH', 'philippines': 'PH', 'malaysia': 'MY', 
+                        'saudi arabia': 'SA', 'uae': 'AE', 'united arab emirates': 'AE', 'south korea': 'KR',
+                        'nepal': 'NP', 'sri lanka': 'LK', 'singapore': 'SG', 'new zealand': 'NZ', 
+                        'netherlands': 'NL', 'sweden': 'SE', 'switzerland': 'CH', 'poland': 'PL', 
+                        'argentina': 'AR', 'colombia': 'CO', 'chile': 'CL', 'kenya': 'KE'
+                    };
+                    const lower = (selectedCountry || '').toLowerCase().trim();
+                    if (lower.length <= 3 && !lower.includes(' ')) return (selectedCountry || 'US').toUpperCase();
+                    return map[lower] || selectedCountry;
+                })();
+                
+                const catPromise = fetch(`${API_URL}/api/merged/categories?country=${countryCode}&limit=10000`).then(r => r.json()).catch(() => ({}));
+
+                const [dsResult, catResult] = await Promise.all([dsPromise, catPromise]);
+                
+                if (dsResult && dsResult.success) {
+                    setDatasets(dsResult.datasets || dsResult.data || []);
                 } else {
                     setDatasets([]);
                 }
+
+                if (catResult && catResult.success && catResult.data?.categories) {
+                    setCategories(catResult.data.categories);
+                } else {
+                    setCategories([]); 
+                }
             } catch (error) {
-                console.error("Error fetching datasets:", error);
+                console.error("Error fetching data:", error);
                 setDatasets([]);
+                setCategories([]);
             } finally {
                 setLoading(false);
             }
         };
 
         if (selectedCountry) {
-            fetchDatasets();
+            fetchDatasetsAndCategories();
         }
     }, [selectedCountry]);
     
@@ -128,9 +162,10 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
     const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
 
     // Filter Categories
-    const filteredCategories = categories.filter(cat => 
-        cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredCategories = categories.filter(cat => {
+        const catName = cat.displayName || cat.name || '';
+        return catName.toLowerCase().includes(searchQuery.toLowerCase());
+    });
     
     // Filter Countries
     const filteredCountries = countries.filter(c => 
@@ -218,19 +253,21 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
                                     {isDropdownOpen && (
                                         <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
                                             {filteredCategories.length > 0 ? (
-                                                filteredCategories.map((cat, idx) => (
+                                                filteredCategories.map((cat, idx) => {
+                                                    const catName = cat.displayName || cat.name;
+                                                    return (
                                                     <div 
                                                         key={idx}
                                                         className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer text-slate-700"
                                                         onClick={() => {
-                                                            setSearchQuery(cat.name);
+                                                            setSearchQuery(catName);
                                                             setIsDropdownOpen(false);
                                                             setCurrentPage(1);
                                                         }}
                                                     >
-                                                        {cat.name}
+                                                        {catName}
                                                     </div>
-                                                ))
+                                                )})
                                             ) : (
                                                 <div className="px-4 py-2 text-sm text-slate-400 italic">No categories found</div>
                                             )}
@@ -290,24 +327,17 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
                         <div className="grid md:grid-cols-3 gap-y-2 gap-x-8 text-xs text-slate-600 max-w-6xl mx-auto mb-12">
                             {currentCategories.length > 0 ? (
                                 currentCategories.map((category) => {
-                                    // Find if there's a dataset for this category
-                                    const matchedDataset = datasets.find(d => d.category === category.name);
-                                    
-                                    // Link text format
-                                    const linkText = `Business Leads for ${category.name} in ${selectedCountry || 'Country'}`;
+                                    const catName = category.displayName || category.name;
+                                    const linkText = `Business Leads for ${catName} in ${selectedCountry || 'Country'}`;
+                                    const countrySlug = (selectedCountry || 'United States').toLowerCase().replace(/\s+/g, '-');
+                                    const linkUrl = `/b2b-database/leads-list-of-${category.name}-in-${countrySlug}`;
 
                                     return (
-                                        <div key={category._id || category.id} className="flex items-center gap-2 py-1 text-[14px]">
-                                            <span className={`w-1 h-1 rounded-full shrink-0 ${matchedDataset ? 'bg-slate-800' : 'bg-slate-300'}`}></span>
-                                            {matchedDataset ? (
-                                                <a href={`/b2b/${matchedDataset.id}`} className="hover:text-blue-600 hover:underline truncate text-slate-700 font-medium">
-                                                    {linkText}
-                                                </a>
-                                            ) : (
-                                                <span className="text-slate-400 truncate cursor-not-allowed" title="Data not currently available">
-                                                    {linkText}
-                                                </span>
-                                            )}
+                                        <div key={category._id || category.name} className="flex items-center gap-2 py-1 text-[14px]">
+                                            <span className="w-1 h-1 rounded-full shrink-0 bg-slate-800"></span>
+                                            <a href={linkUrl} className="hover:text-blue-600 hover:underline truncate text-slate-700 font-medium">
+                                                {linkText}
+                                            </a>
                                         </div>
                                     );
                                 })
