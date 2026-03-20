@@ -24,7 +24,7 @@ export default async function B2bPage() {
     // Fetch countries and initial categories
     const [countriesRes, categoriesRes] = await Promise.all([
       fetch(`${API_URL}/api/merged/countries`, { next: { revalidate: 3600 } }),
-      fetch(`${API_URL}/api/merged/categories?country=${countryCode}&page=1&limit=${ITEMS_PER_PAGE}`, { next: { revalidate: 3600 } })
+      fetch(`${API_URL}/api/merged/categories?country=${countryCode}&page=1&limit=${ITEMS_PER_PAGE}`, { next: { revalidate: 60 } })
     ]);
 
     const countriesData = await countriesRes.json();

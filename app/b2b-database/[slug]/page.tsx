@@ -118,8 +118,8 @@ export default async function DatasetDetailPage({ params }: Props) {
   try {
     // Fetch data just like the component does
     const [dataRes, catRes] = await Promise.all([
-        fetch(`${API_URL}/api/merged/data?country=${countryApiCode}&category=${categoryFormatted}&page=1&limit=10`, { next: { revalidate: 3600 } }),
-        fetch(`${API_URL}/api/merged/categories?country=${countryApiCode}&limit=1000`, { next: { revalidate: 3600 } })
+        fetch(`${API_URL}/api/merged/data?country=${countryApiCode}&category=${categoryFormatted}&page=1&limit=10`, { next: { revalidate: 60 } }),
+        fetch(`${API_URL}/api/merged/categories?country=${countryApiCode}&limit=1000`, { next: { revalidate: 60 } })
     ]);
     
     const dataResult = await dataRes.json();

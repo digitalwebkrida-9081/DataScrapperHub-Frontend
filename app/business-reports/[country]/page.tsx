@@ -75,8 +75,8 @@ export default async function BusinessReportPage({ params }: Props) {
   try {
      // Fetch categories and API states in PARALLEL server-side
      const [catRes, statesRes] = await Promise.all([
-         fetch(`${API_URL}/api/merged/categories?country=${countryCodeToUse}&limit=200`, { next: { revalidate: 3600 } }),
-         fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(countryFormatted)}`, { next: { revalidate: 3600 } })
+         fetch(`${API_URL}/api/merged/categories?country=${countryCodeToUse}&limit=200`, { next: { revalidate: 60 } }),
+         fetch(`${API_URL}/api/location/states?country=${encodeURIComponent(countryFormatted)}`, { next: { revalidate: 60 } })
      ]);
 
      const catResult = await catRes.json();
