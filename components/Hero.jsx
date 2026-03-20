@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[400px]">
-      <link rel="preload" as="image" href="/images/hero-bg.avif" imagesrcset="/images/hero-bg.avif 1x, /images/hero-bg@2x.avif 2x" />
+      <link rel="preload" as="image" href="/images/hero-bg.avif" imageSrcSet="/images/hero-bg.avif 1x, /images/hero-bg@2x.avif 2x" />
 
       {/* Background Image */}
       <Image

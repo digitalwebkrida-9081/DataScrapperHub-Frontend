@@ -22,7 +22,7 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
         const fetchData = async () => {
              // Handle initial slug logic (even if we already got SSR countries)
              const countriesToUse = countries.length > 0 ? countries : [];
-             let finalSelectedCountry = 'United States';
+             let finalSelectedCountry = '';
 
              if (initialCountrySlug && countriesToUse.length > 0) {
                  const decodedSlug = decodeURIComponent(initialCountrySlug).replace(/-/g, ' ');
@@ -151,7 +151,7 @@ const Locationreport = ({ initialCountrySlug = null, initialCountries = [], init
         
         // Update URL
         const slug = countryName.toLowerCase().replace(/\s+/g, '-');
-        router.push(`/smartscraper/business-reports/${slug}`);
+        router.push(`/location-report?country=${slug}`);
     };
 
     const [searchQuery, setSearchQuery] = useState('');
