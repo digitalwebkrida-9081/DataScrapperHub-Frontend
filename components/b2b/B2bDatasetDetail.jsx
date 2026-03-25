@@ -9,7 +9,7 @@ import WhyChoose from '../WhyChoose';
 import DatasetFaq from './DatasetFaq';
 // import * as XLSX from 'xlsx'; // Moved to dynamic import
 import dynamic from 'next/dynamic';
-import PayPalProvider from '../PayPalProvider';
+// import PayPalProvider from '../PayPalProvider'; // Removed redundancy
 import { getCountryData, generateSimulatedDistribution } from '../../data/countryStates';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { countryCodes } from '../../utils/countryCodes';
@@ -523,7 +523,6 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
     }
 
     return (
-        <PayPalProvider>
             <div className="bg-white min-h-screen font-sans text-slate-800">
             {/* --- HERO SECTION --- */}
             <div className="bg-[#05051a] text-white pt-15 pb-20 relative overflow-hidden font-sans">
@@ -1207,7 +1206,6 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                 </div>
             )}
             </div>
-        </PayPalProvider>
     );
 };
 
