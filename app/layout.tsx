@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { headers } from "next/headers";
 import "./globals.css";
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
@@ -24,31 +25,78 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const host = headersList.get("host") || "";
+  
+  // Helper to determine tracking IDs based on the domain
+  const getTrackingIds = (hostname: string) => {
+    // Check .com.au first because it also contains .au
+    if (hostname.includes("datasellerhub.com.au")) {
+      return { 
+        GTM_ID: "GTM-WDLCQLB9", // Placeholder from example
+        GA_ID: "G-WXH4999HZH", // ID from example
+        AW_ID: "AW-17980750879" 
+      };
+    }
+    if (hostname.includes("datasellerhub.au")) {
+      // This will match .au (but not .com.au due to the check above)
+      return { 
+        GTM_ID: "GTM-WDLCQLB9", 
+        GA_ID: "G-80CQE197ZM", 
+        AW_ID: "AW-17980750879" 
+      };
+    }
+    // Default to .com
+    return { 
+      GTM_ID: "GTM-WDLCQLB9", 
+      GA_ID: "G-V7YK8CSH0Q", 
+      AW_ID: "AW-17980750879" 
+    };
+  };
+
+  const { GTM_ID, GA_ID, AW_ID } = getTrackingIds(host);
+
   return (
     <html lang="en">
       <head>
+        {/* Google Tag Manager */}
+        <Script
+          id="google-tag-manager"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_ID}');
+            `,
+          }}
+        />
         {/* Google tag (gtag.js) */}
         <Script
-          strategy="lazyOnload"
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17980750879"
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         />
         <Script
           id="google-analytics"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'AW-17980750879');
+              gtag('config', '${GA_ID}');
+              ${AW_ID ? `gtag('config', '${AW_ID}');` : ''}
             `,
           }}
         />
+
         {/* Microsoft Clarity */}
         <Script
           id="microsoft-clarity"
@@ -67,6 +115,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         <Newsletter />
         <Header />
         {children}
