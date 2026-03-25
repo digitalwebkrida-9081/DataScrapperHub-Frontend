@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import Newsletter from "@/components/layout/Newsletter"
+import PayPalProvider from "@/components/PayPalProvider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -125,10 +126,12 @@ export default async function RootLayout({
           ></iframe>
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <Newsletter />
-        <Header />
-        {children}
-        <Footer />
+        <PayPalProvider>
+          <Newsletter />
+          <Header />
+          {children}
+          <Footer />
+        </PayPalProvider>
       </body>
     </html>
   );
