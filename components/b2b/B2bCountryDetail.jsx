@@ -240,9 +240,7 @@ const B2bCountryDetail = ({ countrySlug, initialStates = [], initialCategories =
                             const randomNum = Math.floor(Math.random() * 5000) + 1000; 
                             const catDisplayName = cat.displayName || cat.name;
                             const categorySlug = cat.displayName ? cat.name : (cat.name || '').replace(/\s+/g, '_');
-                            const targetHref = countryCode 
-                                ? `/b2b-database/leads-list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`
-                                : `/b2b-database?country=${encodeURIComponent(displayName)}&category=${encodeURIComponent(catDisplayName)}`;
+                            const targetHref = `/b2b-database/leads-list-of-${categorySlug}-in-${displayName.toLowerCase().replace(/\s+/g, '-')}`;
                                 
                             return (
                                 <Link 
