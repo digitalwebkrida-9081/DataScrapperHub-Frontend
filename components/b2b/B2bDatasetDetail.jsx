@@ -145,7 +145,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                          id: dataset.id,
                          category: dataset.category,
                          location: dataset.location
-                    }
+                    },
+                    source: window.location.hostname
                 })
             }).catch(error => {
                 console.error("Error submitting sample request API:", error);
@@ -232,7 +233,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                 location: dataset.location,
                                 country: country,
                                 totalRecords: dataset.totalRecords
-                            }
+                            },
+                            source: window.location.hostname
                         })
                     });
                 } catch (e) {
