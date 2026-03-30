@@ -124,6 +124,11 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
 
     const handleSampleDownload = async (e) => {
         e.preventDefault();
+        const isPhoneValid = sampleForm.phoneNumber && sampleForm.phoneNumber.replace(/\D/g, '').length > 3;
+        if (!sampleForm.fullName.trim() || !sampleForm.email.trim() || !isPhoneValid) {
+            alert("Please fill in all required fields (Name, Email, and a valid Phone number).");
+            return;
+        }
         // Simulate processing
         setPurchaseLoading(true); // Reuse loading state or create new one if needed
 
@@ -974,7 +979,15 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                         {/* Form */}
                         {!isFormComplete ? (
                             <form 
-                                onSubmit={(e) => { e.preventDefault(); setIsFormComplete(true); }} 
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const isPhoneValid = form.phoneNumber && form.phoneNumber.replace(/\D/g, '').length > 3;
+                                    if (!form.fullName.trim() || !form.email.trim() || !isPhoneValid) {
+                                        alert("Please fill in all required fields (Name, Email, and a valid Phone number).");
+                                        return;
+                                    }
+                                    setIsFormComplete(true);
+                                }}
                                 className="space-y-4"
                             >
                                 <div>

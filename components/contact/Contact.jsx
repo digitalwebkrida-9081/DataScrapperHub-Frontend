@@ -112,15 +112,28 @@ export default function ContactUsPage() {
                 .
               </p>
 
-              <form className="space-y-8" onSubmit={async (e) => {
-                e.preventDefault();
-                const payload = {
-                    type: 'contact_form',
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    email: formData.email,
-                    phone: formData.phone,
-                    message: formData.message
-                };
+              <form
+                className="space-y-8"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const name = `${formData.firstName} ${formData.lastName}`.trim();
+                  const email = formData.email?.trim();
+                  const phone = formData.phone?.trim();
+                  const message = formData.message?.trim();
+                  const isPhoneValid = phone && phone.replace(/\D/g, '').length > 3;
+
+                  if (!formData.firstName.trim() || !formData.lastName.trim() || !email || !isPhoneValid || !message) {
+                    alert("Please fill in all mandatory fields (*).");
+                    return;
+                  }
+
+                  const payload = {
+                    type: "contact_form",
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    message: message,
+                  };
 
                 try {
                     const API_URL = process.env.NEXT_PUBLIC_API_URL || '';

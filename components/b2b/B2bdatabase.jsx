@@ -85,6 +85,11 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {}, initialDatasets =
 
     const handleSampleDownload = async (e) => {
         e.preventDefault();
+        const isPhoneValid = sampleForm.phoneNumber && sampleForm.phoneNumber.replace(/\D/g, '').length > 3;
+        if (!sampleForm.fullName.trim() || !sampleForm.email.trim() || !isPhoneValid) {
+            alert("Please fill in all required fields (Name, Email, and a valid Phone number).");
+            return;
+        }
         setPurchaseLoading(true);
 
         try {
@@ -782,12 +787,23 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {}, initialDatasets =
                         <form onSubmit={async (e) => {
                             e.preventDefault();
                             const formData = new FormData(e.target);
+                            const name = formData.get('name')?.trim();
+                            const email = formData.get('email')?.trim();
+                            const phone = phoneCode?.trim();
+                            const message = formData.get('message')?.trim();
+                            const isPhoneValid = phone && phone.replace(/\D/g, '').length > 3;
+
+                            if (!name || !email || !isPhoneValid || !message) {
+                                alert("Please fill in all mandatory fields (*).");
+                                return;
+                            }
+
                             const payload = {
                                 type: 'custom_database',
-                                name: formData.get('name'),
-                                email: formData.get('email'),
-                                phone: formData.get('phone'),
-                                message: formData.get('message')
+                                name,
+                                email,
+                                phone,
+                                message
                             };
 
                             try {
