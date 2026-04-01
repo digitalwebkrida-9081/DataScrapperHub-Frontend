@@ -791,7 +791,7 @@ const B2bdatabase = ({ isSeoPage = false, initialFilters = {}, initialDatasets =
                             const email = formData.get('email')?.trim();
                             const phone = phoneCode?.trim();
                             const message = formData.get('message')?.trim();
-                            const isPhoneValid = phone && phone.replace(/\D/g, '').length > 3;
+                            const isPhoneValid = phone && phone.replace(/\D/g, '').length >= 8;
 
                             if (!name || !email || !isPhoneValid || !message) {
                                 alert("Please fill in all mandatory fields (*).");

@@ -981,7 +981,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                             <form 
                                 onSubmit={(e) => {
                                     e.preventDefault();
-                                    const isPhoneValid = form.phoneNumber && form.phoneNumber.replace(/\D/g, '').length > 3;
+                                    const isPhoneValid = form.phoneNumber && form.phoneNumber.replace(/\D/g, '').length >= 8;
                                     if (!form.fullName.trim() || !form.email.trim() || !isPhoneValid) {
                                         alert("Please fill in all required fields (Name, Email, and a valid Phone number).");
                                         return;
