@@ -253,7 +253,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                 let hasMore = true;
 
                 while (hasMore) {
-                    const res = await fetch(`${API_URL}/api/merged/data?country=${countryApiCode}&category=${category}&page=${page}&limit=${batchSize}${filterState ? `&state=${encodeURIComponent(filterState)}` : ''}${filterCity ? `&city=${encodeURIComponent(filterCity)}` : ''}`);
+                    const res = await fetch(`${API_URL}/api/merged/data?country=${countryApiCode}&category=${category.replace(/-/g, '_')}&page=${page}&limit=${batchSize}${filterState ? `&state=${encodeURIComponent(filterState)}` : ''}${filterCity ? `&city=${encodeURIComponent(filterCity)}` : ''}`);
                     const result = await res.json();
                     
                     if (result.success && result.data?.data?.length > 0) {
@@ -369,21 +369,21 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                     try {
                         // Fetch sample data rows + category info in parallel
                         // Build data URL with optional state/city filters
-                        let dataUrl = `${API_URL}/api/merged/data?country=${countryApiCode}&category=${category}&page=1&limit=10`;
+                        let dataUrl = `${API_URL}/api/merged/data?country=${countryApiCode}&category=${category.replace(/-/g, '_')}&page=1&limit=10`;
                         if (filterState) dataUrl += `&state=${encodeURIComponent(filterState)}`;
                         if (filterCity) dataUrl += `&city=${encodeURIComponent(filterCity)}`;
 
                         const [dataRes, catRes] = await Promise.all([
                             fetch(dataUrl),
-                            fetch(`${API_URL}/api/merged/categories?country=${countryApiCode}&limit=1000`)
+                            fetch(`${API_URL}/api/merged/categories?country=${countryApiCode}&limit=10000`)
                         ]);
                         
                         const dataResult = await dataRes.json();
                         const catResult = await catRes.json();
 
-                        // Find this category's info
-                        const catInfo = catResult.success && catResult.data?.categories
-                            ? catResult.data.categories.find(c => c.name === category)
+                        // Find this category's info (try both original and underscore versions)
+                        const catInfo = (catResult.success && catResult.data?.categories)
+                            ? catResult.data.categories.find(c => c.name === category || c.name === category.replace(/-/g, '_'))
                             : null;
 
                         // Use filtered data total when state/city is set, otherwise use category total
@@ -391,7 +391,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                         const totalRecords = (filterState || filterCity) ? dataTotal : (catInfo?.records || dataTotal || 0);
                         const rows = dataResult.success ? (dataResult.data?.data || dataResult.data?.rows || []) : [];
                         const locationName = displayLabel || country.toUpperCase();
-                        const categoryDisplayName = catInfo?.displayName || category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        const categoryDisplayName = catInfo?.displayName || category.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
                         // Detect field columns from the data
                         const firstRow = rows[0] || {};
@@ -537,7 +537,7 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                     {/* Breadcrumb */}
                     <div className="text-xs font-medium text-slate-400 mb-6 flex gap-2 items-center tracking-wide">
                          <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link> / 
-                         <Link href="/b2b" className="hover:text-blue-400 transition-colors">B2B Database</Link> / 
+                         <Link href="/b2b-database" className="hover:text-blue-400 transition-colors">B2B Database</Link> / 
                          <span className="text-slate-200">{dataset.category} in {dataset.location}</span>
                     </div>
 
