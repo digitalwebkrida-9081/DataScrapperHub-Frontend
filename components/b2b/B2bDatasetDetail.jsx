@@ -149,7 +149,10 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                     datasetDetails: {
                          id: dataset.id,
                          category: dataset.category,
-                         location: dataset.location
+                         location: dataset.location,
+                         country: country,
+                         state: filterState,
+                         city: filterCity
                     },
                     source: window.location.hostname
                 })
@@ -237,6 +240,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                 category: dataset.category,
                                 location: dataset.location,
                                 country: country,
+                                state: filterState,
+                                city: filterCity,
                                 totalRecords: dataset.totalRecords
                             },
                             source: window.location.hostname
@@ -1073,7 +1078,10 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                                     body: JSON.stringify({
                                                         datasetDetails: {
                                                             category: dataset.category,
-                                                            location: dataset.location
+                                                            location: dataset.location,
+                                                            country: country,
+                                                            state: filterState,
+                                                            city: filterCity
                                                         },
                                                         price: finalPrice
                                                     }),
@@ -1104,6 +1112,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                                                 category: dataset.category,
                                                                 location: dataset.location,
                                                                 country: country,
+                                                                state: filterState,
+                                                                city: filterCity
                                                             }
                                                         })
                                                     });
