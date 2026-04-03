@@ -315,7 +315,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                     body: JSON.stringify({
                         id: id,
                         ...form,
-                        phoneNumber: form.phoneNumber
+                        phoneNumber: form.phoneNumber,
+                        source: window.location.hostname
                     })
                 });
                 
@@ -1083,7 +1084,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                                             state: filterState,
                                                             city: filterCity
                                                         },
-                                                        price: finalPrice
+                                                        price: finalPrice,
+                                                        source: window.location.hostname
                                                     }),
                                                 });
                                                 
@@ -1114,7 +1116,8 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                                                                 country: country,
                                                                 state: filterState,
                                                                 city: filterCity
-                                                            }
+                                                            },
+                                                            source: window.location.hostname
                                                         })
                                                     });
 
