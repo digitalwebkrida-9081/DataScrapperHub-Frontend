@@ -129,16 +129,13 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
             alert("Please fill in all required fields (Name, Email, and a valid Phone number).");
             return;
         }
-        // Simulate processing
-        setPurchaseLoading(true); // Reuse loading state or create new one if needed
+        setPurchaseLoading(true);
 
         try {
-            // Dynamically import XLSX
-            const XLSX = await import('xlsx');
-            
-            // Submit to Backend
             const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-            await fetch(`${API_URL}/api/forms/submit`, {
+            
+            // 1. Submit tracking form (fire-and-forget)
+            fetch(`${API_URL}/api/forms/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -158,64 +155,36 @@ const B2bDatasetDetail = ({ id, country, category, initialDataset = null }) => {
                 })
             }).catch(error => {
                 console.error("Error submitting sample request API:", error);
-                // We can continue generating the file even if tracking fails.
             });
+
+            // 2. Download sample CSV from backend (unmasked if manual sample exists)
+            const categorySlug = category ? category.replace(/-/g, '_') : (dataset.category || '').replace(/\s+/g, '_');
+            const downloadUrl = `${API_URL}/api/merged/download-sample?country=${countryApiCode}&category=${encodeURIComponent(categorySlug)}`;
             
-            setTimeout(() => {
-                try {
-                    // Generate Excel File
-                    const wb = XLSX.utils.book_new();
-                    
-                    // Create data for Excel with masked/hidden fields
-                    const exportData = dataset.sampleList.map(item => ({
-                        "Business Name": item.name,
-                        "Address": item.address || "Available in Full List",
-                        "City": item.city,
-                        "State": item.state,
-                        "Country": item.country,
-                        "Phone": "Available in Full List (Verified)", // Masked
-                        "Email": "Available in Full List (Verified)", // Masked
-                        "Website": item.website || "--",
-                        "Rating": item.rating,
-                        "Reviews": item.reviews
-                    }));
+            const response = await fetch(downloadUrl);
+            
+            if (!response.ok) {
+                throw new Error(`Download failed: ${response.statusText}`);
+            }
 
-                    const ws = XLSX.utils.json_to_sheet(exportData);
-                    
-                    // Adjust column widths
-                    const wscols = [
-                        {wch: 30}, // Name
-                        {wch: 30}, // Address
-                        {wch: 15}, // City
-                        {wch: 15}, // State
-                        {wch: 15}, // Country
-                        {wch: 25}, // Phone
-                        {wch: 25}, // Email
-                        {wch: 20}, // Website
-                        {wch: 10}, // Rating
-                        {wch: 10}  // Reviews
-                    ];
-                    ws['!cols'] = wscols;
+            // 3. Trigger browser download from response blob
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${dataset.category}-${dataset.location}-SAMPLE.csv`.replace(/\s+/g, '_');
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
 
-                    XLSX.utils.book_append_sheet(wb, ws, "Sample Leads");
-                      
-                    // Download file
-                    XLSX.writeFile(wb, `${dataset.category}-${dataset.location}-SAMPLE.xlsx`);
-                    
-                    setPurchaseLoading(false);
-                    setIsSampleModalOpen(false);
-                    alert("Sample data downloaded successfully!");
-                } catch (error) {
-                    console.error("Error generating sample file:", error);
-                    setPurchaseLoading(false);
-                    alert("Failed to create sample file.");
-                }
-            }, 1500);
-
-        } catch (error) {
-            console.error("Error preparing sample request:", error);
             setPurchaseLoading(false);
-            alert("Failed to prepare sample download.");
+            setIsSampleModalOpen(false);
+            alert("Sample data downloaded successfully!");
+        } catch (error) {
+            console.error("Error downloading sample:", error);
+            setPurchaseLoading(false);
+            alert("Failed to download sample data. Please try again.");
         }
     };
 
